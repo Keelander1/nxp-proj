@@ -8,3 +8,5 @@ by two brushless direct current motors (BLDC motors). The steering is realized w
 
 ## 1.2 Documentation
 For documentation [>click-here<](https://github.com/CEcker94/nxp-aes-documentation) 
+
+The documentation repository contains datasheets, pictures, circuit diagrams and most importantly the report of this project.
