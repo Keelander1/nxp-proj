@@ -23,6 +23,7 @@ drivers \
 freertos/freertos_kernel \
 freertos/freertos_kernel/portable/GCC/ARM_CM4F \
 freertos/freertos_kernel/portable/MemMang \
+source/board \
 source/camera \
 source/display \
 source/display/driver \

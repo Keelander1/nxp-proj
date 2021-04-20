@@ -15,7 +15,7 @@
 #define HMI_REFRESH_RATE 20
 
 
-void hmi_task(void* args);
+void HMI_Task(void* args);
 
 
 #endif /* DISPLAY_HMI_HMI_H_ */

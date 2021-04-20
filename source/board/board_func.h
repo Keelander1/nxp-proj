@@ -1,6 +1,6 @@
 /************************************************************************************************************
  ************************************************************************************************************
- ** Filename: 		main_gustl.h					################
+ ** Filename: 		board_func.h					################
  ** Created on: 	04-20-2021						#####| |########  University of applied sciences
  ** Authors: 		Ecker Christian,				#####| |########  Landshut, Germany
  ** 				Summer Matthias,				#####| |########
@@ -11,48 +11,43 @@
  ************************************************************************************************************
  **		| Authors	| Date 		| Commit																	|
  **	----|-----------|-----------|---------------------------------------------------------------------------|
- ** 1	|	EC/SM	|04-20-2021	| Created main_gustl.h														|
- ** 2	|			|			| 																			|
- ** 3	|			|			| 																			|
- ** 4	|			|			| 																			|
- ** 5	|			|			| 																			|
- ** 6	|			|			| 																			|
- ** 7	|			|			| 																			|
- ** 8	|			|			| 																			|
- ** 9	|			|			| 																			|
- ** 10	|			|			| 																			|
+ ** 1	|	CE		|04-20-2021	| Created board_func.h														|
+ ** 2	|			|			|																			|
+ ** 3	|			|			|																			|
+ ** 4	|			|			|																			|
+ ** 5	|			|			|																			|
+ ** 6	|			|			|																			|
+ ** 7	|			|			|																			|
+ ** 8	|			|			|																			|
+ ** 9	|			|			|																			|
+ ** 10	|			|			|																			|
+ ************************************************************************************************************
+ **
+ **	Description
+ ************************************************************************************************************
+ ** Header file for board initialization functions:
+ **
+ ** Contains includes and function prototypes
  ************************************************************************************************************
  ***********************************************************************************************************/
 
-
-#ifndef MAIN_GUSTL_H_
-#define MAIN_GUSTL_H_
+#ifndef BOARD_BOARD_FUNC_H_
+#define BOARD_BOARD_FUNC_H_
 
 
 /*******************************************************************************
  * Includes
  ******************************************************************************/
-/* FreeRTOS kernel includes. */
 #include "FreeRTOS.h"
 #include "task.h"
-#include "queue.h"
-#include "timers.h"
-
-/* Own header files */
-#include "servo/servo.h"
-#include "display/hmi/hmi.h"
-#include "drive/drive.h"
-#include "camera/camera.h"
-#include "rpmMeas/rpmMeas.h"
-#include "board/board_func.h"
-
-/* Freescale includes. */
-#include "fsl_device_registers.h"
-#include "fsl_debug_console.h"
 #include "board.h"
 
-#include "pin_mux.h"
-#include <stdbool.h>
+/*******************************************************************************
+ * Prototypes
+ ******************************************************************************/
+void LED_Blink_Task(void *args); 	//LED1 blinking task (Board running feedback)
+void Board_Init(void);				//Initialize board peripherals
+void CLKOUT_Init(void);				//Initialize Port 3 Pin 12 for CLKOUT Function
 
 
-#endif /* MAIN_GUSTL_H_ */
+#endif /* BOARD_BOARD_FUNC_H_ */

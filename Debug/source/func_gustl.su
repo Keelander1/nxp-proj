@@ -1,0 +1,5 @@
+fsl_gpio.h:186:20:GPIO_PortSet	24	static
+fsl_gpio.h:210:20:GPIO_PortToggle	24	static
+func_gustl.c:29:13:LED_Blink_Task	16	static
+func_gustl.c:37:6:Board_Init	8	static
+func_gustl.c:49:6:CLKOUT_Init	4	static

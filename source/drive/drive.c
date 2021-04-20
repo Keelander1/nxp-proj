@@ -1,93 +1,145 @@
-/*
- * drive.c
- *
- *  Created on: 04.12.2020
- *      Author: Summer Matthias, Ecker Christian
- */
+/************************************************************************************************************
+ ************************************************************************************************************
+ ** Filename: 		drive.c							################
+ ** Created on: 	04-12-2020						#####| |########  University of applied sciences
+ ** Authors: 		Ecker Christian,				#####| |########  Landshut, Germany
+ ** 				Summer Matthias,				#####| |########
+ ** 				Ambrosch Markus					#####|  __ |####  Am Lurzenhof 1, 84036 Landshut
+ ** 				                                #####| |##||####
+ **													#####|_|##|_|###
+ **	ChangeLog:										################
+ ************************************************************************************************************
+ **		| Authors	| Date 		| Commit																	|
+ **	----|-----------|-----------|---------------------------------------------------------------------------|
+ ** 1	|	EC/SM	|04-12-2020	| Created drive.c															|
+ ** 2	|	EC		|04-20-2021	| Commented the Code														|
+ ** 3	|			|			| 																			|
+ ** 4	|			|			| 																			|
+ ** 5	|			|			| 																			|
+ ** 6	|			|			| 																			|
+ ** 7	|			|			| 																			|
+ ** 8	|			|			| 																			|
+ ** 9	|			|			| 																			|
+ ** 10	|			|			| 																			|
+ ************************************************************************************************************
+ **
+ **	Description
+ ************************************************************************************************************
+ ** C-file for initialization of the BLDC-drives:
+ **
+ ** Contains initialization functions
+ **
+ ** CTIMER3 PWM 0/2 Channel --> Write to CTIMER1->MSR[2] for PWM (Right drive)
+ **							--> Write to CTIMER1->MSR[0] for PWM (Right drive)
+ **                      	--> Use only values in Range 240000-418000 !!!!
+ **
+ ** Left  BLDC PWM at Pin P[3][10] (J13 Pin7)
+ ** Right BLDC PWM at Pin P[0][27] (J13 Pin12)
+ ************************************************************************************************************
+ ***********************************************************************************************************/
 
 
 #include "drive.h"
 
-
+/*******************************************************************************
+ * Parameters
+ ******************************************************************************/
 const ctimer_config_t BLDC_config = {
 		.mode = kCTIMER_TimerMode,   /* TC is incremented every rising APB bus clock edge */
 		.input = kCTIMER_Capture_0,  /*!< Timer capture channel 0 */
 		.prescale = 0                /*!< Prescale value 0 --> */
 };
 
+
+/*******************************************************************************
+ * BLDC Main Initialization function
+ ******************************************************************************/
 void BLDC_Init(void)
 {
 
-	CTIMER3_Init(); //Timer init function
-	CTIMER3-> MCR 		|= CTIMER_MCR_MR0RL_MASK;
-		//Reload MR0 with the contents of the shadow register when the timer counter (TC) is reset to 0
-	IOCON->PIO[3][10]	&= 0xFFFFFFF0;      		//clear FUNC bits of P3.10
-	IOCON->PIO[3][10]	|= 0x3;						//set FUNC bits to CTIMER3_MAT0 function ALT3 P3.10
-	GPIO->DIR[3]        |= 1<<10;        			//set P3.10 to output
-	//initalice MSR register with BLDC_INIT_LOW value (1.0 ms on time)
-	CTIMER3->MSR[0] = CTIMER3_PWM_PERIOD - BLDC_PWM_INIT_LOW_VALUE;
+	CTIMER3_Init(); //TIMER3 Initialization
 
-	CTIMER3-> MCR 		|= CTIMER_MCR_MR2RL_MASK;
-		//Reload MR2 with the contents of the shadow register when the timer counter (TC) is reset to 0
-	IOCON->PIO[0][27]	&= 0xFFFFFFF0;      		//clear FUNC bits of P0.27
-	IOCON->PIO[0][27]	|= 0x3;						//set FUNC bits to CTIMER3_MAT2 function ALT3 P0.27
-	GPIO->DIR[0]        |= 1<<27;        			//set P0.27 to output
-	//initalice MSR register with BLDC_INIT_LOW value (1.0 ms on time)
-	CTIMER3->MSR[2] = CTIMER3_PWM_PERIOD - BLDC_PWM_INIT_LOW_VALUE;
+	//*************************************************************
+	//Configure Pin P[3][10] (J13 Pin7) (Left BLDC)
+	CTIMER3-> MCR 		|= CTIMER_MCR_MR0RL_MASK;					//Reload MR0 with content of shadow register at timer overflow
+	IOCON->PIO[3][10]	&= 0xFFFFFFF0;      						//Clear FUNC bits of P3.10
+	IOCON->PIO[3][10]	|= 0x3;										//Set FUNC bits to CTIMER3_MAT0 function ALT3 P3.10
+	GPIO->DIR[3]        |= 1<<10;        							//Set P3.10 to output
+	CTIMER3->MSR[0] = CTIMER3_PWM_PERIOD - BLDC_PWM_INIT_LOW_VALUE;	//Initialize MSR with BLDC_PWM_INIT_LOW_VALUE value
+	//*************************************************************
 
-	//crate initialication task for ESCs
-	if (xTaskCreate(BLDC_Init_Task, "BLDC_Init_Task", configMINIMAL_STACK_SIZE + 100, NULL, 1, NULL) !=
-			pdPASS)
-	{
-		LED3_ON();
-	}
+
+	//*************************************************************
+	//Configure Pin P[0][27] (J13 Pin12) (Right BLDC)
+	CTIMER3-> MCR 		|= CTIMER_MCR_MR2RL_MASK;					//Reload MR2 with content of shadow register at timer overflow
+	IOCON->PIO[0][27]	&= 0xFFFFFFF0;      						//Clear FUNC bits of P0.27
+	IOCON->PIO[0][27]	|= 0x3;										//Set FUNC bits to CTIMER3_MAT2 function ALT3 P0.27
+	GPIO->DIR[0]        |= 1<<27;        							//Set P0.27 to output
+	CTIMER3->MSR[2] = CTIMER3_PWM_PERIOD - BLDC_PWM_INIT_LOW_VALUE;	//Initialize MSR with BLDC_PWM_INIT_LOW_VALUE value
+	//*************************************************************
+
+
+	//*******************************************************************************************************
+	//Create ESC initialization task
+	if (xTaskCreate(ESC_Init_Task, "ESC_Init_Task", configMINIMAL_STACK_SIZE + 100, NULL, 1, NULL) != pdPASS)
+	{ LED3_ON(); } //LED3 is Error
+	//*******************************************************************************************************
 }
 
+
+/*******************************************************************************
+ * TIMER3 Initialization function
+ ******************************************************************************/
 void CTIMER3_Init(void)
 {
 	/* CTIMER1 peripheral initialization */
-	CTIMER_Init(CTIMER3, &BLDC_config); //(CTIMER_Type, ctimer_config_t)
-	/* PWM channel 0 of CTIMER3 peripheral initialization */
+	CTIMER_Init(CTIMER3, &BLDC_config);
+
+	/* PWM channel 0 of CTIMER3 peripheral initialization (Left BLDC)*/
 	CTIMER_SetupPwmPeriod(CTIMER3, CTIMER3_PWM_LEFT_CHANNEL, CTIMER3_PWM_PERIOD, CTIMER3_PWM_PERIOD - CTIMER3_PWM_0_DUTY, false);
-		//(CTIMER_Type, ctimer_match_t,uint32_t,uint32_t)
-	/* PWM channel 2 of CTIMER3 peripheral initialization */
+
+	/* PWM channel 2 of CTIMER3 peripheral initialization (Left BLDC)*/
 	CTIMER_SetupPwmPeriod(CTIMER3, CTIMER3_PWM_RIGHT_CHANNEL, CTIMER3_PWM_PERIOD, CTIMER3_PWM_PERIOD - CTIMER3_PWM_0_DUTY, false);
-		//(CTIMER_Type, ctimer_match_t,uint32_t,uint32_t)
-	/* Start the timer */
-	CTIMER_StartTimer(CTIMER3); //Timer starten
+
+	/* Start TIMER3 */
+	CTIMER_StartTimer(CTIMER3);
 }
 
-//Initialize ESCs
-void BLDC_Init_Task(void *pvParameters)
+
+/*******************************************************************************
+ * ESC Initialization Task
+ ******************************************************************************/
+void ESC_Init_Task(void *pvParameters)
 {
-	while(1){
-
+	while(1)
+	{
+		//***************************************************************
 		//Initialize Sequence for BLDC-Motors
-		//low throttle value
-		CTIMER3->MSR[0] = CTIMER3_PWM_PERIOD - BLDC_PWM_INIT_LOW_VALUE;
-		CTIMER3->MSR[2] = CTIMER3_PWM_PERIOD - BLDC_PWM_INIT_LOW_VALUE;
+		CTIMER3->MSR[0] = CTIMER3_PWM_PERIOD - BLDC_PWM_INIT_LOW_VALUE;		//Low throttle value
+		CTIMER3->MSR[2] = CTIMER3_PWM_PERIOD - BLDC_PWM_INIT_LOW_VALUE;		//Low throttle value
 		vTaskDelay(2000);
-		//half throttle value
-		CTIMER3->MSR[0] = CTIMER3_PWM_PERIOD - BLDC_PWM_INIT_HIGH_VALUE;
-		CTIMER3->MSR[2] = CTIMER3_PWM_PERIOD - BLDC_PWM_INIT_HIGH_VALUE;
+
+		CTIMER3->MSR[0] = CTIMER3_PWM_PERIOD - BLDC_PWM_INIT_HIGH_VALUE;	//Half throttle value
+		CTIMER3->MSR[2] = CTIMER3_PWM_PERIOD - BLDC_PWM_INIT_HIGH_VALUE;	//Half throttle value
 		vTaskDelay(2000);
-		//low throttle value
-		CTIMER3->MSR[0] = CTIMER3_PWM_PERIOD - BLDC_PWM_INIT_LOW_VALUE;
-		CTIMER3->MSR[2] = CTIMER3_PWM_PERIOD - BLDC_PWM_INIT_LOW_VALUE;
+
+		CTIMER3->MSR[0] = CTIMER3_PWM_PERIOD - BLDC_PWM_INIT_LOW_VALUE;		//Low throttle value
+		CTIMER3->MSR[2] = CTIMER3_PWM_PERIOD - BLDC_PWM_INIT_LOW_VALUE;		//Low throttle value
 		vTaskDelay(3500);
+		//***************************************************************
 
-		//set motor to full speed
-		CTIMER3->MSR[0] = CTIMER3_PWM_PERIOD - BLDC_PWM_FULLTHROTTLE;
-		CTIMER3->MSR[2] = CTIMER3_PWM_PERIOD - BLDC_PWM_FULLTHROTTLE;
+
+		//***************************************************************
+		//Testing Sequence for BLDC-Motors
+
+		/*CTIMER3->MSR[0] = CTIMER3_PWM_PERIOD - BLDC_PWM_FULLTHROTTLE;		//Set motor to full speed
+		CTIMER3->MSR[2] = CTIMER3_PWM_PERIOD - BLDC_PWM_FULLTHROTTLE;		//Set motor to full speed
 		vTaskDelay(1000);
-		//stop motor
-		CTIMER3->MSR[0] = CTIMER3_PWM_PERIOD - BLDC_PWM_STOPTHROTTLE;
-		CTIMER3->MSR[2] = CTIMER3_PWM_PERIOD - BLDC_PWM_STOPTHROTTLE;
+		CTIMER3->MSR[0] = CTIMER3_PWM_PERIOD - BLDC_PWM_STOPTHROTTLE;		//Stop motor
+		CTIMER3->MSR[2] = CTIMER3_PWM_PERIOD - BLDC_PWM_STOPTHROTTLE;		//Stop motor*/
 
-		//suspend Task
-		vTaskSuspend(NULL);
+		//***************************************************************
+
+		vTaskSuspend(NULL);	//suspend Task
 	}
 }
-
-
-

@@ -18,6 +18,7 @@ RM := rm -rf
 -include source/display/driver/subdir.mk
 -include source/display/subdir.mk
 -include source/camera/subdir.mk
+-include source/board/subdir.mk
 -include source/subdir.mk
 -include freertos/freertos_kernel/portable/MemMang/subdir.mk
 -include freertos/freertos_kernel/portable/GCC/ARM_CM4F/subdir.mk
@@ -42,25 +43,25 @@ endif
 # Add inputs and outputs from these tool invocations to the build variables 
 
 # All Target
-all: Gustl_SumEck.axf
+all: nxp-aes-proj.axf
 
 # Tool invocations
-Gustl_SumEck.axf: $(OBJS) $(USER_OBJS)
+nxp-aes-proj.axf: $(OBJS) $(USER_OBJS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: MCU Linker'
-	arm-none-eabi-gcc -nostdlib -L"C:\Users\chris\git\NXP_Gustl_SumEck\Gustl_SumEck\libs" -Xlinker -Map="Gustl_SumEck.map" -Xlinker --gc-sections -Xlinker -print-memory-usage -Xlinker --sort-section=alignment -Xlinker --cref -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -T lpcxpresso54628_freertos_hello_Debug.ld -o "Gustl_SumEck.axf" $(OBJS) $(USER_OBJS) $(LIBS)
+	arm-none-eabi-gcc -nostdlib -L"C:\Users\chris\OneDrive\Desktop\NXP-Git\nxp-aes-proj\libs" -Xlinker -Map="nxp-aes-proj.map" -Xlinker --gc-sections -Xlinker -print-memory-usage -Xlinker --sort-section=alignment -Xlinker --cref -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -T lpcxpresso54628_freertos_hello_Debug.ld -o "nxp-aes-proj.axf" $(OBJS) $(USER_OBJS) $(LIBS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 	$(MAKE) --no-print-directory post-build
 
 # Other Targets
 clean:
-	-$(RM) $(EXECUTABLES)$(OBJS)$(C_DEPS) Gustl_SumEck.axf
+	-$(RM) $(EXECUTABLES)$(OBJS)$(C_DEPS) nxp-aes-proj.axf
 	-@echo ' '
 
 post-build:
 	-@echo 'Performing post-build steps'
-	-arm-none-eabi-size "Gustl_SumEck.axf"; # arm-none-eabi-objcopy -v -O binary "Gustl_SumEck.axf" "Gustl_SumEck.bin" ; # checksum -p LPC54628J512 -d "Gustl_SumEck.bin";
+	-arm-none-eabi-size "nxp-aes-proj.axf"; # arm-none-eabi-objcopy -v -O binary "nxp-aes-proj.axf" "nxp-aes-proj.bin" ; # checksum -p LPC54628J512 -d "nxp-aes-proj.bin";
 	-@echo ' '
 
 .PHONY: all clean dependents post-build
