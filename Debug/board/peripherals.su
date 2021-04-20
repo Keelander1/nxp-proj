@@ -1,0 +1,5 @@
+fsl_ctimer.h:452:20:CTIMER_StartTimer	16	static
+peripherals.c:88:6:CTIMER1_init	16	static
+peripherals.c:146:6:CTIMER3_init	16	static
+peripherals.c:160:6:BOARD_InitPeripherals	8	static
+peripherals.c:170:6:BOARD_InitBootPeripherals	8	static

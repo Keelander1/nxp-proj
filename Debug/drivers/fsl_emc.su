@@ -1,0 +1,10 @@
+fsl_clock.h:698:20:CLOCK_EnableClock	24	static
+fsl_clock.h:712:20:CLOCK_DisableClock	24	static
+fsl_clock.h:922:26:CLOCK_GetEmcClkFreq	16	static
+fsl_emc.c:89:17:EMC_GetInstance	24	static
+fsl_emc.c:107:17:EMC_CalculateTimerCycles	32	static
+fsl_emc.c:127:17:EMC_ModeOffset	24	static
+fsl_emc.c:187:6:EMC_Init	16	static
+fsl_emc.c:229:6:EMC_DynamicMemInit	48	static
+fsl_emc.c:380:6:EMC_StaticMemInit	40	static
+fsl_emc.c:436:6:EMC_Deinit	16	static

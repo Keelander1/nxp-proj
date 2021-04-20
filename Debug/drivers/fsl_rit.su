@@ -1,0 +1,11 @@
+fsl_clock.h:698:20:CLOCK_EnableClock	24	static
+fsl_clock.h:712:20:CLOCK_DisableClock	24	static
+fsl_rit.c:47:17:RIT_GetInstance	24	static
+fsl_rit.c:74:6:RIT_GetDefaultConfig	16	static
+fsl_rit.c:93:6:RIT_Init	16	static
+fsl_rit.c:126:6:RIT_Deinit	16	static
+fsl_rit.c:147:6:RIT_SetTimerCompare	24	static
+fsl_rit.c:167:6:RIT_SetMaskBit	24	static
+fsl_rit.c:182:10:RIT_GetCompareTimerCount	32	static
+fsl_rit.c:206:10:RIT_GetCounterTimerCount	32	static
+fsl_rit.c:227:10:RIT_GetMaskTimerCount	32	static

@@ -1,0 +1,5 @@
+<directory>
+ <chips chipVendor='NXP' >
+  <chip name='LPC54628J512' xml_file='LPC54628J512_part.xml' />
+ </chips>
+</directory> 

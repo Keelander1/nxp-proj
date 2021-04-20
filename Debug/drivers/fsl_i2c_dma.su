@@ -1,0 +1,15 @@
+core_cm4.h:1679:22:__NVIC_EnableIRQ	16	static
+fsl_common.h:484:28:EnableIRQ	16	static
+fsl_i2c.h:485:24:I2C_GetStatusFlags	16	static
+fsl_i2c.h:505:20:I2C_MasterClearStatusFlags	16	static
+fsl_i2c.h:523:20:I2C_EnableInterrupts	16	static
+fsl_i2c.h:535:20:I2C_DisableInterrupts	16	static
+fsl_i2c_dma.c:79:17:I2C_InitTransferStateMachineDMA	48	static
+fsl_i2c_dma.c:141:13:I2C_RunDMATransfer	72	static
+fsl_i2c_dma.c:201:17:I2C_RunTransferStateMachineDMA	104	static
+fsl_i2c_dma.c:408:6:I2C_MasterTransferDMAHandleIRQ	32	static
+fsl_i2c_dma.c:438:13:I2C_MasterTransferCallbackDMA	32	static
+fsl_i2c_dma.c:461:6:I2C_MasterTransferCreateHandleDMA	32	static
+fsl_i2c_dma.c:512:10:I2C_MasterTransferDMA	32	static
+fsl_i2c_dma.c:546:10:I2C_MasterTransferGetCountDMA	24	static
+fsl_i2c_dma.c:573:6:I2C_MasterTransferAbortDMA	24	static
