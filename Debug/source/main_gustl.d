@@ -30,19 +30,6 @@ source/main_gustl.o source/main_gustl.d: ../source/main_gustl.c \
  C:\Users\chris\OneDrive\Desktop\NXP-Git\nxp-aes-proj\board/clock_config.h \
  C:\Users\chris\OneDrive\Desktop\NXP-Git\nxp-aes-proj\drivers/fsl_common.h \
  C:\Users\chris\OneDrive\Desktop\NXP-Git\nxp-aes-proj\drivers/fsl_gpio.h \
- ../source/display/hmi/hmi.h \
- C:\Users\chris\OneDrive\Desktop\NXP-Git\nxp-aes-proj\source/display/display.h \
- C:\Users\chris\OneDrive\Desktop\NXP-Git\nxp-aes-proj\source/display/interface/i2c_rtos_interface.h \
- C:\Users\chris\OneDrive\Desktop\NXP-Git\nxp-aes-proj\drivers/fsl_i2c.h \
- C:\Users\chris\OneDrive\Desktop\NXP-Git\nxp-aes-proj\freertos\freertos_kernel\include/semphr.h \
- C:\Users\chris\OneDrive\Desktop\NXP-Git\nxp-aes-proj\freertos\freertos_kernel\include/queue.h \
- C:\Users\chris\OneDrive\Desktop\NXP-Git\nxp-aes-proj\drivers/fsl_i2c_dma.h \
- C:\Users\chris\OneDrive\Desktop\NXP-Git\nxp-aes-proj\drivers/fsl_i2c.h \
- C:\Users\chris\OneDrive\Desktop\NXP-Git\nxp-aes-proj\drivers/fsl_dma.h \
- C:\Users\chris\OneDrive\Desktop\NXP-Git\nxp-aes-proj\source/display/driver/ssd1309_rtos.h \
- C:\Users\chris\OneDrive\Desktop\NXP-Git\nxp-aes-proj\source/display/driver/ssd1309.h \
- C:\Users\chris\OneDrive\Desktop\NXP-Git\nxp-aes-proj\source/display/driver/resources/ssd1309_font.h \
- C:\Users\chris\OneDrive\Desktop\NXP-Git\nxp-aes-proj\source/display/driver/resources/ssd1309_img.h \
  ../source/drive/drive.h ../source/camera/camera.h \
  ../source/rpmMeas/rpmMeas.h ../source/board/board_func.h \
  C:\Users\chris\OneDrive\Desktop\NXP-Git\nxp-aes-proj\utilities/fsl_debug_console.h \
@@ -112,32 +99,6 @@ C:\Users\chris\OneDrive\Desktop\NXP-Git\nxp-aes-proj\board/clock_config.h:
 C:\Users\chris\OneDrive\Desktop\NXP-Git\nxp-aes-proj\drivers/fsl_common.h:
 
 C:\Users\chris\OneDrive\Desktop\NXP-Git\nxp-aes-proj\drivers/fsl_gpio.h:
-
-../source/display/hmi/hmi.h:
-
-C:\Users\chris\OneDrive\Desktop\NXP-Git\nxp-aes-proj\source/display/display.h:
-
-C:\Users\chris\OneDrive\Desktop\NXP-Git\nxp-aes-proj\source/display/interface/i2c_rtos_interface.h:
-
-C:\Users\chris\OneDrive\Desktop\NXP-Git\nxp-aes-proj\drivers/fsl_i2c.h:
-
-C:\Users\chris\OneDrive\Desktop\NXP-Git\nxp-aes-proj\freertos\freertos_kernel\include/semphr.h:
-
-C:\Users\chris\OneDrive\Desktop\NXP-Git\nxp-aes-proj\freertos\freertos_kernel\include/queue.h:
-
-C:\Users\chris\OneDrive\Desktop\NXP-Git\nxp-aes-proj\drivers/fsl_i2c_dma.h:
-
-C:\Users\chris\OneDrive\Desktop\NXP-Git\nxp-aes-proj\drivers/fsl_i2c.h:
-
-C:\Users\chris\OneDrive\Desktop\NXP-Git\nxp-aes-proj\drivers/fsl_dma.h:
-
-C:\Users\chris\OneDrive\Desktop\NXP-Git\nxp-aes-proj\source/display/driver/ssd1309_rtos.h:
-
-C:\Users\chris\OneDrive\Desktop\NXP-Git\nxp-aes-proj\source/display/driver/ssd1309.h:
-
-C:\Users\chris\OneDrive\Desktop\NXP-Git\nxp-aes-proj\source/display/driver/resources/ssd1309_font.h:
-
-C:\Users\chris\OneDrive\Desktop\NXP-Git\nxp-aes-proj\source/display/driver/resources/ssd1309_img.h:
 
 ../source/drive/drive.h:
 

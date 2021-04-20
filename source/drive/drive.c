@@ -68,7 +68,6 @@ void BLDC_Init(void)
 	CTIMER3->MSR[0] = CTIMER3_PWM_PERIOD - BLDC_PWM_INIT_LOW_VALUE;	//Initialize MSR with BLDC_PWM_INIT_LOW_VALUE value
 	//*************************************************************
 
-
 	//*************************************************************
 	//Configure Pin P[0][27] (J13 Pin12) (Right BLDC)
 	CTIMER3-> MCR 		|= CTIMER_MCR_MR2RL_MASK;					//Reload MR2 with content of shadow register at timer overflow
@@ -77,7 +76,6 @@ void BLDC_Init(void)
 	GPIO->DIR[0]        |= 1<<27;        							//Set P0.27 to output
 	CTIMER3->MSR[2] = CTIMER3_PWM_PERIOD - BLDC_PWM_INIT_LOW_VALUE;	//Initialize MSR with BLDC_PWM_INIT_LOW_VALUE value
 	//*************************************************************
-
 
 	//*******************************************************************************************************
 	//Create ESC initialization task

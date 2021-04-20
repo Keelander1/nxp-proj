@@ -56,10 +56,6 @@ int main(void)
     //Create LED blinking task (Board running feedback)
     if (xTaskCreate(LED_Blink_Task, "LED_Blink_Task", configMINIMAL_STACK_SIZE + 100, NULL, 1, NULL) != pdPASS)
     { LED3_ON(); } //LED3 is Error
-
-    //Create HMI task
-    if (xTaskCreate(HMI_Task, "HMI_Task", configMINIMAL_STACK_SIZE + 100, NULL, 1, NULL) != pdPASS)
-    { LED3_ON(); } //LED3 is Error
     //***********************************************************************************************
 
     //********************

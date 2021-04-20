@@ -40,7 +40,6 @@
 
 /* Own header files */
 #include "servo/servo.h"
-#include "display/hmi/hmi.h"
 #include "drive/drive.h"
 #include "camera/camera.h"
 #include "rpmMeas/rpmMeas.h"
