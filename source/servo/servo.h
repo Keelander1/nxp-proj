@@ -1,51 +1,81 @@
-/*****************************************************************************************************/
-/*****************************************************************************************************/
-/*****             Erstellt von Summer Matthias und Ecker Christian am 20.11.2020                *****/
-/*****                                                                                           *****/
-/***** Funktionen zur Initialisierung des ServoMotors für die Lenkung                            *****/
-/***** CTIMER1 PWM 2 Channel   --> Zum Lenken in CTIMER1->MSR[2] schreiben                       *****/
-/*****                         --> Nur Werte von 200000 bis 459000 verwenden!!!                  *****/
-/*****                         --> 200000 < x < 327000 -> Links Lenken                           *****/
-/*****                         --> 327000 < x < 459000 -> Rechts lenken                          *****/
-/***** Enthält auch DemoTask mit Links-Rechts-Mitte Lenkeinschlag                                *****/
-/*****                                                                                           *****/
-/***** Servo PWM an Pin P[3][2] und J13 Pin11 auf dem Board                                      *****/
-/*****************************************************************************************************/
-/*****************************************************************************************************/
+/************************************************************************************************************
+ ************************************************************************************************************
+ ** Filename: 		servo.h							################
+ ** Created on: 	11-20-2020						#####| |########  University of applied sciences
+ ** Authors: 		Ecker Christian,				#####| |########  Landshut, Germany
+ ** 				Summer Matthias,				#####| |########
+ ** 				Ambrosch Markus					#####|  __ |####  Am Lurzenhof 1, 84036 Landshut
+ ** 				                                #####| |##||####
+ **													#####|_|##|_|###
+ **	ChangeLog:										################
+ ************************************************************************************************************
+ **		| Authors	| Date 		| Commit																	|
+ **	----|-----------|-----------|---------------------------------------------------------------------------|
+ ** 1	|	EC/SM	|11-20-2020	| Created servo.h															|
+ ** 2	|	EC		|04-20-2021	| Commented the Code														|
+ ** 3	|			|			| 																			|
+ ** 4	|			|			| 																			|
+ ** 5	|			|			| 																			|
+ ** 6	|			|			| 																			|
+ ** 7	|			|			| 																			|
+ ** 8	|			|			| 																			|
+ ** 9	|			|			| 																			|
+ ** 10	|			|			| 																			|
+ ************************************************************************************************************
+ **
+ **	Description
+ ************************************************************************************************************
+ ** Header file for initialization of the servo-drive (Steering):
+ **
+ ** Contains includes, defines and function prototypes
+ **
+ ** CTIMER1 PWM 2 Channel  --> Write to CTIMER1->MSR[2] for alternating steering angle
+ **                        --> Use only values in Range 200000-459000 !!!!
+ **                        --> 200000 < x < 327000 -> steer left
+ **                        --> 327000 < x < 459000 -> steer right
+ **
+ ** Servo-drive PWM at Pin P[3][2] (J13 Pin11)
+ ************************************************************************************************************
+ ***********************************************************************************************************/
 
 
+#ifndef SERVO_SERVO_H_
+#define SERVO_SERVO_H_
+
+
+/*******************************************************************************
+ * Includes
+ ******************************************************************************/
 #include "fsl_ctimer.h"
 #include "FreeRTOS.h"
 #include "task.h"
 #include "queue.h"
 #include "board.h"
 
+/*******************************************************************************
+ * Defines
+ ******************************************************************************/
 
+/* Channel definitions */
+#define CTIMER1_PWM_0_CHANNEL kCTIMER_Match_2 	//Definition of channel 2 ID
 
-/* Definition of channel 2 duty  --> on ticks*/
-#define CTIMER1_PWM_0_DUTY 0
+/* Servo PWM initialization value definitions */
+#define CTIMER1_PWM_0_DUTY 0					//Definition of channel 2 duty  --> on ticks
+#define CTIMER1_PWM_PERIOD 4400000				//Definition of PWM period --> whole period ticks
 
-/* Definition of PWM period --> whole period ticks*/
-#define CTIMER1_PWM_PERIOD 4400000
+/* Servo PWM steer left/right max value definitions */
+#define SERVO_PWM_Left_Value 200000				//max left steering value -> less than 200000 (0,91ms) -> crash
+#define SERVO_PWM_Right_Value 459000				//max right steering value -> more than 459000 (2,08ms) -> crash
+#define SERVO_PWM_Middle_Value 327000			//zero degree steering angle
 
-/* Definition of channel 2 ID */
-#define CTIMER1_PWM_0_CHANNEL kCTIMER_Match_2
-
-//max left steering value //Attention!! If less than 200000 -> 0,91ms--> hardware crash
-#define SERVO_PWM_LeftValue 200000
-
-//max right steering value //Attention!! If more than 459000 -> 2,08ms --> hardware crash
-#define SERVO_PWM_RightValue 459000
-
-//zero degree steering angle
-#define SERVO_PWM_MiddleValue 327000
-
-
+/*******************************************************************************
+ * Prototypes
+ ******************************************************************************/
 void SERVO_Init(void);
 void CTIMER1_Init(void) ;
 void SERVO_Demo(void *pvParameters);
 
 
-
+#endif /* SERVO_SERVO_H_ */
 
 

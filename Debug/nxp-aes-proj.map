@@ -6190,7 +6190,7 @@ OUTPUT(nxp-aes-proj.axf elf32-littlearm)
  .debug_ranges  0x00001198       0x30 ./board/pin_mux.o
  .debug_ranges  0x000011c8       0x88 C:\Users\chris\OneDrive\Desktop\NXP-Git\nxp-aes-proj\libs\libpower_hardabi.a(fsl_power_lib.o)
 
-.debug_macro    0x00000000    0x1587a
+.debug_macro    0x00000000    0x15886
  .debug_macro   0x00000000      0x1cc ./utilities/fsl_assert.o
  .debug_macro   0x000001cc      0xae4 ./utilities/fsl_assert.o
  .debug_macro   0x00000cb0       0x10 ./utilities/fsl_assert.o
@@ -6227,172 +6227,172 @@ OUTPUT(nxp-aes-proj.axf elf32-littlearm)
  .debug_macro   0x00012245       0x1c ./utilities/fsl_assert.o
  .debug_macro   0x00012261       0x32 ./startup/startup_lpc54628.o
  .debug_macro   0x00012293       0x34 ./startup/startup_lpc54628.o
- .debug_macro   0x000122c7      0x1e7 ./source/servo/servo.o
- .debug_macro   0x000124ae       0x2f ./source/servo/servo.o
- .debug_macro   0x000124dd       0x10 ./source/servo/servo.o
- .debug_macro   0x000124ed      0x20b ./source/servo/servo.o
- .debug_macro   0x000126f8       0x28 ./source/servo/servo.o
- .debug_macro   0x00012720      0x1ed ./source/rpmMeas/rpmMeas.o
- .debug_macro   0x0001290d       0x10 ./source/rpmMeas/rpmMeas.o
- .debug_macro   0x0001291d      0x1ed ./source/drive/drive.o
- .debug_macro   0x00012b0a       0x3a ./source/drive/drive.o
- .debug_macro   0x00012b44      0x1e8 ./source/display/interface/i2c_rtos_interface.o
- .debug_macro   0x00012d2c       0x16 ./source/display/interface/i2c_rtos_interface.o
- .debug_macro   0x00012d42       0x1c ./source/display/interface/i2c_rtos_interface.o
- .debug_macro   0x00012d5e       0x46 ./source/display/interface/i2c_rtos_interface.o
- .debug_macro   0x00012da4       0x76 ./source/display/interface/i2c_rtos_interface.o
- .debug_macro   0x00012e1a       0x10 ./source/display/interface/i2c_rtos_interface.o
- .debug_macro   0x00012e2a      0x25c ./source/display/hmi/hmi.o
- .debug_macro   0x00013086       0x10 ./source/display/hmi/hmi.o
- .debug_macro   0x00013096       0x52 ./source/display/hmi/hmi.o
- .debug_macro   0x000130e8       0x10 ./source/display/hmi/hmi.o
- .debug_macro   0x000130f8       0x6c ./source/display/driver/ssd1309.o
- .debug_macro   0x00013164       0x10 ./source/display/driver/ssd1309.o
- .debug_macro   0x00013174      0x10b ./source/display/driver/ssd1309_rtos.o
- .debug_macro   0x0001327f      0x253 ./source/display/display.o
- .debug_macro   0x000134d2      0x121 ./source/camera/camera.o
- .debug_macro   0x000135f3       0x10 ./source/camera/camera.o
- .debug_macro   0x00013603      0x1c0 ./source/board/board_func.o
- .debug_macro   0x000137c3      0x302 ./source/main_gustl.o
- .debug_macro   0x00013ac5       0x97 ./source/main_gustl.o
- .debug_macro   0x00013b5c       0x4c ./source/main_gustl.o
- .debug_macro   0x00013ba8       0x40 ./source/main_gustl.o
- .debug_macro   0x00013be8       0x16 ./source/main_gustl.o
- .debug_macro   0x00013bfe      0x107 ./source/main_gustl.o
- .debug_macro   0x00013d05       0x11 ./source/semihost_hardfault.o
- .debug_macro   0x00013d16       0xdf ./freertos/freertos_kernel/portable/MemMang/heap_4.o
- .debug_macro   0x00013df5      0x179 ./freertos/freertos_kernel/portable/GCC/ARM_CM4F/port.o
- .debug_macro   0x00013f6e       0xb8 ./freertos/freertos_kernel/list.o
- .debug_macro   0x00014026      0x125 ./freertos/freertos_kernel/queue.o
- .debug_macro   0x0001414b      0x192 ./freertos/freertos_kernel/tasks.o
- .debug_macro   0x000142dd       0x10 ./freertos/freertos_kernel/tasks.o
- .debug_macro   0x000142ed       0x16 ./freertos/freertos_kernel/tasks.o
- .debug_macro   0x00014303      0x10d ./freertos/freertos_kernel/timers.o
- .debug_macro   0x00014410      0x22f ./drivers/fsl_clock.o
- .debug_macro   0x0001463f       0x22 ./drivers/fsl_clock.o
- .debug_macro   0x00014661      0x124 ./drivers/fsl_common.o
- .debug_macro   0x00014785      0x12e ./drivers/fsl_ctimer.o
- .debug_macro   0x000148b3      0x12d ./drivers/fsl_dma.o
- .debug_macro   0x000149e0       0x70 ./drivers/fsl_dma.o
- .debug_macro   0x00014a50      0x127 ./drivers/fsl_flexcomm.o
- .debug_macro   0x00014b77       0x10 ./drivers/fsl_flexcomm.o
- .debug_macro   0x00014b87      0x12e ./drivers/fsl_gpio.o
- .debug_macro   0x00014cb5      0x149 ./drivers/fsl_i2c.o
- .debug_macro   0x00014dfe      0x161 ./drivers/fsl_i2c_dma.o
- .debug_macro   0x00014f5f      0x11e ./drivers/fsl_reset.o
- .debug_macro   0x0001507d       0xdf ./device/system_LPC54628.o
- .debug_macro   0x0001515c      0x250 ./board/board.o
- .debug_macro   0x000153ac       0x58 ./board/board.o
- .debug_macro   0x00015404      0x13e ./board/clock_config.o
- .debug_macro   0x00015542       0x1c ./board/clock_config.o
- .debug_macro   0x0001555e      0x139 ./board/pin_mux.o
- .debug_macro   0x00015697       0xe2 ./board/pin_mux.o
- .debug_macro   0x00015779      0x101 ./board/pin_mux.o
+ .debug_macro   0x000122c7      0x1ed ./source/servo/servo.o
+ .debug_macro   0x000124b4       0x2f ./source/servo/servo.o
+ .debug_macro   0x000124e3       0x10 ./source/servo/servo.o
+ .debug_macro   0x000124f3      0x20b ./source/servo/servo.o
+ .debug_macro   0x000126fe       0x28 ./source/servo/servo.o
+ .debug_macro   0x00012726      0x1ed ./source/rpmMeas/rpmMeas.o
+ .debug_macro   0x00012913       0x10 ./source/rpmMeas/rpmMeas.o
+ .debug_macro   0x00012923      0x1ed ./source/drive/drive.o
+ .debug_macro   0x00012b10       0x3a ./source/drive/drive.o
+ .debug_macro   0x00012b4a      0x1e8 ./source/display/interface/i2c_rtos_interface.o
+ .debug_macro   0x00012d32       0x16 ./source/display/interface/i2c_rtos_interface.o
+ .debug_macro   0x00012d48       0x1c ./source/display/interface/i2c_rtos_interface.o
+ .debug_macro   0x00012d64       0x46 ./source/display/interface/i2c_rtos_interface.o
+ .debug_macro   0x00012daa       0x76 ./source/display/interface/i2c_rtos_interface.o
+ .debug_macro   0x00012e20       0x10 ./source/display/interface/i2c_rtos_interface.o
+ .debug_macro   0x00012e30      0x25c ./source/display/hmi/hmi.o
+ .debug_macro   0x0001308c       0x10 ./source/display/hmi/hmi.o
+ .debug_macro   0x0001309c       0x52 ./source/display/hmi/hmi.o
+ .debug_macro   0x000130ee       0x10 ./source/display/hmi/hmi.o
+ .debug_macro   0x000130fe       0x6c ./source/display/driver/ssd1309.o
+ .debug_macro   0x0001316a       0x10 ./source/display/driver/ssd1309.o
+ .debug_macro   0x0001317a      0x10b ./source/display/driver/ssd1309_rtos.o
+ .debug_macro   0x00013285      0x253 ./source/display/display.o
+ .debug_macro   0x000134d8      0x121 ./source/camera/camera.o
+ .debug_macro   0x000135f9       0x10 ./source/camera/camera.o
+ .debug_macro   0x00013609      0x1c0 ./source/board/board_func.o
+ .debug_macro   0x000137c9      0x308 ./source/main_gustl.o
+ .debug_macro   0x00013ad1       0x97 ./source/main_gustl.o
+ .debug_macro   0x00013b68       0x4c ./source/main_gustl.o
+ .debug_macro   0x00013bb4       0x40 ./source/main_gustl.o
+ .debug_macro   0x00013bf4       0x16 ./source/main_gustl.o
+ .debug_macro   0x00013c0a      0x107 ./source/main_gustl.o
+ .debug_macro   0x00013d11       0x11 ./source/semihost_hardfault.o
+ .debug_macro   0x00013d22       0xdf ./freertos/freertos_kernel/portable/MemMang/heap_4.o
+ .debug_macro   0x00013e01      0x179 ./freertos/freertos_kernel/portable/GCC/ARM_CM4F/port.o
+ .debug_macro   0x00013f7a       0xb8 ./freertos/freertos_kernel/list.o
+ .debug_macro   0x00014032      0x125 ./freertos/freertos_kernel/queue.o
+ .debug_macro   0x00014157      0x192 ./freertos/freertos_kernel/tasks.o
+ .debug_macro   0x000142e9       0x10 ./freertos/freertos_kernel/tasks.o
+ .debug_macro   0x000142f9       0x16 ./freertos/freertos_kernel/tasks.o
+ .debug_macro   0x0001430f      0x10d ./freertos/freertos_kernel/timers.o
+ .debug_macro   0x0001441c      0x22f ./drivers/fsl_clock.o
+ .debug_macro   0x0001464b       0x22 ./drivers/fsl_clock.o
+ .debug_macro   0x0001466d      0x124 ./drivers/fsl_common.o
+ .debug_macro   0x00014791      0x12e ./drivers/fsl_ctimer.o
+ .debug_macro   0x000148bf      0x12d ./drivers/fsl_dma.o
+ .debug_macro   0x000149ec       0x70 ./drivers/fsl_dma.o
+ .debug_macro   0x00014a5c      0x127 ./drivers/fsl_flexcomm.o
+ .debug_macro   0x00014b83       0x10 ./drivers/fsl_flexcomm.o
+ .debug_macro   0x00014b93      0x12e ./drivers/fsl_gpio.o
+ .debug_macro   0x00014cc1      0x149 ./drivers/fsl_i2c.o
+ .debug_macro   0x00014e0a      0x161 ./drivers/fsl_i2c_dma.o
+ .debug_macro   0x00014f6b      0x11e ./drivers/fsl_reset.o
+ .debug_macro   0x00015089       0xdf ./device/system_LPC54628.o
+ .debug_macro   0x00015168      0x250 ./board/board.o
+ .debug_macro   0x000153b8       0x58 ./board/board.o
+ .debug_macro   0x00015410      0x13e ./board/clock_config.o
+ .debug_macro   0x0001554e       0x1c ./board/clock_config.o
+ .debug_macro   0x0001556a      0x139 ./board/pin_mux.o
+ .debug_macro   0x000156a3       0xe2 ./board/pin_mux.o
+ .debug_macro   0x00015785      0x101 ./board/pin_mux.o
 
-.debug_line     0x00000000    0x11206
+.debug_line     0x00000000    0x11209
  .debug_line    0x00000000      0x5a4 ./utilities/fsl_assert.o
  .debug_line    0x000005a4      0x6dc ./startup/startup_lpc54628.o
- .debug_line    0x00000c80      0x619 ./source/servo/servo.o
- .debug_line    0x00001299      0x5d9 ./source/rpmMeas/rpmMeas.o
- .debug_line    0x00001872      0x65b ./source/drive/drive.o
- .debug_line    0x00001ecd      0x5b7 ./source/display/interface/i2c_rtos_interface.o
- .debug_line    0x00002484      0x749 ./source/display/hmi/hmi.o
- .debug_line    0x00002bcd      0x5f7 ./source/display/driver/ssd1309.o
- .debug_line    0x000031c4      0x45f ./source/display/driver/ssd1309_rtos.o
- .debug_line    0x00003623      0x6db ./source/display/display.o
- .debug_line    0x00003cfe      0x3aa ./source/camera/camera.o
- .debug_line    0x000040a8      0x5cd ./source/board/board_func.o
- .debug_line    0x00004675      0x957 ./source/main_gustl.o
- .debug_line    0x00004fcc       0x59 ./source/semihost_hardfault.o
- .debug_line    0x00005025      0x647 ./freertos/freertos_kernel/portable/MemMang/heap_4.o
- .debug_line    0x0000566c      0x648 ./freertos/freertos_kernel/portable/GCC/ARM_CM4F/port.o
- .debug_line    0x00005cb4      0x41d ./freertos/freertos_kernel/list.o
- .debug_line    0x000060d1     0x1209 ./freertos/freertos_kernel/queue.o
- .debug_line    0x000072da     0x1975 ./freertos/freertos_kernel/tasks.o
- .debug_line    0x00008c4f      0xa09 ./freertos/freertos_kernel/timers.o
- .debug_line    0x00009658     0x1e5b ./drivers/fsl_clock.o
- .debug_line    0x0000b4b3      0x4ed ./drivers/fsl_common.o
- .debug_line    0x0000b9a0      0x8e5 ./drivers/fsl_ctimer.o
- .debug_line    0x0000c285      0xe1f ./drivers/fsl_dma.o
- .debug_line    0x0000d0a4      0x698 ./drivers/fsl_flexcomm.o
- .debug_line    0x0000d73c      0x39d ./drivers/fsl_gpio.o
- .debug_line    0x0000dad9     0x11af ./drivers/fsl_i2c.o
- .debug_line    0x0000ec88      0x86a ./drivers/fsl_i2c_dma.o
- .debug_line    0x0000f4f2      0x3de ./drivers/fsl_reset.o
- .debug_line    0x0000f8d0      0x57f ./device/system_LPC54628.o
- .debug_line    0x0000fe4f      0x69b ./board/board.o
- .debug_line    0x000104ea      0x46e ./board/clock_config.o
- .debug_line    0x00010958      0x491 ./board/pin_mux.o
- .debug_line    0x00010de9      0x41d C:\Users\chris\OneDrive\Desktop\NXP-Git\nxp-aes-proj\libs\libpower_hardabi.a(fsl_power_lib.o)
+ .debug_line    0x00000c80      0x61b ./source/servo/servo.o
+ .debug_line    0x0000129b      0x5d9 ./source/rpmMeas/rpmMeas.o
+ .debug_line    0x00001874      0x65b ./source/drive/drive.o
+ .debug_line    0x00001ecf      0x5b7 ./source/display/interface/i2c_rtos_interface.o
+ .debug_line    0x00002486      0x749 ./source/display/hmi/hmi.o
+ .debug_line    0x00002bcf      0x5f7 ./source/display/driver/ssd1309.o
+ .debug_line    0x000031c6      0x45f ./source/display/driver/ssd1309_rtos.o
+ .debug_line    0x00003625      0x6db ./source/display/display.o
+ .debug_line    0x00003d00      0x3aa ./source/camera/camera.o
+ .debug_line    0x000040aa      0x5ce ./source/board/board_func.o
+ .debug_line    0x00004678      0x957 ./source/main_gustl.o
+ .debug_line    0x00004fcf       0x59 ./source/semihost_hardfault.o
+ .debug_line    0x00005028      0x647 ./freertos/freertos_kernel/portable/MemMang/heap_4.o
+ .debug_line    0x0000566f      0x648 ./freertos/freertos_kernel/portable/GCC/ARM_CM4F/port.o
+ .debug_line    0x00005cb7      0x41d ./freertos/freertos_kernel/list.o
+ .debug_line    0x000060d4     0x1209 ./freertos/freertos_kernel/queue.o
+ .debug_line    0x000072dd     0x1975 ./freertos/freertos_kernel/tasks.o
+ .debug_line    0x00008c52      0xa09 ./freertos/freertos_kernel/timers.o
+ .debug_line    0x0000965b     0x1e5b ./drivers/fsl_clock.o
+ .debug_line    0x0000b4b6      0x4ed ./drivers/fsl_common.o
+ .debug_line    0x0000b9a3      0x8e5 ./drivers/fsl_ctimer.o
+ .debug_line    0x0000c288      0xe1f ./drivers/fsl_dma.o
+ .debug_line    0x0000d0a7      0x698 ./drivers/fsl_flexcomm.o
+ .debug_line    0x0000d73f      0x39d ./drivers/fsl_gpio.o
+ .debug_line    0x0000dadc     0x11af ./drivers/fsl_i2c.o
+ .debug_line    0x0000ec8b      0x86a ./drivers/fsl_i2c_dma.o
+ .debug_line    0x0000f4f5      0x3de ./drivers/fsl_reset.o
+ .debug_line    0x0000f8d3      0x57f ./device/system_LPC54628.o
+ .debug_line    0x0000fe52      0x69b ./board/board.o
+ .debug_line    0x000104ed      0x46e ./board/clock_config.o
+ .debug_line    0x0001095b      0x491 ./board/pin_mux.o
+ .debug_line    0x00010dec      0x41d C:\Users\chris\OneDrive\Desktop\NXP-Git\nxp-aes-proj\libs\libpower_hardabi.a(fsl_power_lib.o)
 
-.debug_str      0x00000000    0x9dae9
+.debug_str      0x00000000    0x9dafc
  .debug_str     0x00000000    0x8d2e2 ./utilities/fsl_assert.o
                               0x8d39c (size before relaxing)
  .debug_str     0x0008d2e2      0x6ef ./startup/startup_lpc54628.o
                                0x364d (size before relaxing)
- .debug_str     0x0008d9d1     0x2f4b ./source/servo/servo.o
-                              0x8f98f (size before relaxing)
- .debug_str     0x0009091c      0x1b4 ./source/rpmMeas/rpmMeas.o
+ .debug_str     0x0008d9d1     0x2f5e ./source/servo/servo.o
+                              0x8f9a2 (size before relaxing)
+ .debug_str     0x0009092f      0x1b4 ./source/rpmMeas/rpmMeas.o
                               0x8f9d8 (size before relaxing)
- .debug_str     0x00090ad0      0x183 ./source/drive/drive.o
+ .debug_str     0x00090ae3      0x183 ./source/drive/drive.o
                               0x8fa20 (size before relaxing)
- .debug_str     0x00090c53     0x14e6 ./source/display/interface/i2c_rtos_interface.o
+ .debug_str     0x00090c66     0x14e6 ./source/display/interface/i2c_rtos_interface.o
                               0x8f4ea (size before relaxing)
- .debug_str     0x00092139      0x7a1 ./source/display/hmi/hmi.o
+ .debug_str     0x0009214c      0x7a1 ./source/display/hmi/hmi.o
                               0x91300 (size before relaxing)
- .debug_str     0x000928da      0x12a ./source/display/driver/ssd1309.o
+ .debug_str     0x000928ed      0x12a ./source/display/driver/ssd1309.o
                                0x4c83 (size before relaxing)
- .debug_str     0x00092a04       0x7c ./source/display/driver/ssd1309_rtos.o
+ .debug_str     0x00092a17       0x7c ./source/display/driver/ssd1309_rtos.o
                                0x96e6 (size before relaxing)
- .debug_str     0x00092a80      0x47c ./source/display/display.o
+ .debug_str     0x00092a93      0x47c ./source/display/display.o
                               0x916f2 (size before relaxing)
- .debug_str     0x00092efc      0x794 ./source/camera/camera.o
+ .debug_str     0x00092f0f      0x794 ./source/camera/camera.o
                               0x8ad99 (size before relaxing)
- .debug_str     0x00093690       0x65 ./source/board/board_func.o
+ .debug_str     0x000936a3       0x65 ./source/board/board_func.o
                               0x8ec7e (size before relaxing)
- .debug_str     0x000936f5     0x159b ./source/main_gustl.o
-                              0x934ca (size before relaxing)
- .debug_str     0x00094c90       0x1f ./source/semihost_hardfault.o
+ .debug_str     0x00093708     0x159b ./source/main_gustl.o
+                              0x934dd (size before relaxing)
+ .debug_str     0x00094ca3       0x1f ./source/semihost_hardfault.o
                                0x2f0a (size before relaxing)
- .debug_str     0x00094caf      0x3a8 ./freertos/freertos_kernel/portable/MemMang/heap_4.o
+ .debug_str     0x00094cc2      0x3a8 ./freertos/freertos_kernel/portable/MemMang/heap_4.o
                                0x8630 (size before relaxing)
- .debug_str     0x00095057      0x83b ./freertos/freertos_kernel/portable/GCC/ARM_CM4F/port.o
+ .debug_str     0x0009506a      0x83b ./freertos/freertos_kernel/portable/GCC/ARM_CM4F/port.o
                                0x8ac2 (size before relaxing)
- .debug_str     0x00095892      0x135 ./freertos/freertos_kernel/list.o
+ .debug_str     0x000958a5      0x135 ./freertos/freertos_kernel/list.o
                                0x7d42 (size before relaxing)
- .debug_str     0x000959c7      0x89c ./freertos/freertos_kernel/queue.o
+ .debug_str     0x000959da      0x89c ./freertos/freertos_kernel/queue.o
                                0x93f0 (size before relaxing)
- .debug_str     0x00096263     0x14e2 ./freertos/freertos_kernel/tasks.o
+ .debug_str     0x00096276     0x14e2 ./freertos/freertos_kernel/tasks.o
                                0xa1d2 (size before relaxing)
- .debug_str     0x00097745      0x608 ./freertos/freertos_kernel/timers.o
+ .debug_str     0x00097758      0x608 ./freertos/freertos_kernel/timers.o
                                0x9918 (size before relaxing)
- .debug_str     0x00097d4d     0x20be ./drivers/fsl_clock.o
+ .debug_str     0x00097d60     0x20be ./drivers/fsl_clock.o
                               0x8d6aa (size before relaxing)
- .debug_str     0x00099e0b      0x17b ./drivers/fsl_common.o
+ .debug_str     0x00099e1e      0x17b ./drivers/fsl_common.o
                               0x8a870 (size before relaxing)
- .debug_str     0x00099f86      0x961 ./drivers/fsl_ctimer.o
+ .debug_str     0x00099f99      0x961 ./drivers/fsl_ctimer.o
                               0x8c245 (size before relaxing)
- .debug_str     0x0009a8e7      0x9a7 ./drivers/fsl_dma.o
+ .debug_str     0x0009a8fa      0x9a7 ./drivers/fsl_dma.o
                               0x8ce53 (size before relaxing)
- .debug_str     0x0009b28e      0x360 ./drivers/fsl_flexcomm.o
+ .debug_str     0x0009b2a1      0x360 ./drivers/fsl_flexcomm.o
                               0x8bdcb (size before relaxing)
- .debug_str     0x0009b5ee      0x107 ./drivers/fsl_gpio.o
+ .debug_str     0x0009b601      0x107 ./drivers/fsl_gpio.o
                               0x8b781 (size before relaxing)
- .debug_str     0x0009b6f5      0xd1c ./drivers/fsl_i2c.o
+ .debug_str     0x0009b708      0xd1c ./drivers/fsl_i2c.o
                               0x8bbbf (size before relaxing)
- .debug_str     0x0009c411      0x240 ./drivers/fsl_i2c_dma.o
+ .debug_str     0x0009c424      0x240 ./drivers/fsl_i2c_dma.o
                               0x8be55 (size before relaxing)
- .debug_str     0x0009c651       0xae ./drivers/fsl_reset.o
+ .debug_str     0x0009c664       0xae ./drivers/fsl_reset.o
                               0x8a7e4 (size before relaxing)
- .debug_str     0x0009c6ff       0xc3 ./device/system_LPC54628.o
+ .debug_str     0x0009c712       0xc3 ./device/system_LPC54628.o
                               0x884e1 (size before relaxing)
- .debug_str     0x0009c7c2      0x7f9 ./board/board.o
+ .debug_str     0x0009c7d5      0x7f9 ./board/board.o
                               0x8f8c0 (size before relaxing)
- .debug_str     0x0009cfbb       0xaa ./board/clock_config.o
+ .debug_str     0x0009cfce       0xaa ./board/clock_config.o
                               0x8b318 (size before relaxing)
- .debug_str     0x0009d065      0x5a7 ./board/pin_mux.o
+ .debug_str     0x0009d078      0x5a7 ./board/pin_mux.o
                               0x8b35a (size before relaxing)
- .debug_str     0x0009d60c      0x4dd C:\Users\chris\OneDrive\Desktop\NXP-Git\nxp-aes-proj\libs\libpower_hardabi.a(fsl_power_lib.o)
+ .debug_str     0x0009d61f      0x4dd C:\Users\chris\OneDrive\Desktop\NXP-Git\nxp-aes-proj\libs\libpower_hardabi.a(fsl_power_lib.o)
                                 0xc4a (size before relaxing)
 
 .comment        0x00000000       0xf7
