@@ -25,6 +25,12 @@ freertos/freertos_kernel/portable/GCC/ARM_CM4F \
 freertos/freertos_kernel/portable/MemMang \
 source/board \
 source/camera \
+source/display/adapter \
+source/display \
+source/display/driver \
+source/display/interface \
+source/display/menu/design \
+source/display/menu \
 source/drive \
 source \
 source/rpmMeas \
