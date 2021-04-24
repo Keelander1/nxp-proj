@@ -1,7 +1,7 @@
 /************************************************************************************************************
  ************************************************************************************************************
- ** Filename: 		menu_rtos.c						################
- ** Created on: 	04-22-2021						#####| |########  University of applied sciences
+ ** Filename: 		rotary_encode.c					################
+ ** Created on: 	04-23-2021						#####| |########  University of applied sciences
  ** Authors: 		Ecker Christian,				#####| |########  Landshut, Germany
  ** 				Summer Matthias,				#####| |########
  ** 				Ambrosch Markus					#####|  __ |####  Am Lurzenhof 1, 84036 Landshut
@@ -11,7 +11,7 @@
  ************************************************************************************************************
  **		| Authors	| Date 		| Commit																	|
  **	----|-----------|-----------|---------------------------------------------------------------------------|
- ** 1	|	MS		|04-23-2021	| imported menu_rtos.c														|
+ ** 1	|	MS		|04-24-2021	| imported rotary_encode.c												|
  ** 2	|			|			|																			|
  ** 3	|			|			|																			|
  ** 4	|			|			|																			|
@@ -25,37 +25,53 @@
  **
  **	Description
  ************************************************************************************************************
- ** Header file for display functions:
+ ** Header file for HMI functions:
  **
- ** contains menu init with RTOS operation
+ ** contains encoder functions
  **
- ** LCD_SCL (LCD Clock) at Pin P[3][24] (J9 Pin1) Clock Signal with 400kHz
- ** LCD_SDA (LCD Serial Data) at Pin P[3][23] (J Pin3) I2C serial data
+ ** ENC_A (Encoder signal A) at Pin P[3][20] (J9 Pin9)
+ ** ENC_B (Encoder signal B) at Pin P[3][22] (J9 Pin11)
+ ** ENC_SW (Encoder switch) at Pin P[3][21] (J9 Pin13)
+ **
+ ** SW (switch) at Pin P[3][30] (J9 Pin15)s
  ************************************************************************************************************
  ***********************************************************************************************************/
-#include "menu_rtos.h"
+
+#include "rotary_encode.h"
 
 /*******************************************************************************
- * Prototypes
+ * Variables
  ******************************************************************************/
+static const int8_t re_table[] = {0,0,-1,0,0,0,0,1,1,0,0,0,0,-1,0,0};
 
 /*******************************************************************************
  * Code
  ******************************************************************************/
-/*******************************************************************************
- * menu_rtos_init
- * init menu with RTOS operation
- * param handle:		menu RTOS handle
- ******************************************************************************/
-void menu_rtos_init(menu_rtos_handle_t *handle) {
+void re_init(re_handle_t *handle) {
 
-	if (!handle)
-		return;
+	memset(handle, 0, sizeof(re_handle_t));
+}
 
-	handle->mutex = xSemaphoreCreateMutex();	//create mutex
-	if (handle->mutex == NULL)
-		return;
+void re_task(re_handle_t *handle, uint8_t a, uint8_t b) {
 
-	menu_init(&handle->drv_handle);				//init menu
+	handle->last = (handle->last << 2U) & 0x0F;
+	if (a) handle->last |= 2U;
+	if (b) handle->last |= 1U;
+	handle->state += re_table[handle->last];
+
+	if (((handle->last & 0x0A) == 0x0A) && (handle->state != 0)) {
+		handle->position += handle->state;
+		handle->state = 0;
+	}
+}
+
+int32_t re_get_pos(re_handle_t *handle) {
+
+	int32_t position;
+
+	position = handle->position;
+	handle->position = 0;
+
+	return position;
 }
 

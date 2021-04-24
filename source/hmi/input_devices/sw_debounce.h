@@ -1,7 +1,7 @@
 /************************************************************************************************************
  ************************************************************************************************************
- ** Filename: 		menu_rtos.c						################
- ** Created on: 	04-22-2021						#####| |########  University of applied sciences
+ ** Filename: 		sw_debounce.h					################
+ ** Created on: 	04-23-2021						#####| |########  University of applied sciences
  ** Authors: 		Ecker Christian,				#####| |########  Landshut, Germany
  ** 				Summer Matthias,				#####| |########
  ** 				Ambrosch Markus					#####|  __ |####  Am Lurzenhof 1, 84036 Landshut
@@ -11,7 +11,7 @@
  ************************************************************************************************************
  **		| Authors	| Date 		| Commit																	|
  **	----|-----------|-----------|---------------------------------------------------------------------------|
- ** 1	|	MS		|04-23-2021	| imported menu_rtos.c														|
+ ** 1	|	MS		|04-24-2021	| imported sw_debounce.h												|
  ** 2	|			|			|																			|
  ** 3	|			|			|																			|
  ** 4	|			|			|																			|
@@ -25,37 +25,69 @@
  **
  **	Description
  ************************************************************************************************************
- ** Header file for display functions:
+ ** Header file for HMI functions:
  **
- ** contains menu init with RTOS operation
+ ** contains switch debounce functions
  **
- ** LCD_SCL (LCD Clock) at Pin P[3][24] (J9 Pin1) Clock Signal with 400kHz
- ** LCD_SDA (LCD Serial Data) at Pin P[3][23] (J Pin3) I2C serial data
+ ** ENC_A (Encoder signal A) at Pin P[3][20] (J9 Pin9)
+ ** ENC_B (Encoder signal B) at Pin P[3][22] (J9 Pin11)
+ ** ENC_SW (Encoder switch) at Pin P[3][21] (J9 Pin13)
+ **
+ ** SW (switch) at Pin P[3][30] (J9 Pin15)s
  ************************************************************************************************************
  ***********************************************************************************************************/
-#include "menu_rtos.h"
+
+#ifndef HMI_INPUT_DEVICES_SW_DEBOUNCE_H_
+#define HMI_INPUT_DEVICES_SW_DEBOUNCE_H_
+
+#include <stdint.h>
+#include <string.h>
 
 /*******************************************************************************
- * Prototypes
+ * Definitions
  ******************************************************************************/
+/*! @brief Switch handle. */
+typedef struct _sw_handle_t {
+	volatile uint32_t ct0;
+	volatile uint32_t ct1;
+	volatile uint32_t state;
+	volatile uint32_t down;
+	volatile uint32_t up;
+} sw_handle_t;
 
 /*******************************************************************************
- * Code
+ * API
  ******************************************************************************/
-/*******************************************************************************
- * menu_rtos_init
- * init menu with RTOS operation
- * param handle:		menu RTOS handle
- ******************************************************************************/
-void menu_rtos_init(menu_rtos_handle_t *handle) {
+/*
+ * @brief Init rotary encoder handle.
+ *
+ * Must be called before main task will be executed.
+ */
+void sw_init(sw_handle_t *handle);
 
-	if (!handle)
-		return;
+/*!
+ * @brief Main task for switch debouncing.
+ *
+ * Call this function in an ISR every 10ms.
+ *
+ * @param Up to 32 input states.
+ */
+void sw_task(sw_handle_t *handle, uint32_t inputs);
 
-	handle->mutex = xSemaphoreCreateMutex();	//create mutex
-	if (handle->mutex == NULL)
-		return;
+/*!
+ * @brief Returns all switches which were detected with falling signal edge.
+ *
+ * @param The switch handle.
+ * @retval Signal mask.
+ */
+uint32_t sw_get_down(sw_handle_t *handle);
 
-	menu_init(&handle->drv_handle);				//init menu
-}
+/*!
+ * @brief Returns all switches which were detected with rising signal edge.
+ *
+ * @param The switch handle.
+ * @retval Signal mask.
+ */
+uint32_t sw_get_up(sw_handle_t *handle);
 
+#endif /* HMI_INPUT_DEVICES_SW_DEBOUNCE_H_ */

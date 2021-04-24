@@ -1,7 +1,7 @@
 /************************************************************************************************************
  ************************************************************************************************************
- ** Filename: 		menu_rtos.c						################
- ** Created on: 	04-22-2021						#####| |########  University of applied sciences
+ ** Filename: 		hmi.h							################
+ ** Created on: 	04-23-2021						#####| |########  University of applied sciences
  ** Authors: 		Ecker Christian,				#####| |########  Landshut, Germany
  ** 				Summer Matthias,				#####| |########
  ** 				Ambrosch Markus					#####|  __ |####  Am Lurzenhof 1, 84036 Landshut
@@ -11,7 +11,7 @@
  ************************************************************************************************************
  **		| Authors	| Date 		| Commit																	|
  **	----|-----------|-----------|---------------------------------------------------------------------------|
- ** 1	|	MS		|04-23-2021	| imported menu_rtos.c														|
+ ** 1	|	MS		|04-24-2021	| imported hmi.h															|
  ** 2	|			|			|																			|
  ** 3	|			|			|																			|
  ** 4	|			|			|																			|
@@ -25,37 +25,34 @@
  **
  **	Description
  ************************************************************************************************************
- ** Header file for display functions:
+ ** Header file for HMI functions:
  **
- ** contains menu init with RTOS operation
+ ** contains HMI functions
  **
- ** LCD_SCL (LCD Clock) at Pin P[3][24] (J9 Pin1) Clock Signal with 400kHz
- ** LCD_SDA (LCD Serial Data) at Pin P[3][23] (J Pin3) I2C serial data
+ ** ENC_A (Encoder signal A) at Pin P[3][20] (J9 Pin9)
+ ** ENC_B (Encoder signal B) at Pin P[3][22] (J9 Pin11)
+ ** ENC_SW (Encoder switch) at Pin P[3][21] (J9 Pin13)
+ **
+ ** SW (switch) at Pin P[3][30] (J9 Pin15)s
  ************************************************************************************************************
  ***********************************************************************************************************/
-#include "menu_rtos.h"
+#include "FreeRTOS.h"
+#include "task.h"
+#include "display/display.h"
+#include "menu_data.h"
+#include "screen.h"
 
-/*******************************************************************************
- * Prototypes
- ******************************************************************************/
+#ifndef DISPLAY_HMI_HMI_H_
+#define DISPLAY_HMI_HMI_H_
 
-/*******************************************************************************
- * Code
- ******************************************************************************/
-/*******************************************************************************
- * menu_rtos_init
- * init menu with RTOS operation
- * param handle:		menu RTOS handle
- ******************************************************************************/
-void menu_rtos_init(menu_rtos_handle_t *handle) {
 
-	if (!handle)
-		return;
+#define HMI_FG_REFR_RATE 	20
+#define HMI_BG_REFR_RATE	500
 
-	handle->mutex = xSemaphoreCreateMutex();	//create mutex
-	if (handle->mutex == NULL)
-		return;
+#define HMI_BG_REFR			(HMI_BG_REFR_RATE / HMI_FG_REFR_RATE)
 
-	menu_init(&handle->drv_handle);				//init menu
-}
 
+void hmi_task(void* args);
+
+
+#endif /* DISPLAY_HMI_HMI_H_ */

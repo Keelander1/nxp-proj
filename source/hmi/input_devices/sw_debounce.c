@@ -1,7 +1,7 @@
 /************************************************************************************************************
  ************************************************************************************************************
- ** Filename: 		menu_rtos.c						################
- ** Created on: 	04-22-2021						#####| |########  University of applied sciences
+ ** Filename: 		sw_debounce.c					################
+ ** Created on: 	04-23-2021						#####| |########  University of applied sciences
  ** Authors: 		Ecker Christian,				#####| |########  Landshut, Germany
  ** 				Summer Matthias,				#####| |########
  ** 				Ambrosch Markus					#####|  __ |####  Am Lurzenhof 1, 84036 Landshut
@@ -11,7 +11,7 @@
  ************************************************************************************************************
  **		| Authors	| Date 		| Commit																	|
  **	----|-----------|-----------|---------------------------------------------------------------------------|
- ** 1	|	MS		|04-23-2021	| imported menu_rtos.c														|
+ ** 1	|	MS		|04-24-2021	| imported sw_debounce.c												|
  ** 2	|			|			|																			|
  ** 3	|			|			|																			|
  ** 4	|			|			|																			|
@@ -25,37 +25,60 @@
  **
  **	Description
  ************************************************************************************************************
- ** Header file for display functions:
+ ** Header file for HMI functions:
  **
- ** contains menu init with RTOS operation
+ ** contains switch debounce functions
  **
- ** LCD_SCL (LCD Clock) at Pin P[3][24] (J9 Pin1) Clock Signal with 400kHz
- ** LCD_SDA (LCD Serial Data) at Pin P[3][23] (J Pin3) I2C serial data
+ ** ENC_A (Encoder signal A) at Pin P[3][20] (J9 Pin9)
+ ** ENC_B (Encoder signal B) at Pin P[3][22] (J9 Pin11)
+ ** ENC_SW (Encoder switch) at Pin P[3][21] (J9 Pin13)
+ **
+ ** SW (switch) at Pin P[3][30] (J9 Pin15)s
  ************************************************************************************************************
  ***********************************************************************************************************/
-#include "menu_rtos.h"
 
-/*******************************************************************************
- * Prototypes
- ******************************************************************************/
+#include "sw_debounce.h"
 
 /*******************************************************************************
  * Code
  ******************************************************************************/
-/*******************************************************************************
- * menu_rtos_init
- * init menu with RTOS operation
- * param handle:		menu RTOS handle
- ******************************************************************************/
-void menu_rtos_init(menu_rtos_handle_t *handle) {
+void sw_init(sw_handle_t *handle) {
 
-	if (!handle)
-		return;
+	memset(handle, 0, sizeof(sw_handle_t));
+	handle->ct0 = INT32_MAX;
+	handle->ct1 = INT32_MAX;
+}
 
-	handle->mutex = xSemaphoreCreateMutex();	//create mutex
-	if (handle->mutex == NULL)
-		return;
+void sw_task(sw_handle_t *handle, uint32_t inputs) {
 
-	menu_init(&handle->drv_handle);				//init menu
+	uint32_t i;
+
+	i = handle->state ^ inputs;
+	handle->ct0 = ~(handle->ct0 & i);
+	handle->ct1 = handle->ct0 ^ (handle->ct1 & i);
+	i &= handle->ct0 & handle->ct1;
+	handle->up |= ~inputs & i;
+	handle->state ^= i;
+	handle->down |= handle->state & i;
+}
+
+uint32_t sw_get_down(sw_handle_t *handle) {
+
+	uint32_t down;
+
+	down = handle->down;
+	handle->down = 0U;
+
+	return down;
+}
+
+uint32_t sw_get_up(sw_handle_t *handle) {
+
+	uint32_t up;
+
+	up = handle->up;
+	handle->up = 0U;
+
+	return up;
 }
 
