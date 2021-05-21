@@ -1,7 +1,7 @@
 /************************************************************************************************************
  ************************************************************************************************************
- ** Filename: 		menu_rtos.h						################
- ** Created on: 	04-22-2021						#####| |########  University of applied sciences
+ ** Filename: 		settings.h						################
+ ** Created on: 	04-28-2021						#####| |########  University of applied sciences
  ** Authors: 		Ecker Christian,				#####| |########  Landshut, Germany
  ** 				Summer Matthias,				#####| |########
  ** 				Ambrosch Markus					#####|  __ |####  Am Lurzenhof 1, 84036 Landshut
@@ -11,7 +11,7 @@
  ************************************************************************************************************
  **		| Authors	| Date 		| Commit																	|
  **	----|-----------|-----------|---------------------------------------------------------------------------|
- ** 1	|	MS		|04-23-2021	| imported menu_rtos.h														|
+ ** 1	|	MS		|04-xx-2021	| imported settings.h															|
  ** 2	|			|			|																			|
  ** 3	|			|			|																			|
  ** 4	|			|			|																			|
@@ -27,82 +27,88 @@
  ************************************************************************************************************
  ** Header file for display functions:
  **
- ** contains menu init with RTOS operation
+ ** Contains setting transfer functions for peripheral
  **
- ** LCD_SCL (LCD Clock) at Pin P[3][24] (J9 Pin1) Clock Signal with 400kHz
- ** LCD_SDA (LCD Serial Data) at Pin P[3][23] (J Pin3) I2C serial data
  ************************************************************************************************************
  ***********************************************************************************************************/
+#ifndef SETTINGS_H_
+#define SETTINGS_H_
 
-#ifndef DISPLAY_MENU_MENU_RTOS_H_
-#define DISPLAY_MENU_MENU_RTOS_H_
-
-#include "FreeRTOS.h"
-#include "semphr.h"
+#include <stdint.h>
 
 #include "menu.h"
+#include "param.h"
+#include "servo/servo.h"
+//#include "drive_output.h"
+#include "screen.h"
 
 /*******************************************************************************
- * Variables
+ * menu_func_servo_motor_init
+ * init servo motor to middle positoion
+ * param state:		value, when function was called
  ******************************************************************************/
+void menu_func_servo_motor_init(uint8_t state);
 
 /*******************************************************************************
- * menu_rtos_handle_t
- * menu RTOA handle
- * param drv_handle: 	menu handle
- * param mutex:			mutex
+ * menu_func_servo_motor_left
+ * set max left steeringangle
+ * param state:		value, when function was called
  ******************************************************************************/
-typedef struct {
-	menu_handle_t drv_handle;
-	SemaphoreHandle_t mutex;
-} menu_rtos_handle_t;
+void menu_func_servo_motor_left(uint8_t state);
 
 /*******************************************************************************
- * Prototypes
+ * menu_func_servo_motor_right
+ * set max right steering angle
+ * param state:		value, when function was called
  ******************************************************************************/
-/*******************************************************************************
- * menu_lock
- * take semaphore
- * param handle: 		menu RTOS handle
- ******************************************************************************/
-static inline void menu_lock(menu_rtos_handle_t *handle) {
-	xSemaphoreTake(handle->mutex, portMAX_DELAY);
-}
+void menu_func_servo_motor_right(uint8_t state);
 
 /*******************************************************************************
- * menu_unlock
- * give semaphore
- * param handle: 		menu RTOAS handle
+ * menu_func_bldc_motor_left_init
+ * init left BLDC motor
+ * param state:		value, when function was called
  ******************************************************************************/
-static inline void menu_unlock(menu_rtos_handle_t *handle) {
-	xSemaphoreGive(handle->mutex);
-}
+void menu_func_bldc_motor_left_init(uint8_t state);
 
 /*******************************************************************************
- * menu_rtos_init
- * init menu with RTOS operation
- * param handle:		menu RTOS handle
+ * menu_func_bldc_motor_left_min
+ * set min value for left BLDC motor
+ * param state:		value, when function was called
  ******************************************************************************/
-void menu_rtos_init(menu_rtos_handle_t *handle);
+void menu_func_bldc_motor_left_min(uint8_t state);
 
 /*******************************************************************************
- * menu_rtos_switch_handle
- * switch menu handle
- * param handle:		old menu RTOS handle
- * param to:			new menu RTOS handle
+ * menu_func_bldc_motor_left_max
+ * set max value for left BLDC motor
+ * param state:		value, when function was called
  ******************************************************************************/
-static inline void menu_rtos_switch_handle(menu_rtos_handle_t **handle, menu_rtos_handle_t *to) {
+void menu_func_bldc_motor_left_max(uint8_t state);
 
-	//if to is defined
-	if (to)
-		menu_lock(to);			//take to semaphore
-	//if handle is defined
-	if (*handle)
-		menu_unlock(*handle);	//give handle semaphore
-	*handle = to;				//switch handles
-}
+/*******************************************************************************
+  * menu_func_bldc_motor_right_init
+ * init right BLDC motor
+ * param state:		value, when function was called
+ ******************************************************************************/
+void menu_func_bldc_motor_right_init(uint8_t state);
 
+/*******************************************************************************
+ * menu_func_bldc_motor_right_min
+ * set min value for right BLDC motor
+ * param state:		value, when function was called
+ ******************************************************************************/
+void menu_func_bldc_motor_right_min(uint8_t state);
 
+/*******************************************************************************
+ * menu_func_bldc_motor_right_max
+ * set max value for left BLDC motor
+ * param state:		value, when function was called
+ ******************************************************************************/
+void menu_func_bldc_motor_right_max(uint8_t state);
 
-#endif /* DISPLAY_MENU_MENU_RTOS_H_ */
+/*******************************************************************************
+ * menu_func_restore
+ * restore all parameter to default
+ ******************************************************************************/
+void menu_func_restore();
 
+#endif /* SETTINGS_H_ */

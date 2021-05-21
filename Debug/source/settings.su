@@ -1,0 +1,10 @@
+settings.c:43:6:menu_func_servo_motor_init	16	static
+settings.c:53:6:menu_func_servo_motor_left	16	static
+settings.c:69:6:menu_func_servo_motor_right	16	static
+settings.c:85:6:menu_func_bldc_motor_left_init	16	static
+settings.c:95:6:menu_func_bldc_motor_left_min	16	static
+settings.c:111:6:menu_func_bldc_motor_left_max	16	static
+settings.c:127:6:menu_func_bldc_motor_right_init	16	static
+settings.c:137:6:menu_func_bldc_motor_right_min	16	static
+settings.c:153:6:menu_func_bldc_motor_right_max	16	static
+settings.c:168:6:menu_func_restore	8	static

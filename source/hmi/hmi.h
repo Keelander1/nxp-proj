@@ -46,12 +46,15 @@
 #define DISPLAY_HMI_HMI_H_
 
 
-#define HMI_FG_REFR_RATE 	20
-#define HMI_BG_REFR_RATE	500
+#define HMI_FG_REFR_RATE 	20										//20ms hmi refresh rate
+#define HMI_BG_REFR_RATE	500										//refresh display every 500ms
 
-#define HMI_BG_REFR			(HMI_BG_REFR_RATE / HMI_FG_REFR_RATE)
+#define HMI_BG_REFR			(HMI_BG_REFR_RATE / HMI_FG_REFR_RATE)	//calculate hmi refresh cycles for display refresh rate
 
-
+/*******************************************************************************
+ * hmi_task
+ * human machine interface task
+ ******************************************************************************/
 void hmi_task(void* args);
 
 

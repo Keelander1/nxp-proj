@@ -51,6 +51,11 @@ const ctimer_config_t SERVO_config = {
 		.prescale = 0                /*!< Prescale value 0 --> */
 };
 
+int32_t* servoMiddleValue= &((all_param_t*)&const_all_param)->motors.servo.init;
+int32_t* servoLeftValue= &((all_param_t*)&const_all_param)->motors.servo.min;
+int32_t* servoRightValue= &((all_param_t*)&const_all_param)->motors.servo.max;
+
+
 
 /*******************************************************************************
  * Servo Main Initialization function
@@ -65,7 +70,7 @@ void SERVO_Init(void)
 	IOCON->PIO[3][2]	&= 0xFFFFFFF0;      						//Clear FUNC bits of P3.2
 	IOCON->PIO[3][2]	|= 0x4;										//Cet FUNC bits to CTIMER1_MAT2 function ALT4 P3.2
 	GPIO->DIR[3]        |= 1<<2;        							//Set P3.2 pin to output
-	CTIMER1->MSR[2] = CTIMER1_PWM_PERIOD - SERVO_PWM_Middle_Value;	//Initialize MSR with SERVO_PWM_Middle_Value value
+	CTIMER1->MSR[2] = CTIMER1_PWM_PERIOD -(*servoMiddleValue)*CTIMER1_PWM_PERIOD/20000;	//Initialize MSR with SERVO_PWM_Middle_Value value
 	//*************************************************************
 
 	//*******************************************************************************************************
@@ -97,6 +102,7 @@ void CTIMER1_Init(void)
  ******************************************************************************/
 void SERVO_Demo(void *pvParameters)
 {
+
 	while(1)
 	{
 		//***************************************************************
@@ -110,6 +116,7 @@ void SERVO_Demo(void *pvParameters)
 
 		vTaskSuspend(NULL);	//suspend Task
 	}
+
 }
 
 

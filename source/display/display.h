@@ -52,22 +52,22 @@
 extern i2c_m_rtos_handle_t g_disp_0_i2c_handle; 	//I2C freertos handle
 extern ssd1309_rtos_t g_disp_0;						//LCD handle
 
-/*
+
 //******************************
 //Configure Pin P[3][23] (J9 Pin3) (I2C_SDA/FC2_CTS_SDA_SSEL0)
-#define PIO323_DIGIMODE_DIGITAL 0x01u 	//pin is digital pin
-#define PIO323_FUNC_ALT1 0x01u			//pin function is I2C SDA
-#define PIO323_I2CSLEW_I2C_MODE 0x00u	//pin slew rate is in I2C mode
+//#define PIO323_DIGIMODE_DIGITAL 0x01u 	//pin is digital pin
+//#define PIO323_FUNC_ALT1 0x01u			//pin function is I2C SDA
+//#define PIO323_I2CSLEW_I2C_MODE 0x00u	//pin slew rate is in I2C mode
 //******************************
 
 
 //******************************
 //Configure Pin P[3][24] (J9 Pin1) (I2C_SCL/FC2_RTS_SCL_SSEL1)
-#define PIO324_DIGIMODE_DIGITAL 0x01u	//pin is digital pin
-#define PIO324_FUNC_ALT1 0x01u			//pin function is I2C SDA
-#define PIO324_I2CSLEW_I2C_MODE 0x00u	//pin slew rate is in I2C mode
+//#define PIO324_DIGIMODE_DIGITAL 0x01u	//pin is digital pin
+//#define PIO324_FUNC_ALT1 0x01u			//pin function is I2C SDA
+//#define PIO324_I2CSLEW_I2C_MODE 0x00u	//pin slew rate is in I2C mode
 //******************************
-*/
+
 
 //******************************
 //Configure I2C interface

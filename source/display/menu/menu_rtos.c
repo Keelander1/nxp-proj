@@ -49,7 +49,7 @@
  ******************************************************************************/
 void menu_rtos_init(menu_rtos_handle_t *handle) {
 
-	if (!handle)
+	if (!handle)	//return if handle do not exist
 		return;
 
 	handle->mutex = xSemaphoreCreateMutex();	//create mutex

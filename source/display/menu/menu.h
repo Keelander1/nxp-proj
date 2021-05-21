@@ -44,8 +44,16 @@
 /*******************************************************************************
  * Definitions
  ******************************************************************************/
+
 /*******************************************************************************
- *
+ * contain status informations
+ * param MENU_LOAD:
+ * param MENU_REFR:
+ * param MENU_DEACT:
+ * param MENU_ACT:
+ * param MENU_UP:
+ * param MENU_DOWN:
+ * param MENU_POS:
  ******************************************************************************/
 enum {
 	MENU_LOAD = 0,
@@ -58,7 +66,12 @@ enum {
 };
 
 /*******************************************************************************
- * menu entry types
+ * menu_entry_type_t
+ * contains menu entry types
+ * param MENU_LINK:		noninverted color mode
+ * param MENU_CHECK:	inverted color mode
+ * param MENU_VALUE:	noninverted color mode
+ * param MENU_PAGE:		inverted color mode
  ******************************************************************************/
 typedef enum {
 	MENU_LINK = 0,
@@ -68,10 +81,20 @@ typedef enum {
 } menu_entry_type_t;
 
 /*******************************************************************************
- * menu entry
+ * menu_entry_t
+ * contains menu entry parameters
+ * param str:		menu entry text
+ * param type:		menu entry type
+ * param link:		inverted color mode
+ * param act:		noninverted color mode
+ * param val:		menu entry value
+ * param func:		menu entry function
+ * param min_val:	menu entry min value
+ * param max_val:	menu entry max value
+ * param en:		menu entry clickable or not
  ******************************************************************************/
 typedef struct {
-	char str[12];
+	char str[18];
 	menu_entry_type_t type;	//menu entry type
 	union {
 		void (*link)();
@@ -85,7 +108,14 @@ typedef struct {
 } menu_entry_t;
 
 /*******************************************************************************
- * menu handle
+ * menu_entry_type_t
+ * contains menu handle
+ * param entry_cnt:		number of entries
+ * param entry_list:	entries
+ * param pos:			actual positon
+ * param active_entry:	selected entry
+ * param dirty:			should display be updeated or not
+ * param draw:			draw function for this entry
  ******************************************************************************/
 typedef struct _menu_handle_t {
 	uint8_t entry_cnt;

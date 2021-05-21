@@ -46,7 +46,13 @@
 /*******************************************************************************
  * Definitions
  ******************************************************************************/
-/*! @brief Rotary encoder handle. */
+/*******************************************************************************
+ * re_handle_t
+ * rotary encoder functionality
+ * param last:		last state of signal a and signal b
+ * param state:		actuall amount of rotations
+ * param position:	if position > 0: clockwise rotation; if < 0: coutnerclockwise rotation; if = 0: no rotation
+ ******************************************************************************/
 typedef struct {
 	volatile uint8_t last;
 	volatile int8_t state;
@@ -56,25 +62,29 @@ typedef struct {
 /*******************************************************************************
  * API
  ******************************************************************************/
-/*
- * @brief Init rotary encoder handle.
- *
+
+/*******************************************************************************
+ * re_init
+ * init rotary encoder
  * Must be called if memory is not initialized to 0.
- */
+ ******************************************************************************/
 void re_init(re_handle_t *handle);
 
-/*!
- * @brief Main task for rotary encoder decoding.
- *
- * Call this function in an ISR every 1ms.
- */
+/*******************************************************************************
+ * re_task
+ * rotary encoder task; get direction of rotation and amount of steps
+ * param handke:		rotary encoder handle
+ * param a:				signal A
+ * param b:				signal B
+ * Call this function in an ISR every 1ms
+ ******************************************************************************/
 void re_task(re_handle_t *handle, uint8_t a, uint8_t b);
 
-/*!
- * @brief Returns the current position.
- *
- * @param The rotary encoders handle.
- */
+/*******************************************************************************
+ * re_get_pos
+ * return and reset position
+ * param handke:		rotary encoder handle
+ ******************************************************************************/
 int32_t re_get_pos(re_handle_t *handle);
 
 

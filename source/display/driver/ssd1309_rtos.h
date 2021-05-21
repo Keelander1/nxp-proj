@@ -58,7 +58,10 @@
  ******************************************************************************/
 
 /*******************************************************************************
- * LCD RTOS struct with LCD object and mutex for RTOS operation
+ * ssd1309_rtos_t
+ * contains LCD RTOS parameters
+ * param disp_obj:	LCD object
+ * param mutex:		mutex handler
  ******************************************************************************/
 typedef struct {
 	ssd1309_t disp_obj;
@@ -87,7 +90,7 @@ void ssd1309_rtos_init(ssd1309_rtos_t *obj, uint8_t id, uint8_t height, uint8_t 
  ******************************************************************************/
 static inline void ssd1309_rtos_lock(ssd1309_rtos_t *obj) {
 
-	xSemaphoreTake(obj->mutex, portMAX_DELAY);
+	xSemaphoreTake(obj->mutex, portMAX_DELAY);		//take LCD semaphor
 }
 
 /*******************************************************************************
@@ -97,7 +100,7 @@ static inline void ssd1309_rtos_lock(ssd1309_rtos_t *obj) {
  ******************************************************************************/
 static inline void ssd1309_rtos_unlock(ssd1309_rtos_t *obj) {
 
-	xSemaphoreGive(obj->mutex);
+	xSemaphoreGive(obj->mutex);						//give LCD semaphore
 }
 
 #endif /* SSD1309_RTOS_H_ */

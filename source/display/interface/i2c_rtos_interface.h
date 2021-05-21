@@ -51,28 +51,39 @@
 
 
 /*******************************************************************************
- * I2C master RTOS handle
+ * i2c_m_rtos_handle_t
+ * contains I2C RTOS configuration
+ * param base:			I2C memory address
+ * param drv_handle:	I2C master DMA handle
+ * param dma_handle:	DMA handle
+ * param dma_base:		DMA memory address
+ * param dma_chnl:		DMA cannel
+ * param config:		I2C master configuration
+ * param async_status:	I2C status and errors
+ * param sem:			semaphore
+ * param mutex:			mutex
  ******************************************************************************/
 typedef struct {
 	I2C_Type *base;
 #ifndef DISP_I2C_DMA
 	i2c_master_handle_t drv_handle;
 #else
-	i2c_master_dma_handle_t drv_handle; //I2C master DMA handle
-	dma_handle_t dma_handle;			//DMA handle
-	DMA_Type *dma_base;					//DMA peripheral address
-	uint32_t dma_chnl;					//DMA channel
+	i2c_master_dma_handle_t drv_handle;
+	dma_handle_t dma_handle;
+	DMA_Type *dma_base;
+	uint32_t dma_chnl;
 #endif
-	i2c_master_config_t config;			//I2C master configuration
-	status_t async_status;				//I2C status and errors
-	SemaphoreHandle_t sem;				//semaphore
-	SemaphoreHandle_t mutex;			//mutex
+	i2c_master_config_t config;
+	status_t async_status;
+	SemaphoreHandle_t sem;
+	SemaphoreHandle_t mutex;
 } i2c_m_rtos_handle_t;
 
 
 #ifndef DISP_I2C_DMA
 void i2c_m_rtos_init(i2c_m_rtos_handle_t *handle, I2C_Type *base, uint32_t baudrate, uint32_t src_clock);
 #else
+
 /*******************************************************************************
  * i2c_m_rtos_init
  * init I2C master with RTOS operaton

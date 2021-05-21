@@ -68,51 +68,41 @@ static void disp_refresh(void* args);
 void ssd1309_rtos_init(ssd1309_rtos_t *obj, uint8_t id, uint8_t height, uint8_t width, uint8_t *buffer) {
 
 	//*******************************************
-	//*******************************************
-	//LCD parameter init
+	//configure LCD
 	//*******************************************
 	obj->disp_obj.config.id = id; 			//set display I2C address
 	obj->disp_obj.config.height = height; 	//set display height in pixel
 	obj->disp_obj.config.width = width; 	//set display width in pixel
 	obj->disp_obj.config.byte_cnt = (uint16_t)((height * width) >> 3);//calculate number of pixels in byte
 
-	//*******************************************
 	//set origin at Top Left corner
 	obj->disp_obj.config.orientation_x = LEFT;
 	obj->disp_obj.config.orientation_y = UP;
-	//*******************************************
 
-	obj->disp_obj.config.color_type = STD; //set color type to not invertet
+	obj->disp_obj.config.color_type = STD; 	//set color type to not invertet
 
-	//*******************************************
 	//set coursor to origin
 	obj->disp_obj.pos.x = 0x00;
 	obj->disp_obj.pos.y = 0x00;
-	//*******************************************
 
 	obj->disp_obj.buffer = buffer; 			//set buffer pointer
-	//*******************************************
-	//*******************************************
 
-	//*******************************************
 	//*******************************************
 	//LCD RTOS operation init
 	//*******************************************
-	obj->mutex = xSemaphoreCreateMutex();	//create Mutex
-	if (obj->mutex == NULL)					//stop if creation failed
+	obj->mutex = xSemaphoreCreateMutex();			//create Mutex
+	if (obj->mutex == NULL)							//stop if creation failed
 		while(1);
 
 	obj->disp_obj.user_data = (void*)obj->mutex;	//save mutex in LCD handler
 
 	obj->disp_obj.dirty = false;					//display is up to date
 
-	ssd1309_init(&obj->disp_obj);//send init to display
+	ssd1309_init(&obj->disp_obj);					//send init to display
 
 	//create disp_refresh task
 	if (xTaskCreate(disp_refresh, "DISP_REFR", (configMINIMAL_STACK_SIZE + 100), (void*)obj, SSD1309_REFR_TASK_PRIO, NULL) != pdPASS)
 		while(1);
-	//*******************************************
-	//*******************************************
 }
 
 /*******************************************************************************
@@ -123,7 +113,7 @@ static void disp_refresh(void* args) {
 
 	ssd1309_rtos_t *obj = (ssd1309_rtos_t*)args;
 	TickType_t last_wake_time;
-	const TickType_t freq = pdMS_TO_TICKS(1000U / SSD1309_REFR_RATE); //calculate display refresh frequency
+	const TickType_t freq = pdMS_TO_TICKS(1000U / SSD1309_REFR_RATE); //calculate display refresh time for 30Hz
 
 	last_wake_time = xTaskGetTickCount();		//get actual operation time
 
@@ -131,9 +121,9 @@ static void disp_refresh(void* args) {
 		//*******************************************
 		//update LCD with RTOS operation
 		//*******************************************
-		ssd1309_rtos_lock(obj);			//take semaphore
-		ssd1309_update(&obj->disp_obj); //update display
-		ssd1309_rtos_unlock(obj);		//give semaphore
+		ssd1309_rtos_lock(obj);					//take semaphore
+		ssd1309_update(&obj->disp_obj); 		//update display
+		ssd1309_rtos_unlock(obj);				//give semaphore
 
 		vTaskDelayUntil(&last_wake_time, freq);	//wait until refresh time is reached
 	}

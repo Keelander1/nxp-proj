@@ -92,7 +92,7 @@ const static uint8_t init_data[] __attribute__((aligned(4U))) = {
 
 		0xD9,	// Set Pre-charge Period
 		0x22,	// Phase 1 period 2h
-				// Phase 2 period 2h
+		// Phase 2 period 2h
 
 		0xDB,	// Set Vcomh Deselect Level
 		0x34,	// 0.78 x Vcc (RESET)
@@ -173,10 +173,10 @@ void ssd1309_set_pixel(ssd1309_t *obj, uint8_t x, uint8_t y, ssd1309_color_t col
  * param bw:		noninverted (ON) or inverted (OFF) rectangel
  ******************************************************************************/
 void ssd1309_draw_rect(ssd1309_t *obj, uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, bool fill, ssd1309_color_t color) {
-	for (uint8_t i = x1; i <= x2; i++) {
-		for (uint8_t j = y1; j <= y2; j++) {
-			if (fill || (i == x1 || i == x2 || j == y1 || j == y2))
-				ssd1309_set_pixel(obj, i, j, color);
+	for (uint8_t i = x1; i <= x2; i++) { 		//for every pixel between x1 and x2
+		for (uint8_t j = y1; j <= y2; j++) {	//for every pixel between y1 and y2
+			if (fill || (i == x1 || i == x2 || j == y1 || j == y2))		//if fill=true or index i or j is on an outline
+				ssd1309_set_pixel(obj, i, j, color);	//draw pixel
 		}
 	}
 }
@@ -192,39 +192,41 @@ void ssd1309_draw_rect(ssd1309_t *obj, uint8_t x1, uint8_t y1, uint8_t x2, uint8
  ******************************************************************************/
 void ssd1309_write_char(ssd1309_t *obj, char chr, ssd1309_font_t font, bool bg, ssd1309_color_t color) {
 
-	uint8_t lf;
+	uint8_t lf;	//linefeed
 	uint8_t b;
 	int16_t h;
 	uint8_t tmp;
 
 	//is chr a printable ascii
-    if (chr < 32 || chr > 126)
-        return;
-    //is the character within the LCD
-    if ((obj->config.height < (obj->pos.y + font.height)) || (obj->config.width < (obj->pos.x + font.width)))
-    	return;
+	if (chr < 32 || chr > 126)
+		return;
+	//is the character within the LCD
+	if ((obj->config.height < (obj->pos.y + font.height)) || (obj->config.width < (obj->pos.x + font.width)))
+		return;
 
-    lf = (font.height - 1U) / 8 + 1;
+	//calculate line feed lf (max: 8 pixels because data is 8 Bit and every Bit stands for one pixel)
+	//for example 0x81 (0b1000 0001) height:8 pixel 0 and pixel 7 is on
+	lf = (font.height - 1U) / 8 + 1;
 
-    for (uint8_t j = 0; j < font.width; j++) {
-		for (uint8_t i = 0; i < lf; i++) {
-			if (font.height % 8)
-				h = (i == lf - 1) ? font.height % 8 : 8;
+	for (uint8_t j = 0; j < font.width; j++) {				//for ever pixel smaller then width
+		for (uint8_t i = 0; i < lf; i++) {					//for every line
+			if (font.height % 8)							//if height != mult of 8
+				h = (i == lf - 1) ? font.height % 8 : 8; 	//if(i==lf)h= height % 8 else h = 8
 			else
 				h = 8;
-			b = font.data[(chr - 32) * font.width * lf + (lf * j) + i];
-			for (uint8_t k = 0; k < h; k++) {
-				tmp = (ssd1309_color_t)((b >> k) & 0x01);
+			b = font.data[(chr - 32) * font.width * lf + (lf * j) + i]; //calc index of data
+			for (uint8_t k = 0; k < h; k++) { 							//for every pixel smaller then line height
+				tmp = (ssd1309_color_t)((b >> k) & 0x01);				//temp = 1 if pixel should be set and 0 if not
 				if (!tmp & !bg)
-					continue;
+					continue;	//do nothing if pixel shouldn´t be set
 				ssd1309_set_pixel(obj, obj->pos.x + j, obj->pos.y + (i << 3) + k, tmp ? color : !color);
 			}
 		}
-    }
+	}
 
-    obj->pos.x += font.width + 1;	//increment x position
+	obj->pos.x += font.width + 1;		//increment courser position
 
-    obj->dirty = true; 				//LCD must be updated
+	obj->dirty = true; 					//LCD must be updated
 }
 
 /*******************************************************************************
@@ -262,22 +264,24 @@ void ssd1309_draw_img(ssd1309_t *obj, uint8_t x, uint8_t y, ssd1309_img_t img, s
 	uint8_t tmp;
 
 	//is the character within the LCD
-    if ((obj->config.height < (y + img.height)) || (obj->config.width < (x + img.width))) {
-    	return;
-    }
+	if ((obj->config.height < (y + img.height)) || (obj->config.width < (x + img.width))) {
+		return;
+	}
 
-    lf = (img.height - 1U) / 8 + 1;
+	//calculate line feed lf (max: 8 pixels because data is 8 Bit and every Bit stands for one pixel)
+	//for example 0x81 (0b1000 0001) height:8 pixel 0 and pixel 7 is on
+	lf = (img.height - 1U) / 8 + 1;
 
-	for(uint8_t i = 0; i < lf; i++) {
-		if (img.height % 8)
-			h = (i == lf - 1) ? img.height % 8 : 8;
+	for(uint8_t i = 0; i < lf; i++) {		//for every line
+		if (img.height % 8)								//if height != multiple of 8
+			h = (i == lf - 1) ? img.height % 8 : 8;		//if(i==lf)h= height % 8 else h = 8
 		else
 			h = 8;
-		for (uint8_t j = 0; j < img.width; j++) {
-			b = img.data[(i * img.width) + j];
-			for (uint8_t k = 0; k < h; k++) {
-				tmp = (ssd1309_color_t)((b >> k) & 0x01);
-				ssd1309_set_pixel(obj, x + j, y + (i << 3) + k, tmp ? color : !color);
+		for (uint8_t j = 0; j < img.width; j++) {			//for every pixel smaller then width
+			b = img.data[(i * img.width) + j];				//calc index of data
+			for (uint8_t k = 0; k < h; k++) {				//for every pixel smaller then line height
+				tmp = (ssd1309_color_t)((b >> k) & 0x01);	//temp = 1 if pixel should be set and 0 if not
+				ssd1309_set_pixel(obj, x + j, y + (i << 3) + k, tmp ? color : !color);		//set current pixel
 			}
 		}
 

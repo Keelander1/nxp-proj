@@ -52,31 +52,50 @@ void screen_main();
 /*******************************************************************************
  * Code
  ******************************************************************************/
+/*******************************************************************************
+ * helper_uint_to_2digit
+ * convert value to 2 ASCII charakters and save them to str
+ * param value:		integer value
+ * param str:		pointer to char array
+ ******************************************************************************/
 static void helper_uint_to_2digit(uint32_t value, char* str) {
 
-	str[0] = ((value / 10) % 10) + '0';
-	str[1] = (value % 10) + '0';
-}
-/*
-void menu_open_main() {
-	//	menu_rtos_switch_handle(&curr_menu_handle, &menu_main_screen_handle);
-	//	menu_main_screen_handle.drv_handle.pos = 2;
-	menu_rtos_switch_handle(&curr_menu_handle, &menu_main_handle);
-	menu_reset(&curr_menu_handle->drv_handle);
+	str[0] = ((value / 10) % 10) + '0'; //calculate tenths of value and convert it to ASCII
+	str[1] = (value % 10) + '0';		//calculate ones of value and convert it to ASCII
 }
 
+/*******************************************************************************
+ * menu_open_main
+ * open main menu
+ ******************************************************************************/
+void menu_open_main() {
+	//?
+	menu_rtos_switch_handle(&curr_menu_handle, &menu_main_screen_handle);
+	menu_main_screen_handle.drv_handle.pos = 2;
+	//**********************************************************************
+	//switch to main menu
+	//**********************************************************************
+	menu_rtos_switch_handle(&curr_menu_handle, &menu_main_handle);	//switch menu handler
+	menu_reset(&curr_menu_handle->drv_handle);						//reset menu handle
+}
+/*
 void menu_open_main_drive() {
 
 	menu_rtos_switch_handle(&curr_menu_handle, &menu_main_drive_handle);
 	menu_reset(&curr_menu_handle->drv_handle);
 }
-
+ */
 void menu_open_main_hardware() {
 
 	menu_rtos_switch_handle(&curr_menu_handle, &menu_main_hardware_handle);
 	menu_reset(&curr_menu_handle->drv_handle);
 }
+void menu_open_hardware_abaut() {
 
+	menu_rtos_switch_handle(&curr_menu_handle, &menu_hardware_ppm_handle);
+	menu_reset(&curr_menu_handle->drv_handle);
+}
+/*
 void menu_page_main_about(uint8_t refresh) {
 
 	ssd1309_rtos_lock(&g_disp_0);
@@ -91,12 +110,14 @@ void menu_page_main_about(uint8_t refresh) {
 
 	ssd1309_rtos_unlock(&g_disp_0);
 }
-
+ */
 void menu_open_hardware_ppm() {
 
 	menu_rtos_switch_handle(&curr_menu_handle, &menu_hardware_ppm_handle);
 	menu_reset(&curr_menu_handle->drv_handle);
 }
+
+
 
 void menu_open_ppm_servo_motor() {
 
@@ -120,7 +141,7 @@ void menu_open_ppm_restore() {
 	menu_rtos_switch_handle(&curr_menu_handle, &menu_ppm_restore_handle);
 	menu_reset(&curr_menu_handle->drv_handle);
 }
-
+/*
 void menu_open_hardware_camera() {
 
 	menu_rtos_switch_handle(&curr_menu_handle, &menu_hardware_camera_handle);
@@ -152,7 +173,7 @@ void menu_page_camera_info(uint8_t refresh) {
 			ssd1309_set_pos(&g_disp_0.disp_obj, 0, 38);
 			ssd1309_write_str(&g_disp_0.disp_obj, (char*)(buffer + 17), ssd1309_font_6x8, false, ON);
 
-			*(uint32_t*)buffer = pixy2_func_zero_arg(&g_pixy2, "getUID", 0x00, NULL, 0);
+ *(uint32_t*)buffer = pixy2_func_zero_arg(&g_pixy2, "getUID", 0x00, NULL, 0);
 			sprintf((char*)(buffer+17), "UID:  %08X", *(uint32_t*)(buffer));
 			ssd1309_set_pos(&g_disp_0.disp_obj, 0, 48);
 			ssd1309_write_str(&g_disp_0.disp_obj, (char*)(buffer + 17), ssd1309_font_6x8, false, ON);
@@ -171,27 +192,33 @@ void menu_page_camera_info(uint8_t refresh) {
 
 
 
+ */
 
+/*******************************************************************************
+ * menu_clos
+ * close men
+ ******************************************************************************/
 void menu_close() {
 
-	drive_output_init_chnl(0, &all_param->ppm.chnl0);
-	drive_output_init_chnl(1, &all_param->ppm.chnl1);
-	drive_output_init_chnl(2, &all_param->ppm.chnl2);
+	//drive_output_init_chnl(0, &all_param->ppm.chnl0);
+	//drive_output_init_chnl(1, &all_param->ppm.chnl1);
+	//drive_output_init_chnl(2, &all_param->ppm.chnl2);
 
-	param_save();
-	screen_main();
+	param_save();	//save parameters
+	screen_main();	//draw main screen
 }
 
-*/
-/*
- *
- */
+
+/*******************************************************************************
+ * screen main
+ * draw main creen
+ ******************************************************************************/
 void screen_main() {
 
-	ssd1309_rtos_lock(&g_disp_0);
-//clear display except for top header
-	ssd1309_draw_rect(&g_disp_0.disp_obj, 0, 13, 127, 56, true, OFF);
-/*
+	ssd1309_rtos_lock(&g_disp_0);	//take LCD semaphore
+
+	ssd1309_draw_rect(&g_disp_0.disp_obj, 0, 13, 127, 56, true, OFF);	//clear display except for top header
+	/*
 	if (pixy2_is_initialized(&g_pixy2)) {
 		menu_rtos_switch_handle(&curr_menu_handle, &menu_main_screen_handle);
 		menu_main_screen_handle.drv_handle.pos = 2;
@@ -202,14 +229,12 @@ void screen_main() {
 		ssd1309_draw_img(&g_disp_0.disp_obj, 39, 18, img_no_camera, ON);
 	}
 
-*/
-	menu_rtos_switch_handle(&curr_menu_handle, NULL);
-	//draw no camera image in center of screen
-	ssd1309_draw_img(&g_disp_0.disp_obj, 39, 18, img_no_camera, ON);
-	//draw bottom header with menu and reset
-	ssd1309_draw_img(&g_disp_0.disp_obj, 0, 57, img_footer_outer, ON);
+	 */
+	menu_rtos_switch_handle(&curr_menu_handle, NULL);					//delete current menu handle
+	ssd1309_draw_img(&g_disp_0.disp_obj, 39, 18, img_no_camera, ON);	//draw no camera symbol
+	ssd1309_draw_img(&g_disp_0.disp_obj, 0, 57, img_footer_outer, ON);	//draw bottom header with menu and reset
 
-	ssd1309_rtos_unlock(&g_disp_0);
+	ssd1309_rtos_unlock(&g_disp_0);		//give LCD semaphore
 }
 
 void screen_update_header() {
@@ -218,43 +243,45 @@ void screen_update_header() {
 
 	char temp_str[5];
 
-	uint32_t time = ((uint32_t)(xTaskGetTickCount()) / configTICK_RATE_HZ);
+	uint32_t time = ((uint32_t)(xTaskGetTickCount()) / configTICK_RATE_HZ);	//get CPU runtime in seconds
 
-	// hrs
+	//calculate hours and convert to ASCII
 	temp_str[0] = ((time / 3600) % 10) + '0';
 
-	// mins
+	//calculate and convert minutes from uint to two digits and save them to temp_str[1] and temp_str[2]
 	helper_uint_to_2digit(((time / 60) % 60), (char *)(temp_str + 1));
 
-	// secs
+	//calculate and convert seconds from uint to two digits and save them to temp_str[3] and temp_str[4]
 	helper_uint_to_2digit((time % 60), (char *)(temp_str + 3));
 
 
-	ssd1309_rtos_lock(&g_disp_0);
+	//**********************************************************************
+	//update screen
+	//**********************************************************************
+	ssd1309_rtos_lock(&g_disp_0);		//take LCD semaphore
 
-	// Runtime
-	ssd1309_set_pos(&g_disp_0.disp_obj, 8, 0);
-	ssd1309_write_char(&g_disp_0.disp_obj, temp_str[0], ssd1309_font_3x5, true, ON);
-	ssd1309_set_pos(&g_disp_0.disp_obj, 14, 0);
-	ssd1309_write_char(&g_disp_0.disp_obj, temp_str[1], ssd1309_font_3x5, true, ON);
-	ssd1309_set_pos(&g_disp_0.disp_obj, 18, 0);
-	ssd1309_write_char(&g_disp_0.disp_obj, temp_str[2], ssd1309_font_3x5, true, ON);
-	ssd1309_set_pos(&g_disp_0.disp_obj, 24, 0);
-	ssd1309_set_pos(&g_disp_0.disp_obj, 24, 0);
-	ssd1309_write_char(&g_disp_0.disp_obj, temp_str[3], ssd1309_font_3x5, true, ON);
-	ssd1309_set_pos(&g_disp_0.disp_obj, 28, 0);
-	ssd1309_write_char(&g_disp_0.disp_obj, temp_str[4], ssd1309_font_3x5, true, ON);
+	//draw runtime to the top left corner
+	ssd1309_set_pos(&g_disp_0.disp_obj, 8, 0);											//set hour position
+	ssd1309_write_char(&g_disp_0.disp_obj, temp_str[0], ssd1309_font_3x5, true, ON);	//draw hours
+	ssd1309_set_pos(&g_disp_0.disp_obj, 14, 0);											//set left minute position
+	ssd1309_write_char(&g_disp_0.disp_obj, temp_str[1], ssd1309_font_3x5, true, ON);	//draw tens of minute
+	ssd1309_set_pos(&g_disp_0.disp_obj, 18, 0);											//set right minue position
+	ssd1309_write_char(&g_disp_0.disp_obj, temp_str[2], ssd1309_font_3x5, true, ON);	//draw ones of minute
+	ssd1309_set_pos(&g_disp_0.disp_obj, 24, 0);											//set left second position
+	ssd1309_write_char(&g_disp_0.disp_obj, temp_str[3], ssd1309_font_3x5, true, ON);	//draw tens of second
+	ssd1309_set_pos(&g_disp_0.disp_obj, 28, 0);											//set right second position
+	ssd1309_write_char(&g_disp_0.disp_obj, temp_str[4], ssd1309_font_3x5, true, ON);	//draw ones of second
 
-	// Battery voltage
-	ssd1309_set_pos(&g_disp_0.disp_obj, 97, 0);
-	ssd1309_write_char(&g_disp_0.disp_obj, '0', ssd1309_font_3x5, true, ON);
-	ssd1309_set_pos(&g_disp_0.disp_obj, 101, 0);
-	ssd1309_write_char(&g_disp_0.disp_obj, '0', ssd1309_font_3x5, true, ON);
-	ssd1309_set_pos(&g_disp_0.disp_obj, 109, 0);
-	ssd1309_write_char(&g_disp_0.disp_obj, '0', ssd1309_font_3x5, true, ON);
+	// draw battery voltage to the top right corner
+	ssd1309_set_pos(&g_disp_0.disp_obj, 97, 0);											//set tens voltage position
+	ssd1309_write_char(&g_disp_0.disp_obj, '-', ssd1309_font_3x5, true, ON);			//draw tens volatage
+	ssd1309_set_pos(&g_disp_0.disp_obj, 101, 0);										//set ones voltage position
+	ssd1309_write_char(&g_disp_0.disp_obj, '-', ssd1309_font_3x5, true, ON);			//draw ones voltage
+	ssd1309_set_pos(&g_disp_0.disp_obj, 109, 0);										//set tenths voltage position
+	ssd1309_write_char(&g_disp_0.disp_obj, '-', ssd1309_font_3x5, true, ON);			//draw tenths voltage
 
 	// Symbols
-/*
+	/*
 	// Pixy camera
 	if (cam_init != pixy2_is_initialized(&g_pixy2)) {
 		if (pixy2_is_initialized(&g_pixy2))
@@ -268,28 +295,30 @@ void screen_update_header() {
 		ssd1309_draw_img(&g_disp_0.disp_obj, 80, 3, img_speaker_symbol, OFF);
 	else
 		ssd1309_draw_rect(&g_disp_0.disp_obj, 80, 3, 87, 9, true, ON);
-*/
-	ssd1309_rtos_unlock(&g_disp_0);
+	 */
+	ssd1309_rtos_unlock(&g_disp_0);		//give LCD semaphore
 
 	//cam_init = pixy2_is_initialized(&g_pixy2);
 }
 
 
-/*
+
+/*******************************************************************************
+ * screen_bg
  * draw the top header with run time and voltage meassurement
- */
+ ******************************************************************************/
 void screen_bg() {
 
-	ssd1309_rtos_lock(&g_disp_0);
+	ssd1309_rtos_lock(&g_disp_0);	//take LCD semaphore
 
-	// Clear display
-	ssd1309_draw_rect(&g_disp_0.disp_obj, 0, 0, 127, 63, true, OFF);
+	ssd1309_draw_rect(&g_disp_0.disp_obj, 0, 0, 127, 63, true, OFF);	//Clear display
 
-	//draw header bar
-	ssd1309_draw_img(&g_disp_0.disp_obj, 0, 0, img_header_bar, ON);
+	ssd1309_draw_img(&g_disp_0.disp_obj, 0, 0, img_header_bar, ON);		//draw header bar
 
-	//draw clock symbol to the left top corner
-	ssd1309_draw_img(&g_disp_0.disp_obj, 0, 0, img_clock_symbol, ON);
+
+
+	ssd1309_draw_img(&g_disp_0.disp_obj, 0, 0, img_clock_symbol, ON);	//draw clock symbol to the left top corner
+
 	//draw colon between hour and minutes
 	ssd1309_set_pixel(&g_disp_0.disp_obj, 12, 1, ON);
 	ssd1309_set_pixel(&g_disp_0.disp_obj, 12, 3, ON);
@@ -297,22 +326,17 @@ void screen_bg() {
 	ssd1309_set_pixel(&g_disp_0.disp_obj, 22, 1, ON);
 	ssd1309_set_pixel(&g_disp_0.disp_obj, 22, 3, ON);
 
-	// Runtime text
-	//set cursor to hour segment position
-	ssd1309_set_pos(&g_disp_0.disp_obj, 8, 0);
-	ssd1309_write_char(&g_disp_0.disp_obj, '0', ssd1309_font_3x5, true, ON);
-	//set cursor to first minute segment position
-	ssd1309_set_pos(&g_disp_0.disp_obj, 14, 0);
-	ssd1309_write_char(&g_disp_0.disp_obj, '0', ssd1309_font_3x5, true, ON);
-	//set cursor to second minute segment position
-	ssd1309_set_pos(&g_disp_0.disp_obj, 18, 0);
-	ssd1309_write_char(&g_disp_0.disp_obj, '0', ssd1309_font_3x5, true, ON);
-	//set cursor to first second segment position
-	ssd1309_set_pos(&g_disp_0.disp_obj, 24, 0);
-	ssd1309_write_char(&g_disp_0.disp_obj, '0', ssd1309_font_3x5, true, ON);
-	//set cursor to second second segment position
-	ssd1309_set_pos(&g_disp_0.disp_obj, 28, 0);
-	ssd1309_write_char(&g_disp_0.disp_obj, '0', ssd1309_font_3x5, true, ON);
+	//draw runtime to the top left corner
+	ssd1309_set_pos(&g_disp_0.disp_obj, 8, 0);									//set hour position
+	ssd1309_write_char(&g_disp_0.disp_obj, '0', ssd1309_font_3x5, true, ON);	//draw hours
+	ssd1309_set_pos(&g_disp_0.disp_obj, 14, 0);									//set left minute position
+	ssd1309_write_char(&g_disp_0.disp_obj, '0', ssd1309_font_3x5, true, ON);	//draw tens of minute
+	ssd1309_set_pos(&g_disp_0.disp_obj, 18, 0);									//set right minue position
+	ssd1309_write_char(&g_disp_0.disp_obj, '0', ssd1309_font_3x5, true, ON);	//draw ones of minute
+	ssd1309_set_pos(&g_disp_0.disp_obj, 24, 0);									//set left second position
+	ssd1309_write_char(&g_disp_0.disp_obj, '0', ssd1309_font_3x5, true, ON);	//draw tens of second
+	ssd1309_set_pos(&g_disp_0.disp_obj, 28, 0);									//set right second position
+	ssd1309_write_char(&g_disp_0.disp_obj, '0', ssd1309_font_3x5, true, ON);	//draw ones of second
 
 	//draw battery symbol on right top corner
 	ssd1309_draw_img(&g_disp_0.disp_obj, 118, 1, img_battery_symbol, ON);
@@ -324,17 +348,14 @@ void screen_bg() {
 	ssd1309_set_pos(&g_disp_0.disp_obj, 113, 0);
 	ssd1309_write_char(&g_disp_0.disp_obj, 'V', ssd1309_font_3x5, false, ON);
 
-	// draw voltage level text (00.0V)
-	//set position to tens place
-	ssd1309_set_pos(&g_disp_0.disp_obj, 97, 0);
-	ssd1309_write_char(&g_disp_0.disp_obj, '0', ssd1309_font_3x5, true, ON);
-	//set position to ones place
-	ssd1309_set_pos(&g_disp_0.disp_obj, 101, 0);
-	ssd1309_write_char(&g_disp_0.disp_obj, '0', ssd1309_font_3x5, true, ON);
-	//set position to tenth place
-	ssd1309_set_pos(&g_disp_0.disp_obj, 109, 0);
-	ssd1309_write_char(&g_disp_0.disp_obj, '0', ssd1309_font_3x5, true, ON);
+	//drwa voltage level
+	ssd1309_set_pos(&g_disp_0.disp_obj, 97, 0);									//set tens voltage position
+	ssd1309_write_char(&g_disp_0.disp_obj, '-', ssd1309_font_3x5, true, ON);	//draw tens voltage
+	ssd1309_set_pos(&g_disp_0.disp_obj, 101, 0);								//set ones voltage position
+	ssd1309_write_char(&g_disp_0.disp_obj, '-', ssd1309_font_3x5, true, ON);	//draw ones voltage
+	ssd1309_set_pos(&g_disp_0.disp_obj, 109, 0);								//set tenth voltage position
+	ssd1309_write_char(&g_disp_0.disp_obj, '-', ssd1309_font_3x5, true, ON);	//draw tenths voltag
 
-	ssd1309_rtos_unlock(&g_disp_0);
+	ssd1309_rtos_unlock(&g_disp_0);		//give LCD semaphore
 }
 

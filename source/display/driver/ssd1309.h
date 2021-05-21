@@ -59,25 +59,41 @@
  ******************************************************************************/
 
 /*******************************************************************************
- * color type of LCD
+ * ssd1309_color_type_t
+ * contains colormode
+ * param STD:	noninverted color mode
+ * param INV:	inverted color mode
  ******************************************************************************/
 typedef enum {
-	STD = 0xA6,	//noninverted color mode
-	INV = 0xA7,	//inverted color mode
+	STD = 0xA6,
+	INV = 0xA7,
 } ssd1309_color_type_t;
 
 /*******************************************************************************
- * orientation of LCD
+ * ssd1309_orientation_t
+ * contains LCD orientation
+ * param UP:	y orientation from top to bottom
+ * param DOWN:	y orientation from bottom to top
+ * param LEFT:	x orientation from left to right
+ * param RIGHT:	x orientation from right to left
  ******************************************************************************/
 typedef enum {
-	UP    = 0xC0,	//y orientation from top to bottom
-	DOWN  = 0xC8,	//y orientation from bottom to top
-	LEFT  = 0xA0,	//x orientation from left to right
-	RIGHT = 0xA1,	//x orientation from right to left
+	UP    = 0xC0,
+	DOWN  = 0xC8,
+	LEFT  = 0xA0,
+	RIGHT = 0xA1,
 } ssd1309_orientation_t;
 
 /*******************************************************************************
- * configuration of LCD
+ * ssd1309_config_t
+ * contains LCD configuration
+ * param id:			I2C address
+ * param height:		LCD height in pixels
+ * param width:			LCD width in pixels
+ * param byte_cnt:		number of pixels in byte
+ * param orientation_y:	y orientation
+ * param orientation_x:	x orientation
+ * param color_type:	color mode
  ******************************************************************************/
 typedef struct {
 	uint8_t id;								//I2C address
@@ -90,38 +106,53 @@ typedef struct {
 } ssd1309_config_t;
 
 /*******************************************************************************
- * courser position
+ * ssd1309_pos_t
+ * contains courser position
+ * param x:		x position
+ * param y:		y position
  ******************************************************************************/
 typedef struct {
-	uint8_t x;	//x position
-	uint8_t y;	//y position
+	uint8_t x;
+	uint8_t y;
 } ssd1309_pos_t;
 
 /*******************************************************************************
- * draw or delete pixel
+ * ssd1309_color_t
+ * contains pixel color
+ * param OFF:		set pixel
+ * param ON:		delete pixel
  ******************************************************************************/
 typedef enum {
-	OFF = 0,	//draw pixel
-	ON = 1,		//delete pixel
+	OFF = 0,
+	ON = 1,
 } ssd1309_color_t;
 
 /*******************************************************************************
- * data or command
+ * ssd1309_data_t
+ * contains data format selection for I2C
+ * param CMD:		data is command
+ * param DATA:		data is data
  ******************************************************************************/
 typedef enum {
-	CMD = 0,	//data is command
-	DATA = 1,	//data is data
+	CMD = 0,
+	DATA = 1,
 } ssd1309_data_t;
 
 /*******************************************************************************
- * LCD object
+ * ssd1309_t
+ * contains all LCD parameter
+ * param config:		LCD configuration
+ * param ps:			courser position
+ * param buffer:		data buffer
+ * param user_data:		user data
+ * param dirty:			should display be updated or not
  ******************************************************************************/
 typedef struct {
-	ssd1309_config_t config;	//LCD configuration
-	ssd1309_pos_t pos;			//courser position
-	uint8_t *buffer;			//data buffer
-	void *user_data;			//user data
-	bool dirty;					// should display be updated or not
+	ssd1309_config_t config;
+	ssd1309_pos_t pos;
+	uint8_t *buffer;
+	void *user_data;
+	bool dirty;
 } ssd1309_t;
 
 /*******************************************************************************

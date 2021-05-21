@@ -12,6 +12,8 @@ RM := rm -rf
 -include startup/subdir.mk
 -include source/servo/subdir.mk
 -include source/rpmMeas/subdir.mk
+-include source/hmi/input_devices/subdir.mk
+-include source/hmi/subdir.mk
 -include source/drive/subdir.mk
 -include source/display/menu/design/subdir.mk
 -include source/display/menu/subdir.mk

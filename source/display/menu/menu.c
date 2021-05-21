@@ -42,9 +42,9 @@
  ******************************************************************************/
 void menu_init(menu_handle_t *handle) {
 
-	handle->pos = 0;
-	handle->active_entry = 0;
-	handle->dirty = 1;
+	handle->pos = 0;			//mark top menu item
+	handle->active_entry = 0;	//to entry is active
+	handle->dirty = 1;			//display should be updated
 }
 
 /*******************************************************************************
@@ -54,9 +54,9 @@ void menu_init(menu_handle_t *handle) {
  ******************************************************************************/
 void menu_reset(menu_handle_t *handle) {
 
-	handle->pos = 0;
-	handle->active_entry = 0;
-	handle->dirty = 1;
+	handle->pos = 0;            //mark top menu item
+	handle->active_entry = 0;   //to entry is active
+	handle->dirty = 1;          //display should be updated
 }
 
 /*******************************************************************************
@@ -68,23 +68,25 @@ void menu_click(menu_handle_t *handle) {
 
 	menu_entry_t *entry;
 
+	//get selected menu
 	entry = &handle->entry_list[handle->pos];
 
+	// if menu is clickable
 	if (!entry->en)
 		return;
 
-	handle->dirty = 1;
+	handle->dirty = 1;		//display has to be refreshed
 
 	if (entry->type == MENU_CHECK) {
 		*entry->act += 1;
 	} else if (entry->type == MENU_LINK)
-		entry->link();
+		entry->link();		//open next menu
 	else if (entry->type == MENU_PAGE) {
 		if (handle->active_entry)
 			handle->active_entry = 0;
 		else {
 			handle->active_entry = 1;
-			entry->func(MENU_LOAD);
+			entry->func(MENU_LOAD);		//run function func
 			return;
 		}
 	} else
@@ -95,7 +97,7 @@ void menu_click(menu_handle_t *handle) {
 
 /*******************************************************************************
  * menu_up
- * scroll uo
+ * scroll up
  * param handle:		menu handle
  * param incr:
  ******************************************************************************/
@@ -108,20 +110,25 @@ void menu_up(menu_handle_t *handle, uint16_t incr) {
 	if (handle->active_entry) {
 		if (entry->type == MENU_PAGE)
 			return;
+		//**********************************************************************
+		//is entry type a value?
+		//**********************************************************************
 		if(entry->type == MENU_VALUE) {
+			//is new value higher then the allowed maximum value?
 			if ((*entry->val + incr) <= entry->max_val) {
-				*entry->val += incr;
-				handle->dirty = 1;
+				*entry->val += incr;	//increment value
+				handle->dirty = 1;		//display has to be refreshed
 			}
 		}
 		if (entry->func)
 			entry->func(MENU_UP);
 	} else {
+		//is new courser position above entry count
 		if ((uint16_t)(handle->pos + incr) >= handle->entry_cnt)
-			handle->pos = handle->entry_cnt - 1;
+			handle->pos = handle->entry_cnt - 1;	//courser position is entry count -1
 		else
-			handle->pos += incr;
-		handle->dirty = 1;
+			handle->pos += incr;	//increment courser position
+		handle->dirty = 1;		//display has to be refreshed
 	}
 }
 
@@ -140,20 +147,25 @@ void menu_down(menu_handle_t *handle, uint16_t decr) {
 	if (handle->active_entry) {
 		if (entry->type == MENU_PAGE)
 			return;
+		//**********************************************************************
+		//is entry type a value?
+		//**********************************************************************
 		if(entry->type == MENU_VALUE) {
+			//is new value less then the allowed minimum value?
 			if ((*entry->val - decr) >= entry->min_val) {
-				*entry->val -= decr;
-				handle->dirty = 1;
+				*entry->val -= decr;	//decrement value
+				handle->dirty = 1;		//display has to be refreshed
 			}
 		}
 		if (entry->func)
 			entry->func(MENU_DOWN);
 	} else {
+		//is new courser position below 0
 		if ((int16_t)(handle->pos - decr) < 0)
-			handle->pos = 0;
+			handle->pos = 0;		//courser position is 0
 		else
-			handle->pos -= decr;
-		handle->dirty = 1;
+			handle->pos -= decr;	//decrement courser position
+		handle->dirty = 1;		//display has to be refreshed
 	}
 }
 
@@ -208,8 +220,9 @@ void menu_refresh(menu_handle_t *handle) {
  ******************************************************************************/
 void menu_task(menu_handle_t *handle) {
 
+	//return if task doesn´t exist
 	if (handle == NULL)
 		return;
-
+	//draw menu if task exists
 	handle->draw(handle);
 }

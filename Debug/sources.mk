@@ -32,6 +32,8 @@ source/display/interface \
 source/display/menu/design \
 source/display/menu \
 source/drive \
+source/hmi \
+source/hmi/input_devices \
 source \
 source/rpmMeas \
 source/servo \

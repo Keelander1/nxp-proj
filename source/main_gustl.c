@@ -31,12 +31,12 @@
 /*******************************************************************************
  * Code: Main Entry
  ******************************************************************************/
-
 int main(void)
 {
 	//*******************************************
 	//Initialize board hardware.
-    CLOCK_AttachClk(BOARD_DEBUG_UART_CLK_ATTACH); //attach 12 MHz clock to FLEXCOMM0 (debug console)
+
+	CLOCK_AttachClk(BOARD_DEBUG_UART_CLK_ATTACH); //attach 12 MHz clock to FLEXCOMM0 (debug console)
     BOARD_InitBootPins();
     BOARD_InitBootClocks();
     BOARD_InitDebugConsole();
@@ -46,6 +46,7 @@ int main(void)
     //***********************************************
     //Own initialization of car peripherals and board
     Board_Init(); 	//Initialize board peripherals
+    PARAM_Init();	//Initialize EEPROM
     CAM_Init();		//Initialize line-Camera
     RPMMEAS_Init();	//Initialize speed-measurement
     SERVO_Init();	//Initialize servo-drive
@@ -58,6 +59,15 @@ int main(void)
     { LED3_ON(); } //LED3 is Error
     //***********************************************************************************************
 
+    //Create HMI task
+    if (xTaskCreate(hmi_task, "hmi_task", configMINIMAL_STACK_SIZE + 100, NULL, 1, NULL) !=
+              pdPASS)
+          {
+          	LED3_ON();
+          }
+    //***********************************************************************************************
+
+
     //********************
     //Start task scheduler
     vTaskStartScheduler();
@@ -66,4 +76,4 @@ int main(void)
     while(1){}
     return 0;
 }
-//mein eigener branch hihi
+

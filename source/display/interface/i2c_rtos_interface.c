@@ -83,12 +83,13 @@ void i2c_m_rtos_init(i2c_m_rtos_handle_t *handle, I2C_Type *base, DMA_Type *dma_
 	/*******************************************************************************
 	 init I2C peripheral
 	 ******************************************************************************/
-	I2C_MasterGetDefaultConfig(&handle->config);//get I2C master default configuration
-	handle->config.baudRate_Bps = baudrate;		//set baudrate in I2C master RTOS handle
+	I2C_MasterGetDefaultConfig(&handle->config);				//get I2C master default configuration
+	handle->config.baudRate_Bps = baudrate;						//set baudrate in I2C master RTOS handle
 
 	I2C_MasterInit(handle->base, &handle->config, src_clock);	//init I2C master
 	SYSCON -> FCLKSEL[2] = 0; 									//Flexcom2 clock: FRO 12 MHz
-	//******************************************************************************
+
+
 	/*******************************************************************************
 	 set DMA
 	 ******************************************************************************/

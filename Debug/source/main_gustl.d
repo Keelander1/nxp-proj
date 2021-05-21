@@ -28,9 +28,39 @@ source/main_gustl.o source/main_gustl.d: ../source/main_gustl.c \
  D:\Projekte\nxp-aes-proj\board/board.h \
  D:\Projekte\nxp-aes-proj\board/clock_config.h \
  D:\Projekte\nxp-aes-proj\drivers/fsl_common.h \
- D:\Projekte\nxp-aes-proj\drivers/fsl_gpio.h ../source/drive/drive.h \
+ D:\Projekte\nxp-aes-proj\drivers/fsl_gpio.h \
+ D:\Projekte\nxp-aes-proj\source/param.h \
+ D:\Projekte\nxp-aes-proj\drivers/fsl_eeprom.h \
+ D:\Projekte\nxp-aes-proj\drivers/fsl_power.h \
+ D:\Projekte\nxp-aes-proj\source/drive_param.h ../source/drive/drive.h \
  ../source/camera/camera.h ../source/rpmMeas/rpmMeas.h \
- ../source/board/board_func.h \
+ ../source/board/board_func.h D:\Projekte\nxp-aes-proj\source\hmi/hmi.h \
+ D:\Projekte\nxp-aes-proj\source/display/display.h \
+ D:\Projekte\nxp-aes-proj\source/display/interface/i2c_rtos_interface.h \
+ D:\Projekte\nxp-aes-proj\drivers/fsl_i2c.h \
+ D:\Projekte\nxp-aes-proj\freertos\freertos_kernel\include/semphr.h \
+ D:\Projekte\nxp-aes-proj\freertos\freertos_kernel\include/queue.h \
+ D:\Projekte\nxp-aes-proj\drivers/fsl_i2c_dma.h \
+ D:\Projekte\nxp-aes-proj\drivers/fsl_i2c.h \
+ D:\Projekte\nxp-aes-proj\drivers/fsl_dma.h \
+ D:\Projekte\nxp-aes-proj\source/display/driver/ssd1309_rtos.h \
+ D:\Projekte\nxp-aes-proj\source/display/driver/ssd1309.h \
+ D:\Projekte\nxp-aes-proj\source\display\driver\resources/ssd1309_font.h \
+ D:\Projekte\nxp-aes-proj\source\display\driver\resources/ssd1309_img.h \
+ D:\Projekte\nxp-aes-proj\source/display/menu/menu_rtos.h \
+ D:\Projekte\nxp-aes-proj\source/display/menu/menu.h \
+ D:\Projekte\nxp-aes-proj\source\hmi/menu_data.h \
+ D:\Projekte\nxp-aes-proj\source\hmi/screen.h \
+ D:\Projekte\nxp-aes-proj\source\hmi/menu_main_screen.h \
+ D:\Projekte\nxp-aes-proj\source/display/driver/resources/ssd1309_img.h \
+ D:\Projekte\nxp-aes-proj\source\hmi/hmi.h \
+ D:\Projekte\nxp-aes-proj\source/display/menu/design/menu_list.h \
+ D:\Projekte\nxp-aes-proj\source\display\menu/menu_rtos.h \
+ D:\Projekte\nxp-aes-proj\source/settings.h \
+ D:\Projekte\nxp-aes-proj\source\display\menu/menu.h \
+ D:\Projekte\nxp-aes-proj\source/param.h \
+ D:\Projekte\nxp-aes-proj\source/servo/servo.h \
+ D:\Projekte\nxp-aes-proj\source\hmi/screen.h ../source/param.h \
  D:\Projekte\nxp-aes-proj\utilities/fsl_debug_console.h \
  D:\Projekte\nxp-aes-proj\component\serial_manager/serial_manager.h \
  D:\Projekte\nxp-aes-proj\component\serial_manager/serial_port_uart.h \
@@ -99,6 +129,14 @@ D:\Projekte\nxp-aes-proj\drivers/fsl_common.h:
 
 D:\Projekte\nxp-aes-proj\drivers/fsl_gpio.h:
 
+D:\Projekte\nxp-aes-proj\source/param.h:
+
+D:\Projekte\nxp-aes-proj\drivers/fsl_eeprom.h:
+
+D:\Projekte\nxp-aes-proj\drivers/fsl_power.h:
+
+D:\Projekte\nxp-aes-proj\source/drive_param.h:
+
 ../source/drive/drive.h:
 
 ../source/camera/camera.h:
@@ -106,6 +144,62 @@ D:\Projekte\nxp-aes-proj\drivers/fsl_gpio.h:
 ../source/rpmMeas/rpmMeas.h:
 
 ../source/board/board_func.h:
+
+D:\Projekte\nxp-aes-proj\source\hmi/hmi.h:
+
+D:\Projekte\nxp-aes-proj\source/display/display.h:
+
+D:\Projekte\nxp-aes-proj\source/display/interface/i2c_rtos_interface.h:
+
+D:\Projekte\nxp-aes-proj\drivers/fsl_i2c.h:
+
+D:\Projekte\nxp-aes-proj\freertos\freertos_kernel\include/semphr.h:
+
+D:\Projekte\nxp-aes-proj\freertos\freertos_kernel\include/queue.h:
+
+D:\Projekte\nxp-aes-proj\drivers/fsl_i2c_dma.h:
+
+D:\Projekte\nxp-aes-proj\drivers/fsl_i2c.h:
+
+D:\Projekte\nxp-aes-proj\drivers/fsl_dma.h:
+
+D:\Projekte\nxp-aes-proj\source/display/driver/ssd1309_rtos.h:
+
+D:\Projekte\nxp-aes-proj\source/display/driver/ssd1309.h:
+
+D:\Projekte\nxp-aes-proj\source\display\driver\resources/ssd1309_font.h:
+
+D:\Projekte\nxp-aes-proj\source\display\driver\resources/ssd1309_img.h:
+
+D:\Projekte\nxp-aes-proj\source/display/menu/menu_rtos.h:
+
+D:\Projekte\nxp-aes-proj\source/display/menu/menu.h:
+
+D:\Projekte\nxp-aes-proj\source\hmi/menu_data.h:
+
+D:\Projekte\nxp-aes-proj\source\hmi/screen.h:
+
+D:\Projekte\nxp-aes-proj\source\hmi/menu_main_screen.h:
+
+D:\Projekte\nxp-aes-proj\source/display/driver/resources/ssd1309_img.h:
+
+D:\Projekte\nxp-aes-proj\source\hmi/hmi.h:
+
+D:\Projekte\nxp-aes-proj\source/display/menu/design/menu_list.h:
+
+D:\Projekte\nxp-aes-proj\source\display\menu/menu_rtos.h:
+
+D:\Projekte\nxp-aes-proj\source/settings.h:
+
+D:\Projekte\nxp-aes-proj\source\display\menu/menu.h:
+
+D:\Projekte\nxp-aes-proj\source/param.h:
+
+D:\Projekte\nxp-aes-proj\source/servo/servo.h:
+
+D:\Projekte\nxp-aes-proj\source\hmi/screen.h:
+
+../source/param.h:
 
 D:\Projekte\nxp-aes-proj\utilities/fsl_debug_console.h:
 

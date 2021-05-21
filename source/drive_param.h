@@ -1,7 +1,7 @@
 /************************************************************************************************************
  ************************************************************************************************************
- ** Filename: 		dislpay.c						################
- ** Created on: 	04-22-2021						#####| |########  University of applied sciences
+ ** Filename: 		param.h							################
+ ** Created on: 	05-03-2021						#####| |########  University of applied sciences
  ** Authors: 		Ecker Christian,				#####| |########  Landshut, Germany
  ** 				Summer Matthias,				#####| |########
  ** 				Ambrosch Markus					#####|  __ |####  Am Lurzenhof 1, 84036 Landshut
@@ -11,7 +11,7 @@
  ************************************************************************************************************
  **		| Authors	| Date 		| Commit																	|
  **	----|-----------|-----------|---------------------------------------------------------------------------|
- ** 1	|	MS		|04-23-2021	| imported display.c														|
+ ** 1	|	MS		|05-xx-2021	| created drive_param.h														|
  ** 2	|			|			|																			|
  ** 3	|			|			|																			|
  ** 4	|			|			|																			|
@@ -27,39 +27,34 @@
  ************************************************************************************************************
  ** Header file for display functions:
  **
- ** Contains display initialization functions
+ ** Contains EEPROM functions
  **
- ** LCD_SCL (LCD Clock) at Pin P[3][24] (J9 Pin1) Clock Signal with 400kHz
- ** LCD_SDA (LCD Serial Data) at Pin P[3][23] (J Pin3) I2C serial data
  ************************************************************************************************************
  ***********************************************************************************************************/
 
-#include "display.h"
+#ifndef DRIVE_PARAM_H_
+#define DRIVE_PARAM_H_
 
-//place display buffer data buffer in "SSD1309ImageBuffer" with an alignement of 4 bytes
-__attribute__((section("SSD1309ImageBuffer"))) static uint8_t s_disp_0_buffer[DISP_0_BYTE_CNT] __attribute__((aligned(4U)));
+typedef struct _drive_param_t {
+	int32_t speed;
+	uint32_t stop;
+	uint32_t limit;
+	int32_t object;
+	int32_t l_l;
+	int32_t l_r;
+} drive_param_t;
 
+typedef struct _motor_chnl_param_t {
+	int32_t init;
+	int32_t min;
+	int32_t max;
+	uint32_t fac;
+} motor_chnl_param_t;
 
-i2c_m_rtos_handle_t g_disp_0_i2c_handle;	//I2C master handle
-ssd1309_rtos_t g_disp_0;					//LCD RTOS handle
+typedef struct _motor_param_t {
+	motor_chnl_param_t servo;
+	motor_chnl_param_t BLDCLeft;
+	motor_chnl_param_t BLDCRight;
+} motor_param_t;
 
-/*******************************************************************************
- * DISPLAY_Init
- * Initialize display
- ******************************************************************************/
-void DISPLAY_Init()
-{
-
-	//set interrupt priority for I2C2
-	NVIC_SetPriority(FLEXCOMM2_IRQn, configLIBRARY_MAX_SYSCALL_INTERRUPT_PRIORITY);
-	#ifndef DISP_I2C_DMA
-		i2c_m_rtos_init(&g_disp_0_i2c_handle, I2C0_MASTER, I2C0_BAUDRATE, I2C0_MASTER_CLK_FREQ);
-	#else
-		//set interrupt priority for DMA0
-		NVIC_SetPriority(DMA0_IRQn, configLIBRARY_MAX_SYSCALL_INTERRUPT_PRIORITY);
-		//Initialize I2C with RTOS and DMA
-		i2c_m_rtos_init(&g_disp_0_i2c_handle, I2C0_MASTER, DMA0, 5, I2C0_BAUDRATE, I2C0_MASTER_CLK_FREQ);
-	#endif
-		//send initialization to LCD
-		ssd1309_rtos_init(&g_disp_0, DISP0_I2C_ADDRESS, DISP_0_HEIGHT, DISP_0_WIDTH, s_disp_0_buffer);
-}
+#endif /* DRIVE_PARAM_H_ */

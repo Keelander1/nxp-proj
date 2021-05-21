@@ -42,18 +42,53 @@
 #include "display/display.h"
 #include "screen.h"
 #include "display/menu/design/menu_list.h"
-//#include "param.h"
-//#include "settings.h"
+#include "param.h"
+#include "settings.h"
 
 
+/****************************************************
+ * handle for main menu
+ ***************************************************/
 extern menu_rtos_handle_t menu_main_handle;
+
+/****************************************************
+ * handle for drive menu
+ ***************************************************/
 extern menu_rtos_handle_t menu_main_drive_handle;
+
+/****************************************************
+ * handle for hardware menu
+ ***************************************************/
 extern menu_rtos_handle_t menu_main_hardware_handle;
+
+/****************************************************
+ * handle for camera menu
+ ***************************************************/
 extern menu_rtos_handle_t menu_hardware_camera_handle;
+
+/****************************************************
+ * handle for motor menu
+ ***************************************************/
 extern menu_rtos_handle_t menu_hardware_ppm_handle;
+
+/****************************************************
+ * handle for servo motor menu
+ ***************************************************/
 extern menu_rtos_handle_t menu_ppm_servo_motor_handle;
+
+/****************************************************
+ * handle for left BLDC menu
+ ***************************************************/
 extern menu_rtos_handle_t menu_ppm_motor_left_handle;
+
+/****************************************************
+ * handle for right BLDC menu
+ ***************************************************/
 extern menu_rtos_handle_t menu_ppm_motor_right_handle;
+
+/****************************************************
+ * handle for motor restore menu
+ ***************************************************/
 extern menu_rtos_handle_t menu_ppm_restore_handle;
 
 

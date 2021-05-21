@@ -62,7 +62,7 @@ void menu_set_pixel(menu_handle_t *handle, uint8_t x, uint8_t y, bool bw) {
  ******************************************************************************/
 void menu_draw_rect(menu_handle_t *handle, uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, bool fill, bool bw) {
 
-	ssd1309_draw_rect(&g_disp_0.disp_obj, x1, y1, x2, y2, fill, (ssd1309_color_t)bw);
+	ssd1309_draw_rect(&g_disp_0.disp_obj, x1, y1, x2, y2, fill, (ssd1309_color_t)bw);	//draw rectangle
 }
 
 /*******************************************************************************

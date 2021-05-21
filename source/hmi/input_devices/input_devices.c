@@ -29,11 +29,11 @@
  **
  ** contains switch and encoder functions
  **
- ** ENC_A (Encoder signal A) at Pin P[3][20] (J9 Pin9)
- ** ENC_B (Encoder signal B) at Pin P[3][22] (J9 Pin11)
- ** ENC_SW (Encoder switch) at Pin P[3][21] (J9 Pin13)
+ ** ENC_A (Encoder signal A) at Pin P[3][20] (J9 Pin 9)
+ ** ENC_B (Encoder signal B) at Pin P[3][22] (J9 Pin 11)
+ ** ENC_SW (Encoder switch) at Pin P[3][21] (J9 Pin 13)
  **
- ** SW (switch) at Pin P[3][30] (J9 Pin15)s
+ ** SW (switch) at Pin P[3][30] (J9 Pin 15)
  ************************************************************************************************************
  ***********************************************************************************************************/
 #include "sw_debounce.h"
@@ -48,25 +48,33 @@ static const rit_config_t rit_config = {
 		.enableRunInDebug = false
 };
 
-static sw_handle_t sw_handle;
+static sw_handle_t sw_handle; //sw handle
 static re_handle_t re_handle; //rotary encoder handle
 
 /*******************************************************************************
  * Code
  ******************************************************************************/
+
+/*******************************************************************************
+ * id_init
+ * init input devices
+ ******************************************************************************/
 void id_init() {
 
-	sw_init(&sw_handle);
-	re_init(&re_handle);
+	sw_init(&sw_handle);	//init switch handle
+	re_init(&re_handle);	//init rotary encoder handle
 
-	RIT_Init(RIT, &rit_config);
-	RIT_SetCountAutoClear(RIT, true);
-	RIT_SetTimerCompare(RIT, (uint64_t)(SystemCoreClock / 1000UL));
+	//**********************************************************************
+	//set Repetitive Interrupt Timer to generate an interrupt for debounce purpose
+	//**********************************************************************
+	RIT_Init(RIT, &rit_config);										//init RIT
+	RIT_SetCountAutoClear(RIT, true);								//clear RIT when compare value is reached
+	RIT_SetTimerCompare(RIT, (uint64_t)(SystemCoreClock / 1000UL));	//set compare value to 12000
 
-	NVIC_SetPriority(RIT_IRQn, 0);
-	EnableIRQ(RIT_IRQn);
+	NVIC_SetPriority(RIT_IRQn, 0);	//set high priority for RIT
+	EnableIRQ(RIT_IRQn);			//enable RIT interrupt
 
-	RIT_StartTimer(RIT);
+	RIT_StartTimer(RIT);			//start RIT
 }
 
 uint32_t id_get_button_state() {
@@ -111,6 +119,7 @@ void RIT_IRQHandler() {
 	if (counter >= 10) {
 		// Period 10ms
 
+		//read actual state of ENC_SW and SW
 		sw_task(&sw_handle,
 				(GPIO_PinRead(BOARD_INITPINS_SW_GPIO, BOARD_INITPINS_SW_PORT, BOARD_INITPINS_SW_PIN) & 0x01) |
 				((GPIO_PinRead(BOARD_INITPINS_USER_SW_GPIO, BOARD_INITPINS_USER_SW_PORT, BOARD_INITPINS_USER_SW_PIN) & 0x01) << 1));
@@ -124,9 +133,9 @@ void RIT_IRQHandler() {
 
 	/* Add for ARM errata 838869, affects Cortex-M4, Cortex-M4F Store immediate overlapping
 	  exception return operation might vector to incorrect interrupt */
-	#if defined __CORTEX_M && (__CORTEX_M == 4U)
-	    __DSB();
-	#endif
+#if defined __CORTEX_M && (__CORTEX_M == 4U)
+	__DSB();
+#endif
 }
 
 
