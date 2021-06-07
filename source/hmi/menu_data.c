@@ -12,7 +12,7 @@
  **		| Authors	| Date 		| Commit																	|
  **	----|-----------|-----------|---------------------------------------------------------------------------|
  ** 1	|	MS		|04-24-2021	| imported menu_data.c														|
- ** 2	|			|			|																			|
+ ** 2	|	MS		|06-07-2021	| implemented test function for BLDC and servo								|
  ** 3	|			|			|																			|
  ** 4	|			|			|																			|
  ** 5	|			|			|																			|
@@ -41,7 +41,9 @@
 /*******************************************************************************
  * Variables
  ******************************************************************************/
-
+int32_t servoTestValue=0;		//value for test purpose
+int32_t BLDCLeftTestValue=0;	//value for test purpose
+int32_t BLDCRightTestValue=0;	//value for test purpose
 
 /****************************************************
  * Entry for drive menu
@@ -270,6 +272,18 @@ const static menu_entry_t menu_ppm_servo_motor_entries[] = {
 		},
 		{
 				/****************************************************
+				 * servo Test function
+				 ****************************************************/
+				.str = "Test",													//display "Test"
+				.type = MENU_VALUE,												//type is MENU_VALUE value
+				.val = &servoTestValue,											//set test value
+				.min_val = -100,												//min value for servo test value
+				.max_val = 100,													//max value for servo test value
+				.func = menu_func_servo_motor_test,								//write value to timer for signal generation
+				.en = true,														//element is changeable
+		},
+		{
+				/****************************************************
 				 * servo init value (middle steering angle)
 				 ****************************************************/
 				.str = "Init",													//display "Init"
@@ -331,6 +345,18 @@ const static menu_entry_t menu_ppm_motor_left_entries[] = {
 		},
 		{
 				/****************************************************
+				 * BLDC left test function
+				 ****************************************************/
+				.str = "Test",													//display "Test"
+				.type = MENU_VALUE,												//type is MENU_VALUE value
+				.val = &BLDCLeftTestValue,										//set left BLDC test value
+				.min_val = 0,													//min value for left BLDC test value
+				.max_val = 100,													//max value for left BLDC test value
+				.func = menu_func_bldcLeft_test,								//write value to timer for signal generation
+				.en = true,														//element is changeable
+		},
+		{
+				/****************************************************
 				 * left motor init value
 				 ****************************************************/
 				.str = "Init",													//display "Init"
@@ -349,9 +375,8 @@ const static menu_entry_t menu_ppm_motor_left_entries[] = {
 				.type = MENU_VALUE,                                             //type is MENU_VALUE
 				.val = &((all_param_t*)&const_all_param)->motors.BLDCLeft.min,  //get saved min value
 				.min_val = 500,                                                 //min value for left BLDC min value
-				.max_val = 2500,                                                //max value for left BLDC min value
-				.func = NULL,                                                   //write value to timer for signal generation
-				//.func =  menu_func_bldc_motor_left_min,                       //element is changeable
+				.max_val = 2500,                                                //max value for left BLDC min value                                                   //write value to timer for signal generation
+				.func =  menu_func_bldc_motor_left_min,                       //element is changeable
 				.en = true,
 		},
 		{
@@ -391,6 +416,18 @@ const static menu_entry_t menu_ppm_motor_right_entries[] = {
 				.type = MENU_LINK,                                               	//type is MENU_LINK
 				.link = menu_open_ppm_motor_right,                               	//not necessary
 				.en = false,                                                     	//element is not clickable
+		},
+		{
+				/****************************************************
+				 * right BLDC test function
+				 ****************************************************/
+				.str = "Test",													//display "Test"
+				.type = MENU_VALUE,												//type is MENU_VALUE value
+				.val = &BLDCRightTestValue,										//set BLDC right test value
+				.min_val = 0,													//min value for right BLDC test value
+				.max_val = 100,													//max value for right BLDC test value
+				.func = menu_func_bldcRight_test,								//write value to timer for signal generation
+				.en = true,														//element is changeable
 		},
 		{
 				/****************************************************
@@ -527,7 +564,7 @@ menu_rtos_handle_t menu_hardware_ppm_handle = {
  ***************************************************/
 menu_rtos_handle_t menu_ppm_servo_motor_handle = {
 		.drv_handle = {
-				.entry_cnt = 5,                                             //5 entries
+				.entry_cnt = 6,                                             //6 entries
 				.entry_list = (menu_entry_t*)menu_ppm_servo_motor_entries,  //list of all entries
 				.draw = menu_list_draw,                                     //emtry draw function
 		},
@@ -538,7 +575,7 @@ menu_rtos_handle_t menu_ppm_servo_motor_handle = {
  ***************************************************/
 menu_rtos_handle_t menu_ppm_motor_left_handle = {
 		.drv_handle = {
-				.entry_cnt = 5,                                             //5 entries
+				.entry_cnt = 6,                                             //6 entries
 				.entry_list = (menu_entry_t*)menu_ppm_motor_left_entries,   //list of all entries
 				.draw = menu_list_draw,                                     //emtry draw function
 		},
@@ -549,7 +586,7 @@ menu_rtos_handle_t menu_ppm_motor_left_handle = {
  ***************************************************/
 menu_rtos_handle_t menu_ppm_motor_right_handle = {
 		.drv_handle = {
-				.entry_cnt = 5,                                             //5 entries
+				.entry_cnt = 6,                                             //6 entries
 				.entry_list = (menu_entry_t*)menu_ppm_motor_right_entries,  //list of all entries
 				.draw = menu_list_draw,                                     //emtry draw function
 		},

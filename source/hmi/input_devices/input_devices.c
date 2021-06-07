@@ -77,41 +77,56 @@ void id_init() {
 	RIT_StartTimer(RIT);			//start RIT
 }
 
+/*******************************************************************************
+ * id_get_button_state
+ * return the state of all buttons
+ ******************************************************************************/
 uint32_t id_get_button_state() {
 
 	uint32_t res = 0;
 
+	//disable RIT IRQ
 	if (DisableIRQ(RIT_IRQn) == kStatus_Success) {
 
-		res = sw_get_up(&sw_handle) & 0x03;
+		res = sw_get_up(&sw_handle) & 0x03;	//get BIT0 and BIT1 for encoder button and push button
 
-
+		//enable RIT IRQ
 		EnableIRQ(RIT_IRQn);
 	}
 
 	return res;
 }
 
+/*******************************************************************************
+ * id_get_encoder_state
+ * return how much steps the rotary encoder turned
+ ******************************************************************************/
 int32_t id_get_encoder_state() {
 
 	int32_t res = 0;
 
+	//disable RIT IRQ
 	if (DisableIRQ(RIT_IRQn) == kStatus_Success) {
 
-		res = re_get_pos(&re_handle);
+		res = re_get_pos(&re_handle);	//get amount of steps and rotation
 
+		//enable RIT IRQ
 		EnableIRQ(RIT_IRQn);
 	}
 
 	return res;
 }
 
+/*******************************************************************************
+ * id_get_encoder_state
+ * return how much steps the rotary encoder turned
+ ******************************************************************************/
 void RIT_IRQHandler() {
 
 	static uint8_t counter = 0;
 
 	// Period 1ms
-
+	//calculate direction and amount of steps of rotary encoder
 	re_task(&re_handle,
 			GPIO_PinRead(BOARD_INITPINS_RE_A_GPIO, BOARD_INITPINS_RE_A_PORT, BOARD_INITPINS_RE_A_PIN),
 			GPIO_PinRead(BOARD_INITPINS_RE_B_GPIO, BOARD_INITPINS_RE_B_PORT, BOARD_INITPINS_RE_B_PIN));
@@ -119,16 +134,17 @@ void RIT_IRQHandler() {
 	if (counter >= 10) {
 		// Period 10ms
 
-		//read actual state of ENC_SW and SW
+		//debounce ENC_SW and SW
 		sw_task(&sw_handle,
 				(GPIO_PinRead(BOARD_INITPINS_SW_GPIO, BOARD_INITPINS_SW_PORT, BOARD_INITPINS_SW_PIN) & 0x01) |
 				((GPIO_PinRead(BOARD_INITPINS_USER_SW_GPIO, BOARD_INITPINS_USER_SW_PORT, BOARD_INITPINS_USER_SW_PIN) & 0x01) << 1));
 
-		counter = 0;
+		counter = 0;	//reset counter
 	}
 
-	counter++;
+	counter++;	//increment counter
 
+	//clear RIT status flags
 	RIT_ClearStatusFlags(RIT, kRIT_TimerFlag);
 
 	/* Add for ARM errata 838869, affects Cortex-M4, Cortex-M4F Store immediate overlapping

@@ -127,9 +127,9 @@ static const uint8_t img_data_nxp[] = {
  * predefined struct for nxp image
  ******************************************************************************/
 static const ssd1309_img_t img_nxp =  {
-		.height = 64,
-		.width = 128,
-		.data = img_data_nxp,
+		.height = 64,			//image height is 64 pixels
+		.width = 128,			//image width is 128 pixels
+		.data = img_data_nxp,	//image data source in hex format
 };
 
 /*******************************************************************************
@@ -206,9 +206,9 @@ static const uint8_t img_data_haw[] = {
  * predefined struct for HAW Landshut image
  ******************************************************************************/
 static const ssd1309_img_t img_haw =  {
-		.height = 64,
-		.width = 128,
-		.data = img_data_haw,
+		.height = 64,           //image height is 64 pixels
+		.width = 128,           //image width is 128 pixels
+		.data = img_data_haw,	//image data source in hex format
 };
 
 /*******************************************************************************
@@ -228,9 +228,9 @@ static const uint8_t img_data_sign_stop[] = {
  * predefined struct for stop sign image
  ******************************************************************************/
 static const ssd1309_img_t img_sign_stop =  {
-		.height = 21,
-		.width = 21,
-		.data = img_data_sign_stop,
+		.height = 21,                  	//image height is 21 pixels
+		.width = 21,                   	//image width is 21 pixels
+		.data = img_data_sign_stop,		//image data source in hex format
 };
 
 /*******************************************************************************
@@ -250,9 +250,9 @@ static const uint8_t img_data_sign_slow[] = {
  * predefined struct for slow sign image
  ******************************************************************************/
 static const ssd1309_img_t img_sign_slow = {
-		.height = 21,
-		.width = 21,
-		.data = img_data_sign_slow,
+		.height = 21,                 	//image height is 21 pixels
+		.width = 21,                  	//image width is 21 pixels
+		.data = img_data_sign_slow,		//image data source in hex format
 };
 
 /*******************************************************************************
@@ -272,9 +272,9 @@ static const uint8_t img_data_sign_fast[] = {
  * predefined struct for fast sign image
  ******************************************************************************/
 static const ssd1309_img_t img_sign_fast = {
-		.height = 21,
-		.width = 21,
-		.data = img_data_sign_fast,
+		.height = 21,                 	//image height is 21 pixels
+		.width = 21,                  	//image width is 21 pixels
+		.data = img_data_sign_fast,		//image data source in hex format
 };
 
 /*******************************************************************************
@@ -294,9 +294,9 @@ static const uint8_t img_data_sign_speed[] = {
  * predefined struct for speed sign image
  ******************************************************************************/
 static const ssd1309_img_t img_sign_speed = {
-		.height = 21,
-		.width = 21,
-		.data = img_data_sign_speed,
+		.height = 21,                  	//image height is 21 pixels
+		.width = 21,                   	//image width is 21 pixels
+		.data = img_data_sign_speed,	//image data source in hex format
 };
 
 /*******************************************************************************
@@ -313,9 +313,9 @@ static const uint8_t img_data_car[] = {
  * predefined struct for car image
  ******************************************************************************/
 static const ssd1309_img_t img_car = {
-		.height = 16,
-		.width = 18,
-		.data = img_data_car,
+		.height = 16,               //image height is 16 pixels
+		.width = 18,                //image width is 18 pixels
+		.data = img_data_car,		//image data source in hex format
 };
 
 /*******************************************************************************
@@ -335,9 +335,9 @@ static const uint8_t img_data_sign_object[] = {
  * predefined struct for object sign image
  ******************************************************************************/
 static const ssd1309_img_t img_sign_object =  {
-		.height = 21,
-		.width = 21,
-		.data = img_data_sign_object,
+		.height = 21,                   //image height is 21 pixels
+		.width = 21,                    //image width is 21 pixels
+		.data = img_data_sign_object,	//image data source in hex format
 };
 
 /*******************************************************************************
@@ -360,9 +360,9 @@ static const uint8_t img_data_road_straight[] = {
  * predefined struct for road straight image
  ******************************************************************************/
 static const ssd1309_img_t img_road_straight = {
-		.height = 36,
-		.width = 18,
-		.data = img_data_road_straight,
+		.height = 36,                    	//image height is 36 pixels
+		.width = 18,                     	//image width is 18 pixels
+		.data = img_data_road_straight,		//image data source in hex format
 };
 
 /*******************************************************************************
@@ -385,9 +385,9 @@ static const uint8_t img_data_road_curve_left[] = {
  * predefined struct for curve left image
  ******************************************************************************/
 static const ssd1309_img_t img_road_curve_left = {
-		.height = 36,
-		.width = 18,
-		.data = img_data_road_curve_left,
+		.height = 36,                     	//image height is 36 pixels
+		.width = 18,                      	//image width is 18 pixels
+		.data = img_data_road_curve_left,	//image data source in hex format
 };
 
 /*******************************************************************************
@@ -411,9 +411,9 @@ static const uint8_t img_data_road_curve_right[] = {
  * predefined struct for curve right image
  ******************************************************************************/
 static const ssd1309_img_t img_road_curve_right = {
-		.height = 36,
-		.width = 18,
-		.data = img_data_road_curve_right,
+		.height = 36,                      		//image height is 36 pixels
+		.width = 18,                       		//image width is 18 pixels
+		.data = img_data_road_curve_right,		//image data source in hex format
 };
 
 /*******************************************************************************
@@ -427,9 +427,9 @@ static const uint8_t img_data_clock[] = {
  * predefined struct for clock image
  ******************************************************************************/
 static const ssd1309_img_t img_clock = {
-		.height = 5,
-		.width = 5,
-		.data = img_data_clock,
+		.height = 5,             	//image height is 5 pixels
+		.width = 5,              	//image width is 5 pixels
+		.data = img_data_clock,  	//image data source in hex format
 };
 
 /*******************************************************************************
@@ -448,9 +448,9 @@ static const uint8_t img_data_arrow[] = {
  * predefined struct for arrow image
  ******************************************************************************/
 static const ssd1309_img_t img_arrow = {
-		.height = 26,
-		.width = 22,
-		.data = img_data_arrow,
+		.height = 26,            	//image height is 26 pixels
+		.width = 22,             	//image width is 22 pixels
+		.data = img_data_arrow,  	//image data source in hex format
 };
 
 /*******************************************************************************
@@ -489,9 +489,9 @@ static const uint8_t img_data_header_bar[] = {
  * predefined struct for top header image
  ******************************************************************************/
 static const ssd1309_img_t img_header_bar = {
-	.height = 13,
-	.width = 128,
-	.data = img_data_header_bar,
+	.height = 13,                 	//image height is 13 pixels
+	.width = 128,                 	//image width is 128 pixels
+	.data = img_data_header_bar, 	//image data source in hex format
 };
 
 /*******************************************************************************
@@ -506,9 +506,9 @@ static const uint8_t img_data_camera_symbol[] = {
  * predefined struct for camera image
  ******************************************************************************/
 static const ssd1309_img_t img_camera_symbol = {
-	.height = 7,
-	.width = 11,
-	.data = img_data_camera_symbol,
+	.height = 7,                    	//image height is 7 pixels
+	.width = 11,                    	//image width is 11 pixels
+	.data = img_data_camera_symbol, 	//image data source in hex format
 };
 //******************************************************************************
 
@@ -523,9 +523,9 @@ static const uint8_t img_data_clock_symbol[] = {
  * predefined struct for clock image
  ******************************************************************************/
 static const ssd1309_img_t img_clock_symbol = {
-	.height = 5,
-	.width = 5,
-	.data = img_data_clock_symbol,
+	.height = 5,                   		//image height is 5 pixels
+	.width = 5,                    		//image width is 5 pixels
+	.data = img_data_clock_symbol,		//image data source in hex format
 };
 
 
@@ -540,9 +540,9 @@ static const uint8_t img_data_battery_symbol[] = {
  * predefined struct for battery image
  ******************************************************************************/
 static const ssd1309_img_t img_battery_symbol = {
-	.height = 3,
-	.width = 10,
-	.data = img_data_battery_symbol,
+	.height = 3,                    	//image height is 3 pixels
+	.width = 10,                     	//image width is 10 pixels
+	.data = img_data_battery_symbol, 	//image data source in hex format
 };
 
 /*******************************************************************************
@@ -556,9 +556,9 @@ static const uint8_t img_data_speaker_symbol[] = {
  * predefined struct for speaker image
  ******************************************************************************/
 static const ssd1309_img_t img_speaker_symbol = {
-	.height = 7,
-	.width = 8,
-	.data = img_data_speaker_symbol,
+	.height = 7,                     	//image height is 7 pixels
+	.width = 8,                      	//image width is 8 pixels
+	.data = img_data_speaker_symbol, 	//image data source in hex format
 };
 
 /*******************************************************************************
@@ -584,9 +584,9 @@ static const uint8_t img_data_footer_outer[] = {
  * predefined struct for bottom header image
  ******************************************************************************/
 static const ssd1309_img_t img_footer_outer = {
-	.height = 7,
-	.width = 128,
-	.data = img_data_footer_outer,
+	.height = 7,                     	//image height is 7 pixels
+	.width = 128,                    	//image width is 128 pixels
+	.data = img_data_footer_outer,		//image data source in hex format
 };
 
 /*******************************************************************************
@@ -619,9 +619,9 @@ static const uint8_t img_data_no_camera[] = {
  * predefined struct for no camera image
  ******************************************************************************/
 static const ssd1309_img_t img_no_camera = {
-	.height = 29,
-	.width = 50,
-	.data = img_data_no_camera,
+	.height = 29,                 	//image height is 29 pixels
+	.width = 50,                  	//image width is 50 pixels
+	.data = img_data_no_camera,   	//image data source in hex format
 };
 
 /*******************************************************************************
@@ -641,9 +641,9 @@ static const uint8_t img_data_sign_right_of_way[] = {
  * predefined struct for right of way image
  ******************************************************************************/
 static const ssd1309_img_t img_sign_right_of_way = {
-	.height = 21,
-	.width = 21,
-	.data = img_data_sign_right_of_way,
+	.height = 21,                       	//image height is 21 pixels
+	.width = 21,                        	//image width is 21 pixels
+	.data = img_data_sign_right_of_way, 	//image data source in hex format
 };
 
 /*******************************************************************************
@@ -663,9 +663,9 @@ static const uint8_t img_data_sign_unlimited[] = {
  * predefined struct for unlimited image
  ******************************************************************************/
 static const ssd1309_img_t img_sign_unlimited = {
-	.height = 21,
-	.width = 21,
-	.data = img_data_sign_unlimited,
+	.height = 21,                    	//image height is 21 pixels
+	.width = 21,                     	//image width is 21 pixels
+	.data = img_data_sign_unlimited, 	//image data source in hex format
 };
 
 /*******************************************************************************
@@ -685,9 +685,9 @@ static const uint8_t img_data_sign_no_parking[] = {
  * predefined struct for no parking image
  ******************************************************************************/
 static const ssd1309_img_t img_sign_no_parking = {
-	.height = 21,
-	.width = 21,
-	.data = img_data_sign_no_parking,
+	.height = 21,                      	//image height is 21 pixels
+	.width = 21,                       	//image width is 21 pixels
+	.data = img_data_sign_no_parking,  	//image data source in hex format
 };
 
 /*******************************************************************************
@@ -707,9 +707,9 @@ static const uint8_t img_data_sign_retoure[] = {
  * predefined struct for retoure image
  ******************************************************************************/
 static const ssd1309_img_t img_sign_retoure = {
-	.height = 21,
-	.width = 21,
-	.data = img_data_sign_retoure,
+	.height = 21,                      	//image height is 21 pixels
+	.width = 21,                       	//image width is 21 pixels
+	.data = img_data_sign_retoure,		//image data source in hex format
 };
 
 /*******************************************************************************
@@ -729,9 +729,9 @@ static const uint8_t img_data_sign_blocking[] = {
  * predefined struct for blocking image
  ******************************************************************************/
 static const ssd1309_img_t img_sign_blocking = {
-	.height = 21,
-	.width = 21,
-	.data = img_data_sign_blocking,
+	.height = 21,                   	//image height is 21 pixels
+	.width = 21,                    	//image width is 21 pixels
+	.data = img_data_sign_blocking, 	//image data source in hex format
 };
 //******************************************************************************
 #endif /* SSD1309_IMG_H_ */

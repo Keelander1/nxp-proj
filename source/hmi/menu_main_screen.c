@@ -49,7 +49,7 @@ static void draw(menu_handle_t *handle);
  ******************************************************************************/
 
 /*******************************************************************************
- * NXP image
+ * data frame image
  ******************************************************************************/
 static const uint8_t img_data_frame[] = {
 	0xFC, 0x02, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01,
@@ -65,15 +65,18 @@ static const uint8_t img_data_frame[] = {
 	0x04, 0x04, 0x04, 0x04, 0x04, 0x04, 0x02, 0x01,
 };
 
+/*******************************************************************************
+ * predefined struct for nxp image
+ ******************************************************************************/
 static const ssd1309_img_t img_frame = {
-	.height = 27,
-	.width = 27,
-	.data = img_data_frame,
+	.height = 27,            	//image height is 27 pixels
+	.width = 27,             	//image width is 27 pixels
+	.data = img_data_frame,		//image data source in hex format
 };
 
 
 /*******************************************************************************
- * NXP image
+ * data footer middle active image
  ******************************************************************************/
 static const uint8_t img_data_footer_middle_active[] = {
 	0x60, 0x70, 0x78, 0x7C, 0x7E, 0x7F, 0x7F, 0x7F, 0x7F, 0x7F,
@@ -83,15 +86,18 @@ static const uint8_t img_data_footer_middle_active[] = {
 	0x7F, 0x7F, 0x7F, 0x7E, 0x7C, 0x78, 0x70, 0x60,
 };
 
+/*******************************************************************************
+ * predefined struct for data footer middle active image
+ ******************************************************************************/
 static const ssd1309_img_t img_footer_middle_active = {
-	.height = 7,
-	.width = 48,
-	.data = img_data_footer_middle_active,
+	.height = 7,                            	//image height is 7 pixels
+	.width = 48,                            	//image width is 48 pixels
+	.data = img_data_footer_middle_active,		//image data source in hex format
 };
 
 
 /*******************************************************************************
- * NXP image
+ * data footer middle inactive image
  ******************************************************************************/
 static const uint8_t img_data_footer_middle_inactive[] = {
 	0x20, 0x10, 0x08, 0x04, 0x02, 0x01, 0x01, 0x01, 0x01, 0x01,
@@ -101,12 +107,19 @@ static const uint8_t img_data_footer_middle_inactive[] = {
 	0x01, 0x01, 0x01, 0x02, 0x04, 0x08, 0x10, 0x20,
 };
 
+/*******************************************************************************
+ * predefined struct for data footer middle inactive image
+ ******************************************************************************/
 static const ssd1309_img_t img_footer_middle_inactive = {
-	.height = 7,
-	.width = 48,
-	.data = img_data_footer_middle_inactive,
+	.height = 7,                             	//image height is 7 pixels
+	.width = 48,                             	//image width is 48 pixels
+	.data = img_data_footer_middle_inactive,	//image data source in hex format
 };
 
+/****************************************************
+ * Entry for drive menu
+ * menu for all submenus
+ ***************************************************/
 static const menu_entry_t entries[] = {
 		{
 				.type = MENU_VALUE,

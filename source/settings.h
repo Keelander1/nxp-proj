@@ -39,8 +39,16 @@
 #include "menu.h"
 #include "param.h"
 #include "servo/servo.h"
+#include "drive/drive.h"
 //#include "drive_output.h"
 #include "screen.h"
+
+/*******************************************************************************
+ * menu_func_servo_motor_test
+ * test servo motor
+ * param state:		value, when function was called
+ ******************************************************************************/
+void menu_func_servo_motor_test(uint8_t state);
 
 /*******************************************************************************
  * menu_func_servo_motor_init
@@ -64,6 +72,13 @@ void menu_func_servo_motor_left(uint8_t state);
 void menu_func_servo_motor_right(uint8_t state);
 
 /*******************************************************************************
+ * menu_func_servo_motor_test
+ * test servo motor
+ * param state:		value, when function was called
+ ******************************************************************************/
+void menu_func_bldcLeft_test(uint8_t state);
+
+/*******************************************************************************
  * menu_func_bldc_motor_left_init
  * init left BLDC motor
  * param state:		value, when function was called
@@ -83,6 +98,13 @@ void menu_func_bldc_motor_left_min(uint8_t state);
  * param state:		value, when function was called
  ******************************************************************************/
 void menu_func_bldc_motor_left_max(uint8_t state);
+
+/*******************************************************************************
+ * menu_func_servo_motor_test
+ * test servo motor
+ * param state:		value, when function was called
+ ******************************************************************************/
+void menu_func_bldcRight_test(uint8_t state);
 
 /*******************************************************************************
   * menu_func_bldc_motor_right_init

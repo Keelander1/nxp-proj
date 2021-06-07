@@ -11,9 +11,9 @@
  ************************************************************************************************************
  **		| Authors	| Date 		| Commit																	|
  **	----|-----------|-----------|---------------------------------------------------------------------------|
- ** 1	|	EC/SM	|04-12-2020	| Created drive.c															|
+ ** 1	|	EC/MS	|04-12-2020	| Created drive.c															|
  ** 2	|	EC		|04-20-2021	| Commented the Code														|
- ** 3	|			|			| 																			|
+ ** 3	|	MS		|06-07-2021	| implemented test function for BLDC and servo								|
  ** 4	|			|			| 																			|
  ** 5	|			|			| 																			|
  ** 6	|			|			| 																			|
@@ -49,6 +49,14 @@ const ctimer_config_t BLDC_config = {
 		.input = kCTIMER_Capture_0,  /*!< Timer capture channel 0 */
 		.prescale = 0                /*!< Prescale value 0 --> */
 };
+
+int32_t* BLDCLeftInitValue= &((all_param_t*)&const_all_param)->motors.BLDCLeft.init; 	//left BLDC init value
+int32_t* BLDCLeftMinValue= &((all_param_t*)&const_all_param)->motors.BLDCLeft.min;		//left BLDC min value
+int32_t* BLDCLeftMaxValue= &((all_param_t*)&const_all_param)->motors.BLDCLeft.max;		//left BLDC max value
+
+int32_t* BLDCRightInitValue= &((all_param_t*)&const_all_param)->motors.BLDCRight.init; 	//right BLDC init value
+int32_t* BLDCRightMinValue= &((all_param_t*)&const_all_param)->motors.BLDCRight.min;	//right BLDC min value
+int32_t* BLDCRightMaxValue=  &((all_param_t*)&const_all_param)->motors.BLDCRight.max;	//right BLDC max value
 
 
 /*******************************************************************************

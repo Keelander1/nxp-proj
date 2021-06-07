@@ -30,7 +30,7 @@ source/settings.o source/settings.d: ../source/settings.c \
  D:\Projekte\nxp-aes-proj\board/clock_config.h \
  D:\Projekte\nxp-aes-proj\drivers/fsl_common.h \
  D:\Projekte\nxp-aes-proj\drivers/fsl_gpio.h \
- D:\Projekte\nxp-aes-proj\source/param.h \
+ D:\Projekte\nxp-aes-proj\source/param.h ../source/drive/drive.h \
  D:\Projekte\nxp-aes-proj\source\hmi/screen.h \
  D:\Projekte\nxp-aes-proj\source\hmi/menu_main_screen.h \
  D:\Projekte\nxp-aes-proj\source/display/display.h \
@@ -126,6 +126,8 @@ D:\Projekte\nxp-aes-proj\drivers/fsl_common.h:
 D:\Projekte\nxp-aes-proj\drivers/fsl_gpio.h:
 
 D:\Projekte\nxp-aes-proj\source/param.h:
+
+../source/drive/drive.h:
 
 D:\Projekte\nxp-aes-proj\source\hmi/screen.h:
 

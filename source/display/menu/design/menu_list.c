@@ -150,8 +150,8 @@ void menu_list_draw(menu_handle_t *handle) {
 	slider = 45 / handle->entry_cnt;	//calculate slider sice
 	menu_draw_rect(handle, 125, 14, 127, 14, false, true);		//draw slider top sign
 	menu_draw_rect(handle, 125, ((handle->entry_cnt - 1) * slider) + slider + 18, 127, ((handle->entry_cnt - 1) * slider) + slider + 18, false, true);	//draw slider bottom sign
-	menu_draw_rect(handle, 125, 16, 127, ((handle->entry_cnt - 1) * slider) + slider + 16, true, false);	//delete last slider
-	menu_draw_rect(handle, 125, (handle->pos * slider) + 16, 127, (handle->pos * slider) + slider + 16, true, true);	//draw slider
+	menu_draw_rect(handle, 125, 16, 127, ((handle->entry_cnt - 1) * slider) + slider + 16, true, false);												//delete last slider
+	menu_draw_rect(handle, 125, (handle->pos * slider) + 16, 127, (handle->pos * slider) + slider + 16, true, true);									//draw slider
 
 	menu_disp_unlock(handle);
 

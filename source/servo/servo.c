@@ -11,9 +11,9 @@
  ************************************************************************************************************
  **		| Authors	| Date 		| Commit																	|
  **	----|-----------|-----------|---------------------------------------------------------------------------|
- ** 1	|	EC/SM	|11-20-2020	| Created servo.c															|
+ ** 1	|	EC/MS	|11-20-2020	| Created servo.c															|
  ** 2	|	EC		|04-20-2021	| Commented the Code														|
- ** 3	|			|			| 																			|
+ ** 3	|	MS		|06-07-2021	| implemented test function for BLDC and servo								|
  ** 4	|			|			| 																			|
  ** 5	|			|			| 																			|
  ** 6	|			|			| 																			|
@@ -51,9 +51,10 @@ const ctimer_config_t SERVO_config = {
 		.prescale = 0                /*!< Prescale value 0 --> */
 };
 
-int32_t* servoMiddleValue= &((all_param_t*)&const_all_param)->motors.servo.init;
-int32_t* servoLeftValue= &((all_param_t*)&const_all_param)->motors.servo.min;
-int32_t* servoRightValue= &((all_param_t*)&const_all_param)->motors.servo.max;
+
+int32_t* servoMiddleValue= &((all_param_t*)&const_all_param)->motors.servo.init; 	//servo init value
+int32_t* servoLeftValue= &((all_param_t*)&const_all_param)->motors.servo.min;		//servo min value
+int32_t* servoRightValue= &((all_param_t*)&const_all_param)->motors.servo.max;		//servo max value
 
 
 

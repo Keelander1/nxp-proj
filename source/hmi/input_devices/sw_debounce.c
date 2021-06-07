@@ -63,13 +63,13 @@ void sw_task(sw_handle_t *handle, uint32_t inputs) {
 
 	uint32_t i;
 
-	i = handle->state ^ inputs; 					//save changed switch states
-	handle->ct0 = ~(handle->ct0 & i);				//reset or count ct0
-	handle->ct1 = handle->ct0 ^ (handle->ct1 & i);	//reset or count ct1
-	i &= handle->ct0 & handle->ct1;					//count until roll over
+	i = handle->state ^ inputs; 					//set Bit to one if button state is changed to previous debounced state
+	handle->ct0 = ~(handle->ct0 & i);				//decrement counter bit for each bit set in i; if i = 0 (current state is previously debounced stat) counter = 3 (ct0 = 1)
+	handle->ct1 = handle->ct0 ^ (handle->ct1 & i);	//decrement counter bit for each bit set in i; if i = 0 (current state is previously debounced stat) counter = 3 (ct1 = 1)
+	i &= handle->ct0 & handle->ct1;					//count until roll over from 0 to 3
 	handle->up |= ~inputs & i;						//bit changed from 0->1: key press detected
 	handle->state ^= i;								//then toggle debounced state
-	handle->down |= handle->state & i;				//down is a bitmask of all pressed inputs
+	handle->down |= handle->state & i;				//down is a bitmask of all pressed and debounced inputs
 }
 /*******************************************************************************
  * sw_get_down

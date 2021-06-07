@@ -60,6 +60,7 @@ source/main_gustl.o source/main_gustl.d: ../source/main_gustl.c \
  D:\Projekte\nxp-aes-proj\source\display\menu/menu.h \
  D:\Projekte\nxp-aes-proj\source/param.h \
  D:\Projekte\nxp-aes-proj\source/servo/servo.h \
+ D:\Projekte\nxp-aes-proj\source/drive/drive.h \
  D:\Projekte\nxp-aes-proj\source\hmi/screen.h ../source/param.h \
  D:\Projekte\nxp-aes-proj\utilities/fsl_debug_console.h \
  D:\Projekte\nxp-aes-proj\component\serial_manager/serial_manager.h \
@@ -196,6 +197,8 @@ D:\Projekte\nxp-aes-proj\source\display\menu/menu.h:
 D:\Projekte\nxp-aes-proj\source/param.h:
 
 D:\Projekte\nxp-aes-proj\source/servo/servo.h:
+
+D:\Projekte\nxp-aes-proj\source/drive/drive.h:
 
 D:\Projekte\nxp-aes-proj\source\hmi/screen.h:
 

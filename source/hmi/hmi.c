@@ -41,6 +41,14 @@
 #include <hmi/input_devices/input_devices.h>
 #include <screen.h>
 
+/*******************************************************************************
+ * screen_state_t
+ * type of screen
+ * SCREEN_START:	start screen
+ * SCREEN_MAIN:		main screen
+ * SCREEN_MENU:		menu screen
+ * SCREEN_DRIVE:	drive screen
+ ******************************************************************************/
 typedef enum {
 	SCREEN_START,
 	SCREEN_MAIN,
