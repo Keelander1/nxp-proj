@@ -6,7 +6,7 @@
  * Generated linker script file for LPC54628J512
  * Created from linkscript.ldt by FMCreateLinkLibraries
  * Using Freemarker v2.3.23
- * MCUXpresso IDE v11.2.1 [Build 4149] [2020-10-07] on 20.04.2021 20:51:46
+ * MCUXpresso IDE v11.2.1 [Build 4149] [2020-10-07] on 07.06.2021 13:47:14
  */
 
 INCLUDE "lpcxpresso54628_freertos_hello_Debug_library.ld"
@@ -16,23 +16,7 @@ ENTRY(ResetISR)
 
 SECTIONS
 {
-     .text_Flash2 : ALIGN(4)
-    {
-       FILL(0xff)
-        *(.text_Flash2) /* for compatibility with previous releases */
-        *(.text_BOARD_FLASH) /* for compatibility with previous releases */
-        *(.text.$Flash2)
-        *(.text.$BOARD_FLASH)
-        *(.text_Flash2.*) /* for compatibility with previous releases */
-        *(.text_BOARD_FLASH.*) /* for compatibility with previous releases */
-        *(.text.$Flash2.*)
-        *(.text.$BOARD_FLASH.*)
-        *(.rodata.$Flash2)
-        *(.rodata.$BOARD_FLASH)
-        *(.rodata.$Flash2.*)
-        *(.rodata.$BOARD_FLASH.*)            } > BOARD_FLASH
-
-    /* MAIN TEXT SECTION */
+     /* MAIN TEXT SECTION */
     .text : ALIGN(4)
     {
         FILL(0xff)
@@ -51,9 +35,6 @@ SECTIONS
         LONG(LOADADDR(.data_RAM3));
         LONG(    ADDR(.data_RAM3));
         LONG(  SIZEOF(.data_RAM3));
-        LONG(LOADADDR(.data_RAM4));
-        LONG(    ADDR(.data_RAM4));
-        LONG(  SIZEOF(.data_RAM4));
         __data_section_table_end = .;
         __bss_section_table = .;
         LONG(    ADDR(.bss));
@@ -62,8 +43,6 @@ SECTIONS
         LONG(  SIZEOF(.bss_RAM2));
         LONG(    ADDR(.bss_RAM3));
         LONG(  SIZEOF(.bss_RAM3));
-        LONG(    ADDR(.bss_RAM4));
-        LONG(  SIZEOF(.bss_RAM4));
         __bss_section_table_end = .;
         __section_table_end = . ;
         /* End of Global Section Table */
@@ -139,24 +118,6 @@ SECTIONS
         PROVIDE(__end_data_USB_RAM = .) ;
      } > USB_RAM AT>PROGRAM_FLASH
 
-    /* DATA section for BOARD_SDRAM */
-
-    .data_RAM4 : ALIGN(4)
-    {
-        FILL(0xff)
-        PROVIDE(__start_data_RAM4 = .) ;
-        PROVIDE(__start_data_BOARD_SDRAM = .) ;
-        *(.ramfunc.$RAM4)
-        *(.ramfunc.$BOARD_SDRAM)
-        *(.data.$RAM4)
-        *(.data.$BOARD_SDRAM)
-        *(.data.$RAM4.*)
-        *(.data.$BOARD_SDRAM.*)
-        . = ALIGN(4) ;
-        PROVIDE(__end_data_RAM4 = .) ;
-        PROVIDE(__end_data_BOARD_SDRAM = .) ;
-     } > BOARD_SDRAM AT>PROGRAM_FLASH
-
     /* MAIN DATA SECTION */
     .uninit_RESERVED (NOLOAD) : ALIGN(4)
     {
@@ -213,20 +174,6 @@ SECTIONS
        PROVIDE(__end_bss_USB_RAM = .) ;
     } > USB_RAM AT> USB_RAM
 
-    /* BSS section for BOARD_SDRAM */
-    .bss_RAM4 : ALIGN(4)
-    {
-       PROVIDE(__start_bss_RAM4 = .) ;
-       PROVIDE(__start_bss_BOARD_SDRAM = .) ;
-       *(.bss.$RAM4)
-       *(.bss.$BOARD_SDRAM)
-       *(.bss.$RAM4.*)
-       *(.bss.$BOARD_SDRAM.*)
-       . = ALIGN (. != 0 ? 4 : 1) ; /* avoid empty segment */
-       PROVIDE(__end_bss_RAM4 = .) ;
-       PROVIDE(__end_bss_BOARD_SDRAM = .) ;
-    } > BOARD_SDRAM AT> BOARD_SDRAM
-
     /* MAIN BSS SECTION */
     .bss : ALIGN(4)
     {
@@ -269,20 +216,6 @@ SECTIONS
        PROVIDE(__end_noinit_RAM3 = .) ;
        PROVIDE(__end_noinit_USB_RAM = .) ;
     } > USB_RAM AT> USB_RAM
-
-    /* NOINIT section for BOARD_SDRAM */
-    .noinit_RAM4 (NOLOAD) : ALIGN(4)
-    {
-       PROVIDE(__start_noinit_RAM4 = .) ;
-       PROVIDE(__start_noinit_BOARD_SDRAM = .) ;
-       *(.noinit.$RAM4)
-       *(.noinit.$BOARD_SDRAM)
-       *(.noinit.$RAM4.*)
-       *(.noinit.$BOARD_SDRAM.*)
-       . = ALIGN(4) ;
-       PROVIDE(__end_noinit_RAM4 = .) ;
-       PROVIDE(__end_noinit_BOARD_SDRAM = .) ;
-    } > BOARD_SDRAM AT> BOARD_SDRAM
 
     /* DEFAULT NOINIT SECTION */
     .noinit (NOLOAD): ALIGN(4)

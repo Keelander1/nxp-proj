@@ -11,9 +11,9 @@
  ************************************************************************************************************
  **		| Authors	| Date 		| Commit																	|
  **	----|-----------|-----------|---------------------------------------------------------------------------|
- ** 1	|	EC/SM	|11-20-2020	| Created servo.c															|
+ ** 1	|	EC/MS	|11-20-2020	| Created servo.c															|
  ** 2	|	EC		|04-20-2021	| Commented the Code														|
- ** 3	|			|			| 																			|
+ ** 3	|	MS		|06-07-2021	| implemented test function for BLDC and servo								|
  ** 4	|			|			| 																			|
  ** 5	|			|			| 																			|
  ** 6	|			|			| 																			|
@@ -52,6 +52,12 @@ const ctimer_config_t SERVO_config = {
 };
 
 
+int32_t* servoMiddleValue= &((all_param_t*)&const_all_param)->motors.servo.init; 	//servo init value
+int32_t* servoLeftValue= &((all_param_t*)&const_all_param)->motors.servo.min;		//servo min value
+int32_t* servoRightValue= &((all_param_t*)&const_all_param)->motors.servo.max;		//servo max value
+
+
+
 /*******************************************************************************
  * Servo Main Initialization function
  ******************************************************************************/
@@ -65,7 +71,7 @@ void SERVO_Init(void)
 	IOCON->PIO[3][2]	&= 0xFFFFFFF0;      						//Clear FUNC bits of P3.2
 	IOCON->PIO[3][2]	|= 0x4;										//Cet FUNC bits to CTIMER1_MAT2 function ALT4 P3.2
 	GPIO->DIR[3]        |= 1<<2;        							//Set P3.2 pin to output
-	CTIMER1->MSR[2] = CTIMER1_PWM_PERIOD - SERVO_PWM_Middle_Value;	//Initialize MSR with SERVO_PWM_Middle_Value value
+	CTIMER1->MSR[2] = CTIMER1_PWM_PERIOD -(*servoMiddleValue)*CTIMER1_PWM_PERIOD/20000;	//Initialize MSR with SERVO_PWM_Middle_Value value
 	//*************************************************************
 
 	//*******************************************************************************************************
@@ -97,6 +103,7 @@ void CTIMER1_Init(void)
  ******************************************************************************/
 void SERVO_Demo(void *pvParameters)
 {
+
 	while(1)
 	{
 		//***************************************************************
@@ -110,6 +117,7 @@ void SERVO_Demo(void *pvParameters)
 
 		vTaskSuspend(NULL);	//suspend Task
 	}
+
 }
 
 

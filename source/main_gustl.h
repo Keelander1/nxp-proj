@@ -44,6 +44,8 @@
 #include "camera/camera.h"
 #include "rpmMeas/rpmMeas.h"
 #include "board/board_func.h"
+#include "hmi.h"
+#include "param.h"
 
 /* Freescale includes. */
 #include "fsl_device_registers.h"

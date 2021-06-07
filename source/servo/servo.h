@@ -51,6 +51,7 @@
 #include "task.h"
 #include "queue.h"
 #include "board.h"
+#include "param.h"
 
 /*******************************************************************************
  * Defines

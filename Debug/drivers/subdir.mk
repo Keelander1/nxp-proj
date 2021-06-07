@@ -8,6 +8,7 @@ C_SRCS += \
 ../drivers/fsl_common.c \
 ../drivers/fsl_ctimer.c \
 ../drivers/fsl_dma.c \
+../drivers/fsl_eeprom.c \
 ../drivers/fsl_emc.c \
 ../drivers/fsl_flexcomm.c \
 ../drivers/fsl_gpio.c \
@@ -23,6 +24,7 @@ OBJS += \
 ./drivers/fsl_common.o \
 ./drivers/fsl_ctimer.o \
 ./drivers/fsl_dma.o \
+./drivers/fsl_eeprom.o \
 ./drivers/fsl_emc.o \
 ./drivers/fsl_flexcomm.o \
 ./drivers/fsl_gpio.o \
@@ -38,6 +40,7 @@ C_DEPS += \
 ./drivers/fsl_common.d \
 ./drivers/fsl_ctimer.d \
 ./drivers/fsl_dma.d \
+./drivers/fsl_eeprom.d \
 ./drivers/fsl_emc.d \
 ./drivers/fsl_flexcomm.d \
 ./drivers/fsl_gpio.d \
@@ -53,7 +56,7 @@ C_DEPS += \
 drivers/%.o: ../drivers/%.c
 	@echo 'Building file: $<'
 	@echo 'Invoking: MCU C Compiler'
-	arm-none-eabi-gcc -std=gnu99 -DCPU_LPC54628J512ET180=1 -DCPU_LPC54628J512ET180_cm4 -DCPU_LPC54628 -D__USE_CMSIS -DSERIAL_PORT_TYPE_UART=1 -DFSL_RTOS_FREE_RTOS -DSDK_DEBUGCONSOLE=0 -DCR_INTEGER_PRINTF -DPRINTF_FLOAT_ENABLE=0 -D__MCUXPRESSO -DDEBUG -D__REDLIB__ -I"C:\Users\chris\OneDrive\Desktop\NXP-Git\nxp-aes-proj\board" -I"C:\Users\chris\OneDrive\Desktop\NXP-Git\nxp-aes-proj\source" -I"C:\Users\chris\OneDrive\Desktop\NXP-Git\nxp-aes-proj" -I"C:\Users\chris\OneDrive\Desktop\NXP-Git\nxp-aes-proj\drivers" -I"C:\Users\chris\OneDrive\Desktop\NXP-Git\nxp-aes-proj\device" -I"C:\Users\chris\OneDrive\Desktop\NXP-Git\nxp-aes-proj\CMSIS" -I"C:\Users\chris\OneDrive\Desktop\NXP-Git\nxp-aes-proj\freertos\freertos_kernel\include" -I"C:\Users\chris\OneDrive\Desktop\NXP-Git\nxp-aes-proj\freertos\freertos_kernel\portable\GCC\ARM_CM4F" -I"C:\Users\chris\OneDrive\Desktop\NXP-Git\nxp-aes-proj\utilities" -I"C:\Users\chris\OneDrive\Desktop\NXP-Git\nxp-aes-proj\component\serial_manager" -I"C:\Users\chris\OneDrive\Desktop\NXP-Git\nxp-aes-proj\component\lists" -I"C:\Users\chris\OneDrive\Desktop\NXP-Git\nxp-aes-proj\component\uart" -O0 -fno-common -g3 -Wall -c  -ffunction-sections  -fdata-sections  -ffreestanding  -fno-builtin -fmerge-constants -fmacro-prefix-map="../$(@D)/"=. -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -D__REDLIB__ -fstack-usage -specs=redlib.specs -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
+	arm-none-eabi-gcc -std=gnu99 -DCPU_LPC54628J512ET180=1 -DCPU_LPC54628J512ET180_cm4 -DCPU_LPC54628 -D__USE_CMSIS -DSERIAL_PORT_TYPE_UART=1 -DFSL_RTOS_FREE_RTOS -DSDK_DEBUGCONSOLE=0 -DCR_INTEGER_PRINTF -DPRINTF_FLOAT_ENABLE=0 -D__MCUXPRESSO -DDEBUG -D__REDLIB__ -I"D:\Projekte\nxp-aes-proj\board" -I"D:\Projekte\nxp-aes-proj\source" -I"D:\Projekte\nxp-aes-proj" -I"D:\Projekte\nxp-aes-proj\drivers" -I"D:\Projekte\nxp-aes-proj\device" -I"D:\Projekte\nxp-aes-proj\CMSIS" -I"D:\Projekte\nxp-aes-proj\freertos\freertos_kernel\include" -I"D:\Projekte\nxp-aes-proj\freertos\freertos_kernel\portable\GCC\ARM_CM4F" -I"D:\Projekte\nxp-aes-proj\utilities" -I"D:\Projekte\nxp-aes-proj\component\serial_manager" -I"D:\Projekte\nxp-aes-proj\component\lists" -I"D:\Projekte\nxp-aes-proj\component\uart" -I"D:\Projekte\nxp-aes-proj\source\display" -I"D:\Projekte\nxp-aes-proj\source\display\driver\config" -I"D:\Projekte\nxp-aes-proj\source\display\driver\resources" -I"D:\Projekte\nxp-aes-proj\source\display\menu" -I"D:\Projekte\nxp-aes-proj\source\hmi" -O0 -fno-common -g3 -Wall -c  -ffunction-sections  -fdata-sections  -ffreestanding  -fno-builtin -fmerge-constants -fmacro-prefix-map="../$(@D)/"=. -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -D__REDLIB__ -fstack-usage -specs=redlib.specs -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
 	@echo 'Finished building: $<'
 	@echo ' '
 
