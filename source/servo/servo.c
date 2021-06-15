@@ -108,11 +108,11 @@ void SERVO_Demo(void *pvParameters)
 	{
 		//***************************************************************
 		//Demo Sequence for Servo-drive
-		CTIMER1->MSR[2] = CTIMER1_PWM_PERIOD - servoLeftValue;		//Steer left
+		CTIMER1->MSR[2] = CTIMER1_PWM_PERIOD - (*servoLeftValue);		//Steer left
 		vTaskDelay(500);
-		CTIMER1->MSR[2] = CTIMER1_PWM_PERIOD - servoRightValue;		//Steer right
+		CTIMER1->MSR[2] = CTIMER1_PWM_PERIOD - (*servoRightValue);		//Steer right
 		vTaskDelay(800);
-		CTIMER1->MSR[2] = CTIMER1_PWM_PERIOD - servoMiddleValue;	//Steering angle zero degree
+		CTIMER1->MSR[2] = CTIMER1_PWM_PERIOD - (*servoMiddleValue);	//Steering angle zero degree
 		//***************************************************************
 
 		vTaskSuspend(NULL);	//suspend Task
