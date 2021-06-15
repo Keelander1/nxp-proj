@@ -69,7 +69,7 @@ void SERVO_Init(void)
 	//Configure Pin P[3][2] (J13 Pin11) (Servo PWM)
 	CTIMER1-> MCR 		|= CTIMER_MCR_MR2RL_MASK;					//Reload MR2 with content of shadow register at timer overflow
 	IOCON->PIO[3][2]	&= 0xFFFFFFF0;      						//Clear FUNC bits of P3.2
-	IOCON->PIO[3][2]	|= 0x4;										//Cet FUNC bits to CTIMER1_MAT2 function ALT4 P3.2
+	IOCON->PIO[3][2]	|= 0x4;								//Cet FUNC bits to CTIMER1_MAT2 function ALT4 P3.2
 	GPIO->DIR[3]        |= 1<<2;        							//Set P3.2 pin to output
 	CTIMER1->MSR[2] = CTIMER1_PWM_PERIOD -(*servoMiddleValue)*CTIMER1_PWM_PERIOD/20000;	//Initialize MSR with SERVO_PWM_Middle_Value value
 	//*************************************************************
@@ -108,11 +108,11 @@ void SERVO_Demo(void *pvParameters)
 	{
 		//***************************************************************
 		//Demo Sequence for Servo-drive
-		CTIMER1->MSR[2] = CTIMER1_PWM_PERIOD - SERVO_PWM_Left_Value;	//Steer left
+		CTIMER1->MSR[2] = CTIMER1_PWM_PERIOD - servoLeftValue;		//Steer left
 		vTaskDelay(500);
-		CTIMER1->MSR[2] = CTIMER1_PWM_PERIOD - SERVO_PWM_Right_Value;	//Steer right
+		CTIMER1->MSR[2] = CTIMER1_PWM_PERIOD - servoRightValue;		//Steer right
 		vTaskDelay(800);
-		CTIMER1->MSR[2] = CTIMER1_PWM_PERIOD - SERVO_PWM_Middle_Value;	//Steering angle zero degree
+		CTIMER1->MSR[2] = CTIMER1_PWM_PERIOD - servoMiddleValue;	//Steering angle zero degree
 		//***************************************************************
 
 		vTaskSuspend(NULL);	//suspend Task
