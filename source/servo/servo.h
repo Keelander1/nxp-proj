@@ -64,10 +64,6 @@
 #define CTIMER1_PWM_0_DUTY 0					//Definition of channel 2 duty  --> on ticks
 #define CTIMER1_PWM_PERIOD 4400000				//Definition of PWM period --> whole period ticks
 
-/* Servo PWM steer left/right max value definitions */
-#define SERVO_PWM_Left_Value 200000				//max left steering value -> less than 200000 (0,91ms) -> crash
-#define SERVO_PWM_Right_Value 459000				//max right steering value -> more than 459000 (2,08ms) -> crash
-#define SERVO_PWM_Middle_Value 327000			//zero degree steering angle
 
 /*******************************************************************************
  * Prototypes
