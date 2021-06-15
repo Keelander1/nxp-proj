@@ -63,14 +63,10 @@
 #define CTIMER3_PWM_RIGHT_CHANNEL kCTIMER_Match_2	//Definition of channel 2 ID
 
 /* BLDC PWM initialization value definitions */
-#define BLDC_PWM_INIT_HIGH_VALUE 330000				//Init High value Sequence 1,5ms
-#define BLDC_PWM_INIT_LOW_VALUE 220000				//Init Low value Sequence 1,0ms
-#define CTIMER3_PWM_0_DUTY 0						//Definition of initialization duty
-#define CTIMER3_PWM_PERIOD 4400000					//Definition of PWM period
-
-/* BLDC PWM throttle value definitions */
-#define BLDC_PWM_STOPTHROTTLE 240000				//Stop Throttle value (N = 0rpm) below 1,1ms
-#define BLDC_PWM_FULLTHROTTLE 418000				//fULL Throttle value (N = MAX rpm) 1,9ms
+#define BLDC_PWM_INIT_HIGH_VALUE 330000	//Init High value Sequence 1,5ms
+#define BLDC_PWM_INIT_LOW_VALUE 220000	//Init Low value Sequence 1,0ms
+#define CTIMER3_PWM_0_DUTY 0            //Definition of initialization duty
+#define CTIMER3_PWM_PERIOD 4400000			//Definition of PWM period
 
 /*******************************************************************************
  * Prototypes
