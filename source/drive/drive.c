@@ -51,8 +51,8 @@ const ctimer_config_t BLDC_config = {
 };
 
 int32_t* BLDCLeftInitValue= &((all_param_t*)&const_all_param)->motors.BLDCLeft.init; 	//left BLDC init value
-int32_t* BLDCLeftMinValue= &((all_param_t*)&const_all_param)->motors.BLDCLeft.min;		//left BLDC min value
-int32_t* BLDCLeftMaxValue= &((all_param_t*)&const_all_param)->motors.BLDCLeft.max;		//left BLDC max value
+int32_t* BLDCLeftMinValue= &((all_param_t*)&const_all_param)->motors.BLDCLeft.min;	//left BLDC min value
+int32_t* BLDCLeftMaxValue= &((all_param_t*)&const_all_param)->motors.BLDCLeft.max;	//left BLDC max value
 
 int32_t* BLDCRightInitValue= &((all_param_t*)&const_all_param)->motors.BLDCRight.init; 	//right BLDC init value
 int32_t* BLDCRightMinValue= &((all_param_t*)&const_all_param)->motors.BLDCRight.min;	//right BLDC min value
@@ -69,20 +69,20 @@ void BLDC_Init(void)
 
 	//*************************************************************
 	//Configure Pin P[3][10] (J13 Pin7) (Left BLDC)
-	CTIMER3-> MCR 		|= CTIMER_MCR_MR0RL_MASK;					//Reload MR0 with content of shadow register at timer overflow
-	IOCON->PIO[3][10]	&= 0xFFFFFFF0;      						//Clear FUNC bits of P3.10
-	IOCON->PIO[3][10]	|= 0x3;										//Set FUNC bits to CTIMER3_MAT0 function ALT3 P3.10
-	GPIO->DIR[3]        |= 1<<10;        							//Set P3.10 to output
-	CTIMER3->MSR[0] = CTIMER3_PWM_PERIOD - BLDC_PWM_INIT_LOW_VALUE;	//Initialize MSR with BLDC_PWM_INIT_LOW_VALUE value
+	CTIMER3-> MCR 		|= CTIMER_MCR_MR0RL_MASK;			//Reload MR0 with content of shadow register at timer overflow
+	IOCON->PIO[3][10]	&= 0xFFFFFFF0;      				//Clear FUNC bits of P3.10
+	IOCON->PIO[3][10]	|= 0x3;						//Set FUNC bits to CTIMER3_MAT0 function ALT3 P3.10
+	GPIO->DIR[3]        |= 1<<10;        					//Set P3.10 to output
+	CTIMER3->MSR[0] = CTIMER3_PWM_PERIOD - BLDC_PWM_INIT_LOW_VALUE;		//Initialize MSR with BLDC_PWM_INIT_LOW_VALUE value
 	//*************************************************************
 
 	//*************************************************************
 	//Configure Pin P[0][27] (J13 Pin12) (Right BLDC)
-	CTIMER3-> MCR 		|= CTIMER_MCR_MR2RL_MASK;					//Reload MR2 with content of shadow register at timer overflow
-	IOCON->PIO[0][27]	&= 0xFFFFFFF0;      						//Clear FUNC bits of P0.27
-	IOCON->PIO[0][27]	|= 0x3;										//Set FUNC bits to CTIMER3_MAT2 function ALT3 P0.27
-	GPIO->DIR[0]        |= 1<<27;        							//Set P0.27 to output
-	CTIMER3->MSR[2] = CTIMER3_PWM_PERIOD - BLDC_PWM_INIT_LOW_VALUE;	//Initialize MSR with BLDC_PWM_INIT_LOW_VALUE value
+	CTIMER3-> MCR 		|= CTIMER_MCR_MR2RL_MASK;			//Reload MR2 with content of shadow register at timer overflow
+	IOCON->PIO[0][27]	&= 0xFFFFFFF0;      				//Clear FUNC bits of P0.27
+	IOCON->PIO[0][27]	|= 0x3;						//Set FUNC bits to CTIMER3_MAT2 function ALT3 P0.27
+	GPIO->DIR[0]        |= 1<<27;        					//Set P0.27 to output
+	CTIMER3->MSR[2] = CTIMER3_PWM_PERIOD - BLDC_PWM_INIT_LOW_VALUE;		//Initialize MSR with BLDC_PWM_INIT_LOW_VALUE value
 	//*************************************************************
 
 	//*******************************************************************************************************
@@ -138,11 +138,11 @@ void ESC_Init_Task(void *pvParameters)
 		//***************************************************************
 		//Testing Sequence for BLDC-Motors
 
-		/*CTIMER3->MSR[0] = CTIMER3_PWM_PERIOD - BLDC_PWM_FULLTHROTTLE;		//Set motor to full speed
-		CTIMER3->MSR[2] = CTIMER3_PWM_PERIOD - BLDC_PWM_FULLTHROTTLE;		//Set motor to full speed
+		/*CTIMER3->MSR[0] = CTIMER3_PWM_PERIOD - BLDCLeftMaxValue;		//Set motor to full speed
+		CTIMER3->MSR[2] = CTIMER3_PWM_PERIOD - BLDCRightMaxValue;		//Set motor to full speed
 		vTaskDelay(1000);
-		CTIMER3->MSR[0] = CTIMER3_PWM_PERIOD - BLDC_PWM_STOPTHROTTLE;		//Stop motor
-		CTIMER3->MSR[2] = CTIMER3_PWM_PERIOD - BLDC_PWM_STOPTHROTTLE;		//Stop motor*/
+		CTIMER3->MSR[0] = CTIMER3_PWM_PERIOD - BLDCLeftMinValue;		//Stop motor
+		CTIMER3->MSR[2] = CTIMER3_PWM_PERIOD - BLDCRightMinValue;		//Stop motor*/
 
 		//***************************************************************
 
