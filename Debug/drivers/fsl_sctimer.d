@@ -1,5 +1,5 @@
-drivers/fsl_common.o drivers/fsl_common.d: ../drivers/fsl_common.c \
- ../drivers/fsl_common.h \
+drivers/fsl_sctimer.o drivers/fsl_sctimer.d: ../drivers/fsl_sctimer.c \
+ ../drivers/fsl_sctimer.h ../drivers/fsl_common.h \
  C:\Users\chris\OneDrive\Desktop\NXP-Git\nxp-aes-proj\device/fsl_device_registers.h \
  C:\Users\chris\OneDrive\Desktop\NXP-Git\nxp-aes-proj\device/LPC54628.h \
  C:\Users\chris\OneDrive\Desktop\NXP-Git\nxp-aes-proj\CMSIS/core_cm4.h \
@@ -10,6 +10,8 @@ drivers/fsl_common.o drivers/fsl_common.d: ../drivers/fsl_common.c \
  C:\Users\chris\OneDrive\Desktop\NXP-Git\nxp-aes-proj\device/system_LPC54628.h \
  C:\Users\chris\OneDrive\Desktop\NXP-Git\nxp-aes-proj\device/LPC54628_features.h \
  ../drivers/fsl_clock.h ../drivers/fsl_reset.h
+
+../drivers/fsl_sctimer.h:
 
 ../drivers/fsl_common.h:
 
