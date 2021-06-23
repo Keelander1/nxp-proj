@@ -39,7 +39,6 @@
 #ifndef RPMMEAS_RPMMEAS_H_
 #define RPMMEAS_RPMMEAS_H_
 
-
 /*******************************************************************************
  * Includes
  ******************************************************************************/
@@ -52,8 +51,11 @@
 /*******************************************************************************
  * Defines
  ******************************************************************************/
-#define CTIMER2_RPMMEAS_LEFT_CHANNEL kCTIMER_Capture_0 	//Left BLDC Phase 1 Channel 0
-#define CTIMER2_RPMMEAS_RIGHT_CHANNEL kCTIMER_Capture_1	//Left BLDC Phase 1 Channel 0
+/* Definition of channel 0 ID for right BLDC*/
+#define CTIMER2_RPMMEAS_LEFT_CHANNEL kCTIMER_Capture_0
+
+/* Definition of channel 1 ID for left BLDC*/
+#define CTIMER2_RPMMEAS_RIGHT_CHANNEL kCTIMER_Capture_1
 
 /*******************************************************************************
  * Prototypes
@@ -62,6 +64,8 @@ void RPMMEAS_Init(void);
 void CTIMER2_Init(void);
 void rpmMeas_Left_ISR(uint32_t);
 void rpmMeas_Right_ISR(uint32_t);
+uint32_t rpmMeas_average_val_left(uint32_t a[]);
+uint32_t rpmMeas_average_val_right(uint32_t b[]);
 
 
 #endif /* RPMMEAS_RPMMEAS_H_ */
