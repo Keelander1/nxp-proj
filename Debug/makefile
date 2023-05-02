@@ -33,9 +33,6 @@ RM := rm -rf
 -include component/serial_manager/subdir.mk
 -include component/lists/subdir.mk
 -include board/subdir.mk
--include subdir.mk
--include objects.mk
-
 ifneq ($(MAKECMDGOALS),clean)
 ifneq ($(strip $(C_DEPS)),)
 -include $(C_DEPS)
@@ -44,30 +41,44 @@ endif
 
 -include ../makefile.defs
 
+OPTIONAL_TOOL_DEPS := \
+$(wildcard ../makefile.defs) \
+$(wildcard ../makefile.init) \
+$(wildcard ../makefile.targets) \
+
+
+BUILD_ARTIFACT_NAME := Gustl_SumEck
+BUILD_ARTIFACT_EXTENSION := axf
+BUILD_ARTIFACT_PREFIX :=
+BUILD_ARTIFACT := $(BUILD_ARTIFACT_PREFIX)$(BUILD_ARTIFACT_NAME)$(if $(BUILD_ARTIFACT_EXTENSION),.$(BUILD_ARTIFACT_EXTENSION),)
+
 # Add inputs and outputs from these tool invocations to the build variables 
 
 # All Target
-all: nxp-aes-proj.axf
+all:
+	+@$(MAKE) --no-print-directory main-build && $(MAKE) --no-print-directory post-build
+
+# Main-build Target
+main-build: Gustl_SumEck.axf
 
 # Tool invocations
-nxp-aes-proj.axf: $(OBJS) $(USER_OBJS)
+Gustl_SumEck.axf: $(OBJS) $(USER_OBJS) makefile $(OPTIONAL_TOOL_DEPS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: MCU Linker'
-	arm-none-eabi-gcc -nostdlib -L"C:\Users\chris\OneDrive\Desktop\NXP-Git\nxp-aes-proj\libs" -Xlinker -Map="nxp-aes-proj.map" -Xlinker --gc-sections -Xlinker -print-memory-usage -Xlinker --sort-section=alignment -Xlinker --cref -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -T lpcxpresso54628_freertos_hello_Debug.ld -o "nxp-aes-proj.axf" $(OBJS) $(USER_OBJS) $(LIBS)
+	arm-none-eabi-gcc -nostdlib -L"C:\Users\keela\OneDrive\Desktop\Studium\EmbeddedSystems\nxp-proj\libs" -Xlinker -Map="Gustl_SumEck.map" -Xlinker --gc-sections -Xlinker -print-memory-usage -Xlinker --sort-section=alignment -Xlinker --cref -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -T Gustl_SumEck_Debug.ld -o "Gustl_SumEck.axf" $(OBJS) $(USER_OBJS) $(LIBS) -lpower_hardabi
 	@echo 'Finished building target: $@'
 	@echo ' '
-	$(MAKE) --no-print-directory post-build
 
 # Other Targets
 clean:
-	-$(RM) $(EXECUTABLES)$(OBJS)$(C_DEPS) nxp-aes-proj.axf
+	-$(RM) Gustl_SumEck.axf
 	-@echo ' '
 
 post-build:
 	-@echo 'Performing post-build steps'
-	-arm-none-eabi-size "nxp-aes-proj.axf"; # arm-none-eabi-objcopy -v -O binary "nxp-aes-proj.axf" "nxp-aes-proj.bin" ; # checksum -p LPC54628J512 -d "nxp-aes-proj.bin";
+	-arm-none-eabi-size "Gustl_SumEck.axf"; # arm-none-eabi-objcopy -v -O binary "Gustl_SumEck.axf" "Gustl_SumEck.bin" ; # checksum -p LPC54628J512 -d "Gustl_SumEck.bin";
 	-@echo ' '
 
-.PHONY: all clean dependents post-build
+.PHONY: all clean dependents main-build post-build
 
 -include ../makefile.targets
