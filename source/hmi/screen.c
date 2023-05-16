@@ -78,13 +78,13 @@ void menu_open_main() {
 	menu_rtos_switch_handle(&curr_menu_handle, &menu_main_handle);	//switch menu handler
 	menu_reset(&curr_menu_handle->drv_handle);						//reset menu handle
 }
-/*
+
 void menu_open_main_drive() {
 
 	menu_rtos_switch_handle(&curr_menu_handle, &menu_main_drive_handle);
 	menu_reset(&curr_menu_handle->drv_handle);
 }
- */
+
 void menu_open_main_hardware() {
 
 	menu_rtos_switch_handle(&curr_menu_handle, &menu_main_hardware_handle);
@@ -95,7 +95,7 @@ void menu_open_hardware_abaut() {
 	menu_rtos_switch_handle(&curr_menu_handle, &menu_hardware_ppm_handle);
 	menu_reset(&curr_menu_handle->drv_handle);
 }
-/*
+
 void menu_page_main_about(uint8_t refresh) {
 
 	ssd1309_rtos_lock(&g_disp_0);
@@ -110,7 +110,7 @@ void menu_page_main_about(uint8_t refresh) {
 
 	ssd1309_rtos_unlock(&g_disp_0);
 }
- */
+
 void menu_open_hardware_ppm() {
 
 	menu_rtos_switch_handle(&curr_menu_handle, &menu_hardware_ppm_handle);
@@ -141,13 +141,13 @@ void menu_open_ppm_restore() {
 	menu_rtos_switch_handle(&curr_menu_handle, &menu_ppm_restore_handle);
 	menu_reset(&curr_menu_handle->drv_handle);
 }
-/*
+
 void menu_open_hardware_camera() {
 
 	menu_rtos_switch_handle(&curr_menu_handle, &menu_hardware_camera_handle);
 	menu_reset(&curr_menu_handle->drv_handle);
 }
-
+/*
 void menu_page_camera_info(uint8_t refresh) {
 
 	uint8_t buffer[64];
@@ -192,7 +192,7 @@ void menu_page_camera_info(uint8_t refresh) {
 
 
 
- */
+
 
 /*******************************************************************************
  * menu_clos

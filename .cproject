@@ -266,7 +266,7 @@
 								<option id="com.crt.advproject.link.gcc.lto.optmization.level.1603073752" name="Link-time optimization level" superClass="com.crt.advproject.link.gcc.lto.optmization.level"/>
 								<option id="com.crt.advproject.link.fpu.1303153384" name="Floating point" superClass="com.crt.advproject.link.fpu" value="com.crt.advproject.link.fpu.fpv4.hard" valueType="enumerated"/>
 								<option id="com.crt.advproject.link.manage.1836690412" name="Manage linker script" superClass="com.crt.advproject.link.manage" value="true" valueType="boolean"/>
-								<option id="com.crt.advproject.link.script.1727942536" name="Linker script" superClass="com.crt.advproject.link.script" value="lpcxpresso54628_freertos_hello_Debug.ld" valueType="string"/>
+								<option id="com.crt.advproject.link.script.1727942536" name="Linker script" superClass="com.crt.advproject.link.script" value="Gustl_SumEck_Debug.ld" valueType="string"/>
 								<option id="com.crt.advproject.link.scriptdir.341923698" name="Script path" superClass="com.crt.advproject.link.scriptdir"/>
 								<option id="com.crt.advproject.link.crpenable.593380001" name="Enable automatic placement of Code Read Protection field in image" superClass="com.crt.advproject.link.crpenable"/>
 								<option id="com.crt.advproject.link.flashconfigenable.423716141" name="Enable automatic placement of Flash Configuration field in image" superClass="com.crt.advproject.link.flashconfigenable" value="true" valueType="boolean"/>
@@ -569,7 +569,7 @@
 								<option id="com.crt.advproject.link.gcc.lto.optmization.level.281200752" name="Link-time optimization level" superClass="com.crt.advproject.link.gcc.lto.optmization.level"/>
 								<option id="com.crt.advproject.link.fpu.2127341075" name="Floating point" superClass="com.crt.advproject.link.fpu" value="com.crt.advproject.link.fpu.fpv4.hard" valueType="enumerated"/>
 								<option id="com.crt.advproject.link.manage.1868952562" name="Manage linker script" superClass="com.crt.advproject.link.manage" value="true" valueType="boolean"/>
-								<option id="com.crt.advproject.link.script.240706646" name="Linker script" superClass="com.crt.advproject.link.script" value="lpcxpresso54628_freertos_hello_Release.ld" valueType="string"/>
+								<option id="com.crt.advproject.link.script.240706646" name="Linker script" superClass="com.crt.advproject.link.script" value="Gustl_SumEck_Release.ld" valueType="string"/>
 								<option id="com.crt.advproject.link.scriptdir.136645239" name="Script path" superClass="com.crt.advproject.link.scriptdir"/>
 								<option id="com.crt.advproject.link.crpenable.1110363038" name="Enable automatic placement of Code Read Protection field in image" superClass="com.crt.advproject.link.crpenable"/>
 								<option id="com.crt.advproject.link.flashconfigenable.1291616056" name="Enable automatic placement of Flash Configuration field in image" superClass="com.crt.advproject.link.flashconfigenable" value="true" valueType="boolean"/>
@@ -627,7 +627,7 @@
 	<storageModule moduleId="com.nxp.mcuxpresso.core.datamodels">
 		<sdkName>SDK_2.x_LPCXpresso54628</sdkName>
 		<sdkExample>lpcxpresso54628_freertos_hello</sdkExample>
-		<sdkVersion>2.9.0</sdkVersion>
+		<sdkVersion>2.13.0</sdkVersion>
 		<sdkComponents>platform.drivers.clock.LPC54628;platform.drivers.power.LPC54628;platform.drivers.common.LPC54628;device.LPC54628_CMSIS.LPC54628;platform.Include_core_cm4.LPC54628;platform.Include_common.LPC54628;platform.Include_dsp.LPC54628;platform.drivers.reset.LPC54628;middleware.freertos-kernel.heap_4.LPC54628;middleware.freertos-kernel.LPC54628;middleware.freertos-kernel.extension.LPC54628;utility.debug_console.LPC54628;component.serial_manager.LPC54628;component.lists.LPC54628;component.usart_adapter.LPC54628;platform.drivers.flexcomm_usart.LPC54628;platform.drivers.flexcomm.LPC54628;component.serial_manager_uart.LPC54628;device.LPC54628_startup.LPC54628;platform.drivers.lpc_iocon.LPC54628;platform.drivers.lpc_gpio.LPC54628;platform.drivers.emc.LPC54628;platform.utilities.assert.LPC54628;platform.utilities.misc_utilities.LPC54628;lpcxpresso54628_freertos_hello;</sdkComponents>
 		<boardId>lpcxpresso54628</boardId>
 		<package>LPC54628J512ET180</package>

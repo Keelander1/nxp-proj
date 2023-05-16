@@ -56,8 +56,8 @@ const static menu_entry_t menu_main_entries[] = {
 				 ***************************************************/
 				.str = "Drive",						//display "Drive"
 				.type = MENU_LINK,					//type is MENU_LiNK
-				//.link = menu_open_main_drive,
-				.link = menu_close,
+				.link = menu_open_main_drive,
+				//.link = menu_close,
 				.en = true,							//element is clickable
 		},
 		{
@@ -85,8 +85,8 @@ const static menu_entry_t menu_main_entries[] = {
 				 ***************************************************/
 				.str = "About",						//display "About"
 				.type = MENU_PAGE,					//type is MENU_PAGE
-				//.func = menu_page_main_about,
-				.func = 0,
+				.func = menu_page_main_about,
+				//.func = 0,
 				.en = true,							//element is clickable
 		},
 		{
@@ -140,8 +140,8 @@ const static menu_entry_t menu_main_drive_entries[] = {
 		{
 				.str = "Back",
 				.type = MENU_LINK,
-				//.link = menu_open_main,
-				.link = 0,
+				.link = menu_open_main,
+				//.link = 0,
 				.en = true,
 		},
 };
@@ -153,8 +153,8 @@ const static menu_entry_t menu_main_hardware_entries[] = {
 		{
 				.str = "Camera",					//display "Camera"
 				.type = MENU_LINK,					//type is MENU_LINK
-				.link =0,
-				//.link = menu_open_hardware_camera,
+				//.link =0,
+				.link = menu_open_hardware_camera,	//link to camera menu
 				.en = true,							//element is clickable
 		},
 		{
@@ -542,7 +542,7 @@ menu_rtos_handle_t menu_main_hardware_handle = {
  ***************************************************/
 menu_rtos_handle_t menu_hardware_camera_handle = {
 		.drv_handle = {
-				.entry_cnt = 2,                                             //2 entries
+				.entry_cnt = 3,                                             //2 entries
 				.entry_list = (menu_entry_t*)menu_hardware_camera_entries,  //list of all entries
 				.draw = menu_list_draw,                                     //emtry draw function
 		},

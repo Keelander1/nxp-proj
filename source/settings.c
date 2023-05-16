@@ -148,6 +148,9 @@ void menu_func_bldcLeft_test(uint8_t state) {
 
 	//calculate timer register value for test speed
 	CTIMER3->MSR[0] = CTIMER3_PWM_PERIOD - testValue * CTIMER3_PWM_PERIOD / 20000;
+
+	//for Debugging
+	printf("TestValueLeft: %i \t TimerRegister: %i \n", testValue, CTIMER3->MSR[0]);
 }
 
 
@@ -205,6 +208,8 @@ void menu_func_bldc_motor_left_max(uint8_t state) {
 void menu_func_bldcRight_test(uint8_t state) {
 
 	int16_t testValue;
+
+
 	if(state==MENU_DEACT)
 	{
 		//calculate timer register value for stop
@@ -215,6 +220,9 @@ void menu_func_bldcRight_test(uint8_t state) {
 	testValue= *BLDCRightMinValue + BLDCRightTestValue*(*BLDCRightMaxValue-*BLDCRightMinValue)/100;
 	//calculate timer register value for test speed
 	CTIMER3->MSR[2] = CTIMER3_PWM_PERIOD - testValue * CTIMER3_PWM_PERIOD / 20000;
+
+	//for Debugging
+	printf("TestValueRight: %i \t TimerRegister: %i \n", testValue, CTIMER3->MSR[2]);
 }
 
 
