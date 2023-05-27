@@ -55,6 +55,7 @@ void menu_open_ppm_motor_right();
 void menu_open_ppm_restore();
 void menu_open_hardware_camera();
 void menu_page_camera_info(uint8_t refresh);
+void menu_page_pixelanzeige_camera(uint8_t refresh);
 void menu_close();
 void screen_main();
 void screen_update_header();

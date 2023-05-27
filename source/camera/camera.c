@@ -297,7 +297,7 @@ void ADC_Config(void)
 	ADC0->SEQ_CTRL[0] |= (3 << 12); 	//SCTIMER Output 4 Trigger SCT0_OUT4
 	ADC0->SEQ_CTRL[0] |= (1 << 18); 	//TRIGPOL positive Edge
 	ADC0->SEQ_CTRL[0] |= (1 << 19); 	//Bypass Trigger Synchronization
-	//ADC0->SEQ_CTRL[0] |= (1 << 30);	//Mode: 0(Rst.Value)=End of Conversion / 1=End of Sequence
+	ADC0->SEQ_CTRL[0] |= (1 << 30);	    //Mode: 0(Rst.Value)=End of Conversion / 1=End of Sequence
 	ADC0->SEQ_CTRL[0] |= (1 << 31); 	//Sequence A Enable
 	//*********************************
 

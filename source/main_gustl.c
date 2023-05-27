@@ -47,7 +47,7 @@ int main(void)
     //Own initialization of car peripherals and board
     Board_Init(); 	//Initialize board peripherals
     PARAM_Init();	//Initialize EEPROM
-    //CAM_Init();		//Initialize line-Camera
+    CAM_Init();		//Initialize line-Camera
     RPMMEAS_Init();	//Initialize speed-measurement
     SERVO_Init();	//Initialize servo-drive
     BLDC_Init();	//Initialize BLDC-drives

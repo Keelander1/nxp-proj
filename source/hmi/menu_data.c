@@ -197,12 +197,20 @@ const static menu_entry_t menu_hardware_camera_entries[] = {
 				.en = true,
 		},
 
+		{		.str = "Pixelanzeige",							// Neu Martin Fürstberger 27.05.23
+				.type = MENU_PAGE,
+				.func = menu_page_pixelanzeige_camera,
+				.en = true,
+		},
+
 		{
 				.str = "Back",
 				.type = MENU_LINK,
 				.link = menu_open_main_hardware,
 				.en = true,
 		},
+
+
 };
 
 /****************************************************
@@ -542,11 +550,15 @@ menu_rtos_handle_t menu_main_hardware_handle = {
  ***************************************************/
 menu_rtos_handle_t menu_hardware_camera_handle = {
 		.drv_handle = {
-				.entry_cnt = 3,                                             //2 entries
+				.entry_cnt = 4,                                             //4 entries
 				.entry_list = (menu_entry_t*)menu_hardware_camera_entries,  //list of all entries
 				.draw = menu_list_draw,                                     //emtry draw function
 		},
 };
+
+/****************************************************
+ * handle for motor restore menu
+ ***************************************************/
 
 /****************************************************
  * handle for motor menu
@@ -602,5 +614,6 @@ menu_rtos_handle_t menu_ppm_restore_handle = {
 				.draw = menu_list_draw,                                    	//emtry draw function
 		},
 };
+
 
 
