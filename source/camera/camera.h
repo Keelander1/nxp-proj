@@ -56,7 +56,8 @@
 #include "queue.h"
 #include "board.h"
 #include "fsl_sctimer.h"
-
+#include "hmi/menu_main_screen.h"
+#include "hmi/menu_data.h"
 
 /*******************************************************************************
  * Defines
@@ -74,7 +75,7 @@ void SCTimer_ADCTrigger_Init(void);
 void ADC_Config(void);
 void ADC_Calibration(void);
 void CTIMER0_Init(void);
-
+void menu_page_pixelanzeige_camera(uint8_t refresh);
 void Calculate_PixelValues_Task(void *pvParameters);
 
 #endif /* CAMERA_CAMERA_H_ */

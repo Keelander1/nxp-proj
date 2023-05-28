@@ -36,8 +36,7 @@ source/main_gustl.o source/main_gustl.d: ../source/main_gustl.c \
  D:\Studium\NXP-Cup\nxp-proj\nxp-proj\source/drive_param.h \
  ../source/drive/drive.h ../source/camera/camera.h \
  D:\Studium\NXP-Cup\nxp-proj\nxp-proj\drivers/fsl_sctimer.h \
- ../source/rpmMeas/rpmMeas.h ../source/board/board_func.h \
- D:\Studium\NXP-Cup\nxp-proj\nxp-proj\source\hmi/hmi.h \
+ D:\Studium\NXP-Cup\nxp-proj\nxp-proj\source/hmi/menu_main_screen.h \
  D:\Studium\NXP-Cup\nxp-proj\nxp-proj\source/display/display.h \
  D:\Studium\NXP-Cup\nxp-proj\nxp-proj\source/display/interface/i2c_rtos_interface.h \
  D:\Studium\NXP-Cup\nxp-proj\nxp-proj\drivers/fsl_i2c.h \
@@ -52,11 +51,11 @@ source/main_gustl.o source/main_gustl.d: ../source/main_gustl.c \
  D:\Studium\NXP-Cup\nxp-proj\nxp-proj\source\display\driver\resources/ssd1309_img.h \
  D:\Studium\NXP-Cup\nxp-proj\nxp-proj\source/display/menu/menu_rtos.h \
  D:\Studium\NXP-Cup\nxp-proj\nxp-proj\source/display/menu/menu.h \
- D:\Studium\NXP-Cup\nxp-proj\nxp-proj\source\hmi/menu_data.h \
- D:\Studium\NXP-Cup\nxp-proj\nxp-proj\source\hmi/screen.h \
- D:\Studium\NXP-Cup\nxp-proj\nxp-proj\source\hmi/menu_main_screen.h \
  D:\Studium\NXP-Cup\nxp-proj\nxp-proj\source/display/driver/resources/ssd1309_img.h \
- D:\Studium\NXP-Cup\nxp-proj\nxp-proj\source\hmi/hmi.h \
+ D:\Studium\NXP-Cup\nxp-proj\nxp-proj\source/hmi/hmi.h \
+ D:\Studium\NXP-Cup\nxp-proj\nxp-proj\source/hmi/menu_data.h \
+ D:\Studium\NXP-Cup\nxp-proj\nxp-proj\source/hmi/screen.h \
+ D:\Studium\NXP-Cup\nxp-proj\nxp-proj\source/hmi/menu_main_screen.h \
  D:\Studium\NXP-Cup\nxp-proj\nxp-proj\source/display/menu/design/menu_list.h \
  D:\Studium\NXP-Cup\nxp-proj\nxp-proj\source\display\menu/menu_rtos.h \
  D:\Studium\NXP-Cup\nxp-proj\nxp-proj\source/settings.h \
@@ -64,6 +63,12 @@ source/main_gustl.o source/main_gustl.d: ../source/main_gustl.c \
  D:\Studium\NXP-Cup\nxp-proj\nxp-proj\source/param.h \
  D:\Studium\NXP-Cup\nxp-proj\nxp-proj\source/servo/servo.h \
  D:\Studium\NXP-Cup\nxp-proj\nxp-proj\source/drive/drive.h \
+ D:\Studium\NXP-Cup\nxp-proj\nxp-proj\source\hmi/screen.h \
+ D:\Studium\NXP-Cup\nxp-proj\nxp-proj\source/camera/camera.h \
+ D:\Studium\NXP-Cup\nxp-proj\nxp-proj\source/hmi/menu_data.h \
+ ../source/rpmMeas/rpmMeas.h ../source/board/board_func.h \
+ D:\Studium\NXP-Cup\nxp-proj\nxp-proj\source\hmi/hmi.h \
+ D:\Studium\NXP-Cup\nxp-proj\nxp-proj\source\hmi/menu_data.h \
  D:\Studium\NXP-Cup\nxp-proj\nxp-proj\source\hmi/screen.h \
  ../source/param.h \
  D:\Studium\NXP-Cup\nxp-proj\nxp-proj\utilities/fsl_debug_console.h \
@@ -109,9 +114,7 @@ D:\Studium\NXP-Cup\nxp-proj\nxp-proj\source/drive_param.h:
 ../source/drive/drive.h:
 ../source/camera/camera.h:
 D:\Studium\NXP-Cup\nxp-proj\nxp-proj\drivers/fsl_sctimer.h:
-../source/rpmMeas/rpmMeas.h:
-../source/board/board_func.h:
-D:\Studium\NXP-Cup\nxp-proj\nxp-proj\source\hmi/hmi.h:
+D:\Studium\NXP-Cup\nxp-proj\nxp-proj\source/hmi/menu_main_screen.h:
 D:\Studium\NXP-Cup\nxp-proj\nxp-proj\source/display/display.h:
 D:\Studium\NXP-Cup\nxp-proj\nxp-proj\source/display/interface/i2c_rtos_interface.h:
 D:\Studium\NXP-Cup\nxp-proj\nxp-proj\drivers/fsl_i2c.h:
@@ -126,11 +129,11 @@ D:\Studium\NXP-Cup\nxp-proj\nxp-proj\source\display\driver\resources/ssd1309_fon
 D:\Studium\NXP-Cup\nxp-proj\nxp-proj\source\display\driver\resources/ssd1309_img.h:
 D:\Studium\NXP-Cup\nxp-proj\nxp-proj\source/display/menu/menu_rtos.h:
 D:\Studium\NXP-Cup\nxp-proj\nxp-proj\source/display/menu/menu.h:
-D:\Studium\NXP-Cup\nxp-proj\nxp-proj\source\hmi/menu_data.h:
-D:\Studium\NXP-Cup\nxp-proj\nxp-proj\source\hmi/screen.h:
-D:\Studium\NXP-Cup\nxp-proj\nxp-proj\source\hmi/menu_main_screen.h:
 D:\Studium\NXP-Cup\nxp-proj\nxp-proj\source/display/driver/resources/ssd1309_img.h:
-D:\Studium\NXP-Cup\nxp-proj\nxp-proj\source\hmi/hmi.h:
+D:\Studium\NXP-Cup\nxp-proj\nxp-proj\source/hmi/hmi.h:
+D:\Studium\NXP-Cup\nxp-proj\nxp-proj\source/hmi/menu_data.h:
+D:\Studium\NXP-Cup\nxp-proj\nxp-proj\source/hmi/screen.h:
+D:\Studium\NXP-Cup\nxp-proj\nxp-proj\source/hmi/menu_main_screen.h:
 D:\Studium\NXP-Cup\nxp-proj\nxp-proj\source/display/menu/design/menu_list.h:
 D:\Studium\NXP-Cup\nxp-proj\nxp-proj\source\display\menu/menu_rtos.h:
 D:\Studium\NXP-Cup\nxp-proj\nxp-proj\source/settings.h:
@@ -138,6 +141,13 @@ D:\Studium\NXP-Cup\nxp-proj\nxp-proj\source\display\menu/menu.h:
 D:\Studium\NXP-Cup\nxp-proj\nxp-proj\source/param.h:
 D:\Studium\NXP-Cup\nxp-proj\nxp-proj\source/servo/servo.h:
 D:\Studium\NXP-Cup\nxp-proj\nxp-proj\source/drive/drive.h:
+D:\Studium\NXP-Cup\nxp-proj\nxp-proj\source\hmi/screen.h:
+D:\Studium\NXP-Cup\nxp-proj\nxp-proj\source/camera/camera.h:
+D:\Studium\NXP-Cup\nxp-proj\nxp-proj\source/hmi/menu_data.h:
+../source/rpmMeas/rpmMeas.h:
+../source/board/board_func.h:
+D:\Studium\NXP-Cup\nxp-proj\nxp-proj\source\hmi/hmi.h:
+D:\Studium\NXP-Cup\nxp-proj\nxp-proj\source\hmi/menu_data.h:
 D:\Studium\NXP-Cup\nxp-proj\nxp-proj\source\hmi/screen.h:
 ../source/param.h:
 D:\Studium\NXP-Cup\nxp-proj\nxp-proj\utilities/fsl_debug_console.h:

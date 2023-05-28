@@ -44,7 +44,7 @@
 #include "display/menu/design/menu_list.h"
 #include "param.h"
 #include "settings.h"
-
+#include "camera/camera.h"
 
 /****************************************************
  * handle for main menu

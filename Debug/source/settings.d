@@ -57,7 +57,11 @@ source/settings.o source/settings.d: ../source/settings.c \
  D:\Studium\NXP-Cup\nxp-proj\nxp-proj\source\hmi/screen.h \
  D:\Studium\NXP-Cup\nxp-proj\nxp-proj\source/display/menu/design/menu_list.h \
  D:\Studium\NXP-Cup\nxp-proj\nxp-proj\source\display\menu/menu_rtos.h \
- D:\Studium\NXP-Cup\nxp-proj\nxp-proj\source/settings.h
+ D:\Studium\NXP-Cup\nxp-proj\nxp-proj\source/settings.h \
+ D:\Studium\NXP-Cup\nxp-proj\nxp-proj\source/camera/camera.h \
+ D:\Studium\NXP-Cup\nxp-proj\nxp-proj\drivers/fsl_sctimer.h \
+ D:\Studium\NXP-Cup\nxp-proj\nxp-proj\source/hmi/menu_main_screen.h \
+ D:\Studium\NXP-Cup\nxp-proj\nxp-proj\source/hmi/menu_data.h
 ../source/settings.h:
 D:\Studium\NXP-Cup\nxp-proj\nxp-proj\source\display\menu/menu.h:
 ../source/param.h:
@@ -118,3 +122,7 @@ D:\Studium\NXP-Cup\nxp-proj\nxp-proj\source\hmi/screen.h:
 D:\Studium\NXP-Cup\nxp-proj\nxp-proj\source/display/menu/design/menu_list.h:
 D:\Studium\NXP-Cup\nxp-proj\nxp-proj\source\display\menu/menu_rtos.h:
 D:\Studium\NXP-Cup\nxp-proj\nxp-proj\source/settings.h:
+D:\Studium\NXP-Cup\nxp-proj\nxp-proj\source/camera/camera.h:
+D:\Studium\NXP-Cup\nxp-proj\nxp-proj\drivers/fsl_sctimer.h:
+D:\Studium\NXP-Cup\nxp-proj\nxp-proj\source/hmi/menu_main_screen.h:
+D:\Studium\NXP-Cup\nxp-proj\nxp-proj\source/hmi/menu_data.h:

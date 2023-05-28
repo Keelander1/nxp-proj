@@ -316,7 +316,7 @@ void ADC_Config(void)
  ******************************************************************************/
 void ADC0_SEQA_IRQHandler(void)
 {
-	if(pixelCounter<128) //Save Pixel Values
+	if(pixelCounter<129) //Save Pixel Values
 	{
 		pixelValues[pixelCounter] = ADC0->SEQ_GDAT[0] >> 8;	//Reading current pixel
 		pixelCounter++;										//Next ISR is next pixel
@@ -325,7 +325,27 @@ void ADC0_SEQA_IRQHandler(void)
 	ADC0->FLAGS = (1<<28);									//Delete interrupt flags
 	SDK_ISR_EXIT_BARRIER;
 }
+void menu_page_pixelanzeige_camera(uint8_t refresh)    {								// Neu Martin Fürstberger 27.05.23
+//	char pixelValuestr[128];
+//	temp_str[0] = ((time / 3600) % 10) + '0';
+//	pixelValuestr[0] = pixelValues[0]+'0';
+	uint8_t x=0;
+	uint8_t y=13;
+	ssd1309_rtos_lock(&g_disp_0);
+										//x1,y1, x2,  y2
+	ssd1309_draw_rect(&g_disp_0.disp_obj, 0, 13, 127, 63, true, OFF);
+	while(y<64){
+		for(x=0;x<128;x++){
+			if(pixelValues[x]>=192-(3*y)){
+				ssd1309_set_pixel(&g_disp_0.disp_obj,x,y,ON);
+			}
+		}
+	y++;
+	}
 
+	ssd1309_rtos_unlock(&g_disp_0);
+
+}
 
 /*Transfer ADC result values to voltages and logical values
 uint8_t transferCounter;											//Start with result 0

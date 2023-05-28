@@ -147,21 +147,7 @@ void menu_open_hardware_camera() {
 	menu_rtos_switch_handle(&curr_menu_handle, &menu_hardware_camera_handle);
 	menu_reset(&curr_menu_handle->drv_handle);
 }
-void menu_page_pixelanzeige_camera(uint8_t refresh)    {								// Neu Martin Fürstberger 27.05.23
 
-	ssd1309_rtos_lock(&g_disp_0);
-
-	ssd1309_draw_rect(&g_disp_0.disp_obj, 0, 13, 127, 63, true, OFF);
-	ssd1309_set_pos(&g_disp_0.disp_obj, 8, 18);
-	ssd1309_write_str(&g_disp_0.disp_obj, "Made for NXP Cup", ssd1309_font_6x8, false, ON);
-	ssd1309_set_pos(&g_disp_0.disp_obj, 11, 34);
-	ssd1309_write_str(&g_disp_0.disp_obj, "By Arne Kulinna", ssd1309_font_6x8, false, ON);
-	ssd1309_set_pos(&g_disp_0.disp_obj, 29, 50);
-	ssd1309_write_str(&g_disp_0.disp_obj, "March 2020", ssd1309_font_6x8, false, ON);
-
-	ssd1309_rtos_unlock(&g_disp_0);
-
-}
 /*
 void menu_page_camera_info(uint8_t refresh) {
 
