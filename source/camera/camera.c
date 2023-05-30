@@ -329,6 +329,8 @@ void menu_page_pixelanzeige_camera(uint8_t refresh)    {								// Neu Martin FÃ
 //	char pixelValuestr[128];
 //	temp_str[0] = ((time / 3600) % 10) + '0';
 //	pixelValuestr[0] = pixelValues[0]+'0';
+
+//	********************************************Martin
 	uint8_t x=0;
 	uint8_t y=13;
 	ssd1309_rtos_lock(&g_disp_0);
@@ -344,8 +346,27 @@ void menu_page_pixelanzeige_camera(uint8_t refresh)    {								// Neu Martin FÃ
 	}
 
 	ssd1309_rtos_unlock(&g_disp_0);
-
 }
+//	*********************************************
+
+//	*********************************************Tobias
+//
+//		uint8_t x=0;
+//		uint8_t y=0;
+//		ssd1309_rtos_lock(&g_disp_0);
+//											//x1,y1, x2,  y2
+//		ssd1309_draw_rect(&g_disp_0.disp_obj, 0, 13, 127, 63, true, OFF);
+//
+//		for(x=0;x<128;x++){
+//			y = (pixelValues[x]/5) +13;
+//			ssd1309_set_pixel(&g_disp_0.disp_obj,x, y, ON);
+//		}
+//
+//		ssd1309_rtos_unlock(&g_disp_0);
+//	}
+//	*********************************************
+
+
 
 /*Transfer ADC result values to voltages and logical values
 uint8_t transferCounter;											//Start with result 0

@@ -12,7 +12,7 @@
  **		| Authors	| Date 		| Commit																	|
  **	----|-----------|-----------|---------------------------------------------------------------------------|
  ** 1	|	MS		|05-xx-2021	| created drive_param.h														|
- ** 2	|			|			|																			|
+ ** 2	|	TS		|30-05-2023	| _drive_param_t: stop, limit: uint32_t-> int32_t							|
  ** 3	|			|			|																			|
  ** 4	|			|			|																			|
  ** 5	|			|			|																			|
@@ -37,8 +37,8 @@
 
 typedef struct _drive_param_t {
 	int32_t speed;
-	uint32_t stop;
-	uint32_t limit;
+	int32_t stop;
+	int32_t limit;
 	int32_t object;
 	int32_t l_l;
 	int32_t l_r;

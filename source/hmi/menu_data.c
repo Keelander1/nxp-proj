@@ -13,7 +13,7 @@
  **	----|-----------|-----------|---------------------------------------------------------------------------|
  ** 1	|	MS		|04-24-2021	| imported menu_data.c														|
  ** 2	|	MS		|06-07-2021	| implemented test function for BLDC and servo								|
- ** 3	|			|			|																			|
+ ** 3	|	TS		|30-05-2023	| Changed drive_entities to value											|
  ** 4	|			|			|																			|
  ** 5	|			|			|																			|
  ** 6	|			|			|																			|
@@ -108,31 +108,35 @@ const static menu_entry_t menu_main_drive_entries[] = {
 		{
 				.str = "Speed",
 				.type = MENU_VALUE,
-				//.val = &((all_param_t*)&const_all_param)->drive.speed,
-				.val =0,
+				.val = &((all_param_t*)&const_all_param)->drive.speed,
+				//.val =0,
 				.min_val = 0,
 				.max_val = 100,
 				.en = true,
 		},
 		{
 				.str = "Stop",
-				.type = MENU_CHECK,
-				//.act = &((all_param_t*)&const_all_param)->drive.stop,
-				.act =0,
+				.type = MENU_VALUE,
+				.val = &((all_param_t*)&const_all_param)->drive.stop,
+				.min_val = 0,
+				.max_val = 100,
+				//.act =0,
 				.en = true,
 		},
 		{
 				.str = "Limit",
-				.type = MENU_CHECK,
-				//.act = &((all_param_t*)&const_all_param)->drive.limit,
-				.act =0,
+				.type = MENU_VALUE,
+				.val = &((all_param_t*)&const_all_param)->drive.limit,
+				.min_val = 0,
+				.max_val = 100,
+				//.act =0,
 				.en = true,
 		},
 		{
 				.str = "Object",
 				.type = MENU_VALUE,
-				//.val = &((all_param_t*)&const_all_param)->drive.object,
-				.val =0,
+				.val = &((all_param_t*)&const_all_param)->drive.object,
+				//.val =0,
 				.min_val = 0,
 				.max_val = 2,
 				.en = true,
