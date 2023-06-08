@@ -48,6 +48,8 @@
 
 #include "param.h"
  */
+extern volatile uint8_t pixelCounter;
+extern volatile uint8_t pixelValues[128];
 void screen_main();
 /*******************************************************************************
  * Code
@@ -147,6 +149,51 @@ void menu_open_hardware_camera() {
 	menu_rtos_switch_handle(&curr_menu_handle, &menu_hardware_camera_handle);
 	menu_reset(&curr_menu_handle->drv_handle);
 }
+
+void menu_page_pixelanzeige_camera(uint8_t refresh)    {								// Neu Martin Fürstberger 27.05.23
+//	char pixelValuestr[128];
+//	temp_str[0] = ((time / 3600) % 10) + '0';
+//	pixelValuestr[0] = pixelValues[0]+'0';
+
+//	********************************************Martin
+
+//		uint8_t x=0;
+//		uint8_t y=13;
+//		ssd1309_rtos_lock(&g_disp_0);
+//										//x1,y1, x2,  y2
+//		ssd1309_draw_rect(&g_disp_0.disp_obj, 0, 13, 127, 63, true, OFF);
+//		while(y<64){
+//			for(x=0;x<128;x++){
+//				if(pixelValues[x]>=192-(3*y)){
+//					ssd1309_set_pixel(&g_disp_0.disp_obj,x,y,ON);
+//				}
+//			}
+//			y++;
+//		}
+//
+//	ssd1309_rtos_unlock(&g_disp_0);
+
+
+
+//}
+//	*********************************************
+
+//	*********************************************Tobias
+//
+		uint8_t x=0;
+		uint8_t y=0;
+		ssd1309_rtos_lock(&g_disp_0);
+		//x1,y1, x2,  y2
+		ssd1309_draw_rect(&g_disp_0.disp_obj, 0, 13, 127, 63, true, OFF);
+		for(x=0;x<128;x++){
+			y = 64-(pixelValues[x]/5);
+			ssd1309_set_pixel(&g_disp_0.disp_obj,x, y, ON);
+		}
+
+		ssd1309_rtos_unlock(&g_disp_0);
+		//}
+	}
+
 
 /*
 void menu_page_camera_info(uint8_t refresh) {

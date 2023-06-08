@@ -57,6 +57,7 @@ const ctimer_config_t TakeShots_config = {
 volatile uint8_t pixelCounter = 129;
 volatile uint8_t pixelValues[128] = {0};
 
+
 const int16_t VREFn = 0; 				//mV
 const int16_t VREFp = 3300; 			//mV
 
@@ -88,14 +89,14 @@ void CTIMER0_Init(void)
 	CTIMER_Init(CTIMER0, &TakeShots_config);
 
 	CTIMER0-> MCR  = 0;						//Delete current Configuration
-	CTIMER0-> MCR |= (1<<0)|(1<<1)|(1<<24);	//Interrupt, Timer Counter reset and reload MR with MSR at Match0
+	CTIMER0-> MCR |= (1<<0)|(1<<1)|(1<<24);	//Interrupt when MR0 = value in TC, Timer Counter reset and reload MR with MSR at Match0
 
-	CTIMER0->MSR[0] = 220000;				//Initialize MSR0 with  220000 --> Timer overflow every 1ms
+	CTIMER0->MSR[0] = 220000;				//Initialize MSR0 with  220000 --> Timer overflow every 1ms  ((1/220MHZ)*220000)
 	//***********************************
 	//ADC Interrupt configuration
 	//CTIMER0-> INTEN |= (1<<0);
-	NVIC_SetPriority(CTIMER0_IRQn, 0);		//Enable NVIC interrupt for sequence A.
-	EnableIRQ(CTIMER0_IRQn);				//Enable ADC Sequence A Interrupt
+	NVIC_SetPriority(CTIMER0_IRQn, 0);		//Enable NVIC interrupt for sequence A.			??? Sequence A interrupt is defined lower is this the Timer interrupt?
+	EnableIRQ(CTIMER0_IRQn);				//Enable ADC Sequence A Interrupt				??? Sequence A interrupt is defined lower is this the Timer interrupt?
 	//Enabling NVIC will block DMA trigger!!!!
 	//***********************************
 
@@ -141,12 +142,12 @@ void SCTimer_CamCLK_Init(void)
 	//Set PWM at PIO3_27 to 3,676MHz (Cam_CLK_frequency max=8MHz)
 	//***************************************************
 	//Event 0 for Counter Limit
-	SCT0->MATCHREL[0] = (12-1); 				//Match 0 @ 12/44MHz = 272,72ns Limit Counter
+	SCT0->MATCHREL[0] = (12-1); 				//Match 0 @ 12/44MHz = 272,72ns Limit Counter		//Changed to 24 (545,45 ns)
 	SCT0->EV[0].STATE = 0xFFFFFFFF; 			//Event 0 happens in all states
 	SCT0->EV[0].CTRL = (1 << 12); 				//Match 0 condition only
 	SCT0->OUT[1].SET = (1 << 0); 				//Event 0 will set SCT0_OUT1
 	//Event 1 for PWM Duty Cycle
-	SCT0->MATCHREL[1] = (6-1); 					//Match 1 @ 6/44MHz = 136,36ns
+	SCT0->MATCHREL[1] = (6-1); 					//Match 1 @ 6/44MHz = 136,36ns						//Changed to 12 (272,72 ns)
 	SCT0->EV[1].STATE = 0xFFFFFFFF; 			//Event 1 happens in all states
 	SCT0->EV[1].CTRL = (1 << 0) | (1 << 12); 	//Match 1 condition only
 	SCT0->OUT[1].CLR = (1 << 1); 				//Event 1 will clear SCT0_OUT1
@@ -168,7 +169,7 @@ void SCTimer_SIEvents_Init(void)
 
 	//**************************************
 	//Event 2 for SI Set Event
-	SCT0->MATCHREL[2] = (11-1); 			//Match 2 @ 11/44MHz = 250ns
+	SCT0->MATCHREL[2] = (11-1); 			//Match 2 @ 11/44MHz = 250ns							//Changed to 22 (500 ns)
 	SCT0->EV[2].STATE = 0; 					//Event 2 happens only in State 0
 	SCT0->EV[2].CTRL = (2 << 0)|(1 << 12); 	//Match 2 condition only
 	SCT0->OUT[0].SET = (1 << 2); 			//Event 2 will set SCT0_OUT0
@@ -176,7 +177,7 @@ void SCTimer_SIEvents_Init(void)
 
 	//**************************************
 	//Event 3 for SI reset Event
-	SCT0->MATCHREL[3] = (1-1); 				//Match 3 @ 1/44MHz = 22,727ns
+	SCT0->MATCHREL[3] = (1-1); 				//Match 3 @ 1/44MHz = 22,727ns							//Changed to 2 (45,454ns)
 	SCT0->EV[3].STATE = 0xFFFFFFF; 			//Event 3 happens in every state
 	SCT0->EV[3].CTRL = (3 << 0)|(1 << 12);	//Match 3 condition only
 	SCT0->OUT[0].CLR = (1 << 3); 			//Event 3 will clear SCT0_OUT0
@@ -210,7 +211,7 @@ void SCTimer_ADCTrigger_Init(void)
 {
 	//**************************************
 	//Event 4 for ADC Trigger Event
-	SCT0->MATCHREL[4] = (9-1); 				//Match 4 @ 9/44MHz = 204,54ns (Cam_AO settlingTime Min120ns)
+	SCT0->MATCHREL[4] = (9-1); 				//Match 4 @ 9/44MHz = 204,54ns (Cam_AO settlingTime Min120ns)	//Changed to 18 (409,091 ns)
 	SCT0->EV[4].STATE = 0xFFFFFFF;			//Event 4 happens in all states
 	SCT0->EV[4].CTRL = (4 << 0)|(1 << 12); 	//Match 4 condition only
 
@@ -297,7 +298,7 @@ void ADC_Config(void)
 	ADC0->SEQ_CTRL[0] |= (3 << 12); 	//SCTIMER Output 4 Trigger SCT0_OUT4
 	ADC0->SEQ_CTRL[0] |= (1 << 18); 	//TRIGPOL positive Edge
 	ADC0->SEQ_CTRL[0] |= (1 << 19); 	//Bypass Trigger Synchronization
-	ADC0->SEQ_CTRL[0] |= (1 << 30);	    //Mode: 0(Rst.Value)=End of Conversion / 1=End of Sequence
+	ADC0->SEQ_CTRL[0] |= (1 << 30);	//Mode: 0(Rst.Value)=End of Conversion / 1=End of Sequence
 	ADC0->SEQ_CTRL[0] |= (1 << 31); 	//Sequence A Enable
 	//*********************************
 
@@ -325,45 +326,7 @@ void ADC0_SEQA_IRQHandler(void)
 	ADC0->FLAGS = (1<<28);									//Delete interrupt flags
 	SDK_ISR_EXIT_BARRIER;
 }
-void menu_page_pixelanzeige_camera(uint8_t refresh)    {								// Neu Martin Fürstberger 27.05.23
-//	char pixelValuestr[128];
-//	temp_str[0] = ((time / 3600) % 10) + '0';
-//	pixelValuestr[0] = pixelValues[0]+'0';
 
-//	********************************************Martin
-	uint8_t x=0;
-	uint8_t y=13;
-	ssd1309_rtos_lock(&g_disp_0);
-										//x1,y1, x2,  y2
-	ssd1309_draw_rect(&g_disp_0.disp_obj, 0, 13, 127, 63, true, OFF);
-	while(y<64){
-		for(x=0;x<128;x++){
-			if(pixelValues[x]>=192-(3*y)){
-				ssd1309_set_pixel(&g_disp_0.disp_obj,x,y,ON);
-			}
-		}
-	y++;
-	}
-
-	ssd1309_rtos_unlock(&g_disp_0);
-}
-//	*********************************************
-
-//	*********************************************Tobias
-//
-//		uint8_t x=0;
-//		uint8_t y=0;
-//		ssd1309_rtos_lock(&g_disp_0);
-//											//x1,y1, x2,  y2
-//		ssd1309_draw_rect(&g_disp_0.disp_obj, 0, 13, 127, 63, true, OFF);
-//
-//		for(x=0;x<128;x++){
-//			y = (pixelValues[x]/5) +13;
-//			ssd1309_set_pixel(&g_disp_0.disp_obj,x, y, ON);
-//		}
-//
-//		ssd1309_rtos_unlock(&g_disp_0);
-//	}
 //	*********************************************
 
 

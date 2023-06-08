@@ -56,8 +56,7 @@
 #include "queue.h"
 #include "board.h"
 #include "fsl_sctimer.h"
-#include "hmi/menu_main_screen.h"
-#include "hmi/menu_data.h"
+
 
 /*******************************************************************************
  * Defines
