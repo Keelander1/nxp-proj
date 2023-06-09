@@ -142,7 +142,7 @@ void SCTimer_CamCLK_Init(void)
 	//Set PWM at PIO3_27 to 3,676MHz (Cam_CLK_frequency max=8MHz)
 	//***************************************************
 	//Event 0 for Counter Limit
-	SCT0->MATCHREL[0] = (12-1); 				//Match 0 @ 12/44MHz = 272,72ns Limit Counter		//Changed to 24 (545,45 ns)
+	SCT0->MATCHREL[0] = (24-1); 				//Match 0 @ 12/44MHz = 272,72ns Limit Counter		//Changed to 24 (545,45 ns)
 	SCT0->EV[0].STATE = 0xFFFFFFFF; 			//Event 0 happens in all states
 	SCT0->EV[0].CTRL = (1 << 12); 				//Match 0 condition only
 	SCT0->OUT[1].SET = (1 << 0); 				//Event 0 will set SCT0_OUT1
@@ -169,7 +169,7 @@ void SCTimer_SIEvents_Init(void)
 
 	//**************************************
 	//Event 2 for SI Set Event
-	SCT0->MATCHREL[2] = (11-1); 			//Match 2 @ 11/44MHz = 250ns							//Changed to 22 (500 ns)
+	SCT0->MATCHREL[2] = (22-1); 			//Match 2 @ 11/44MHz = 250ns							//Changed to 22 (500 ns)
 	SCT0->EV[2].STATE = 0; 					//Event 2 happens only in State 0
 	SCT0->EV[2].CTRL = (2 << 0)|(1 << 12); 	//Match 2 condition only
 	SCT0->OUT[0].SET = (1 << 2); 			//Event 2 will set SCT0_OUT0
@@ -177,7 +177,7 @@ void SCTimer_SIEvents_Init(void)
 
 	//**************************************
 	//Event 3 for SI reset Event
-	SCT0->MATCHREL[3] = (1-1); 				//Match 3 @ 1/44MHz = 22,727ns							//Changed to 2 (45,454ns)
+	SCT0->MATCHREL[3] = (2-1); 				//Match 3 @ 1/44MHz = 22,727ns							//Changed to 2 (45,454ns)
 	SCT0->EV[3].STATE = 0xFFFFFFF; 			//Event 3 happens in every state
 	SCT0->EV[3].CTRL = (3 << 0)|(1 << 12);	//Match 3 condition only
 	SCT0->OUT[0].CLR = (1 << 3); 			//Event 3 will clear SCT0_OUT0
@@ -194,8 +194,13 @@ void CTIMER0_IRQHandler(uint32_t flags)
 	pixelCounter = 0; //new picture start at pixel 0
 
 	//**********************************
+
 	SCT0->EV[2].STATE = 0xFFFFFFF; 		//Event 2 happens in all states
 	SCT0->CTRL &= ~(1 << 2); 			//Unhalt SCT0 by clearing bit 2 of CTRL
+	uint8_t i=0;
+	while(i<10){
+	i++;}
+	i=0;
 	SCT0->EV[2].STATE = 0; 				//Event 2 happens only in State 0
 	SCT0->CTRL &= ~(1 << 2); 			//Unhalt SCT0 by clearing bit 2 of CTRL
 	//**********************************
@@ -211,7 +216,7 @@ void SCTimer_ADCTrigger_Init(void)
 {
 	//**************************************
 	//Event 4 for ADC Trigger Event
-	SCT0->MATCHREL[4] = (9-1); 				//Match 4 @ 9/44MHz = 204,54ns (Cam_AO settlingTime Min120ns)	//Changed to 18 (409,091 ns)
+	SCT0->MATCHREL[4] = (16-1); 				//Match 4 @ 9/44MHz = 204,54ns (Cam_AO settlingTime Min120ns)	//Changed to 18 (409,091 ns)
 	SCT0->EV[4].STATE = 0xFFFFFFF;			//Event 4 happens in all states
 	SCT0->EV[4].CTRL = (4 << 0)|(1 << 12); 	//Match 4 condition only
 
