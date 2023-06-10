@@ -50,6 +50,7 @@
  */
 extern volatile uint8_t pixelCounter;
 extern volatile uint8_t pixelValues[128];
+volatile uint32_t exposure_time=220000;
 void screen_main();
 /*******************************************************************************
  * Code
@@ -150,6 +151,23 @@ void menu_open_hardware_camera() {
 	menu_reset(&curr_menu_handle->drv_handle);
 }
 
+void Camera_Exposure_time(void)
+{
+	uint16_t pixel_Values_sum = 0;
+
+	for(uint8_t x=0;x<128;x++){
+		pixel_Values_sum = pixel_Values_sum + pixelValues[x];
+	}
+	if(pixel_Values_sum < 16384){
+		exposure_time = exposure_time+10000;
+	}else{
+		if(pixel_Values_sum > 16384){
+			exposure_time = exposure_time-10000;
+		}
+	}
+	CTIMER0->MSR[0] = exposure_time;
+}
+
 void menu_page_pixelanzeige_camera(uint8_t refresh)    {								// Neu Martin FÃ¼rstberger 27.05.23
 //	char pixelValuestr[128];
 //	temp_str[0] = ((time / 3600) % 10) + '0';
@@ -191,8 +209,11 @@ void menu_page_pixelanzeige_camera(uint8_t refresh)    {								// Neu Martin FÃ
 		}
 
 		ssd1309_rtos_unlock(&g_disp_0);
+		Camera_Exposure_time();
+
 		//}
 	}
+
 
 
 /*

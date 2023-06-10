@@ -58,6 +58,7 @@ volatile uint8_t pixelCounter = 129;
 volatile uint8_t pixelValues[128] = {0};
 
 
+
 const int16_t VREFn = 0; 				//mV
 const int16_t VREFp = 3300; 			//mV
 
@@ -197,10 +198,12 @@ void CTIMER0_IRQHandler(uint32_t flags)
 
 	SCT0->EV[2].STATE = 0xFFFFFFF; 		//Event 2 happens in all states
 	SCT0->CTRL &= ~(1 << 2); 			//Unhalt SCT0 by clearing bit 2 of CTRL
-	uint8_t i=0;
-	while(i<10){
-	i++;}
-	i=0;
+
+	uint8_t i=0;						// Delay for Si-Signal
+	while(i<10){						// Delay for Si-Signal
+	i++;}								// Delay for Si-Signal
+	i=0;								// Delay for Si-Signal
+
 	SCT0->EV[2].STATE = 0; 				//Event 2 happens only in State 0
 	SCT0->CTRL &= ~(1 << 2); 			//Unhalt SCT0 by clearing bit 2 of CTRL
 	//**********************************
@@ -333,6 +336,7 @@ void ADC0_SEQA_IRQHandler(void)
 }
 
 //	*********************************************
+
 
 
 
