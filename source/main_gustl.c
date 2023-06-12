@@ -65,6 +65,28 @@ int main(void)
           {
           	LED3_ON();
           }
+
+    //Create Camera_Exposure_time task
+    if (xTaskCreate(Camera_Exposure_time_task,"Camera_Exposure_time_task", configMINIMAL_STACK_SIZE + 100, NULL, 1, NULL) != pdPASS)
+    {
+    	LED3_ON();
+    }
+//    void Camera_Exposure_time(void)
+//    {
+//    	uint16_t pixel_Values_sum = 0;
+//
+//    	for(uint8_t x=0;x<128;x++){
+//    		pixel_Values_sum = pixel_Values_sum + pixelValues[x];
+//    	}
+//    	if(pixel_Values_sum < 16384){
+//    		exposure_time = exposure_time+10000;
+//    	}else{
+//    		if(pixel_Values_sum > 16384){
+//    			exposure_time = exposure_time-10000;
+//    		}
+//    	}
+//    	CTIMER0->MSR[0] = exposure_time;
+//    }
     //***********************************************************************************************
 
 

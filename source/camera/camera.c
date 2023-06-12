@@ -56,7 +56,7 @@ const ctimer_config_t TakeShots_config = {
 
 volatile uint8_t pixelCounter = 129;
 volatile uint8_t pixelValues[128] = {0};
-
+volatile uint32_t exposure_time=10000000;
 
 
 const int16_t VREFn = 0; 				//mV
@@ -92,7 +92,7 @@ void CTIMER0_Init(void)
 	CTIMER0-> MCR  = 0;						//Delete current Configuration
 	CTIMER0-> MCR |= (1<<0)|(1<<1)|(1<<24);	//Interrupt when MR0 = value in TC, Timer Counter reset and reload MR with MSR at Match0
 
-	CTIMER0->MSR[0] = 220000;				//Initialize MSR0 with  220000 --> Timer overflow every 1ms  ((1/220MHZ)*220000)
+	CTIMER0->MSR[0] = exposure_time;				//Initialize MSR0 with  220000 --> Timer overflow every 1ms  ((1/220MHZ)*220000)
 	//***********************************
 	//ADC Interrupt configuration
 	//CTIMER0-> INTEN |= (1<<0);
@@ -335,6 +335,25 @@ void ADC0_SEQA_IRQHandler(void)
 	SDK_ISR_EXIT_BARRIER;
 }
 
+void Camera_Exposure_time_task(void *pvParameters)
+{
+	while(1){
+		uint16_t pixel_Values_sum = 0;
+
+		for(uint8_t x=0;x<128;x++){
+			pixel_Values_sum = pixel_Values_sum + pixelValues[x];
+		}
+		if(pixel_Values_sum < 16384){
+			exposure_time = exposure_time+10000;
+		}else{
+			if(pixel_Values_sum > 16384){
+				exposure_time = exposure_time-10000;
+			}
+		}
+		CTIMER0->MSR[0] = exposure_time;
+		vTaskDelay(1);
+	}
+}
 //	*********************************************
 
 
