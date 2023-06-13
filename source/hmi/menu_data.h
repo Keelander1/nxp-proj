@@ -67,6 +67,11 @@ extern menu_rtos_handle_t menu_main_hardware_handle;
 extern menu_rtos_handle_t menu_hardware_camera_handle;
 
 /****************************************************
+ * handle for camera parameter menu
+ ***************************************************/
+extern menu_rtos_handle_t menu_hardware_camera_parameter_handle;
+
+/****************************************************
  * handle for motor menu
  ***************************************************/
 extern menu_rtos_handle_t menu_hardware_ppm_handle;

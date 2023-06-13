@@ -151,7 +151,11 @@ void menu_open_hardware_camera() {
 	menu_reset(&curr_menu_handle->drv_handle);
 }
 
+void menu_open_hardware_parameter_camera() {
 
+	menu_rtos_switch_handle(&curr_menu_handle, &menu_hardware_camera_parameter_handle);
+	menu_reset(&curr_menu_handle->drv_handle);
+}
 
 void menu_page_pixelanzeige_camera(uint8_t refresh)    {								// Neu Martin FÃ¼rstberger 27.05.23
 //	char pixelValuestr[128];
@@ -185,6 +189,9 @@ void menu_page_pixelanzeige_camera(uint8_t refresh)    {								// Neu Martin FÃ
 //
 		uint8_t x=0;
 		uint8_t y=0;
+		char time_string[15] = "Exp.Time[ms]:";
+		sprintf(&time_string[13], "%d", CTIMER0->MSR[0]/220000);
+
 		ssd1309_rtos_lock(&g_disp_0);
 		//x1,y1, x2,  y2
 		ssd1309_draw_rect(&g_disp_0.disp_obj, 0, 13, 127, 63, true, OFF);
@@ -194,6 +201,8 @@ void menu_page_pixelanzeige_camera(uint8_t refresh)    {								// Neu Martin FÃ
 		}
 
 		ssd1309_rtos_unlock(&g_disp_0);
+		ssd1309_set_pos(&g_disp_0.disp_obj, 0, 18);
+		ssd1309_write_str(&g_disp_0.disp_obj, time_string , ssd1309_font_6x8, false, ON);
 
 		//}
 	}

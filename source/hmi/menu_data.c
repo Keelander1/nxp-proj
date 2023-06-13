@@ -197,7 +197,7 @@ const static menu_entry_t menu_hardware_camera_entries[] = {
 		{
 				.str = "Parameter",
 				.type = MENU_LINK,
-				.func = NULL,
+				.link = menu_open_hardware_parameter_camera,
 				.en = true,
 		},
 
@@ -215,6 +215,44 @@ const static menu_entry_t menu_hardware_camera_entries[] = {
 		},
 
 
+};
+
+/****************************************************
+ * 	Entry for left BLDC menu
+ * 	menu to change and view right BLDC parameters
+ ***************************************************/
+const static menu_entry_t menu_hardware_camera_parameter_entries[] = {
+		{
+				/****************************************************
+				 * automatic Exposure Time
+				 ****************************************************/
+				.str = "Auto Exposure",										//display "Auto Exposure"
+				.type = MENU_CHECK,											//type is MENU_CHECK
+				.act = &((all_param_t*)&const_all_param)->system.buzzer,
+				.en = true,													//element is clickable
+
+		},
+		{
+				/****************************************************
+				 * left motor init value
+				 ****************************************************/
+				.str = "Exposure Value",										//display "Exposure Value"
+				.type = MENU_VALUE,												//type is MENU_VALUE
+				.val = &(CTIMER0->MSR[0]),										//get saved init value
+				.min_val = 0,													//min value for left BLDC init value
+				.max_val = 0,													//max value for left BLDC init value
+				.func = 0,														//write value
+				.en = true,														//element is changeable
+		},
+		{
+				/****************************************************
+				 * 	Entry for Back
+				 ***************************************************/
+				.str = "Back",                                                      //display "Back"
+				.type = MENU_LINK,                                                  //type is MENU_LINK
+				.link = menu_open_hardware_camera,                                  //link to Camera menu
+				.en = true,                                                         //element is clickable
+		},
 };
 
 /****************************************************
@@ -556,6 +594,17 @@ menu_rtos_handle_t menu_hardware_camera_handle = {
 		.drv_handle = {
 				.entry_cnt = 4,                                             //4 entries
 				.entry_list = (menu_entry_t*)menu_hardware_camera_entries,  //list of all entries
+				.draw = menu_list_draw,                                     //emtry draw function
+		},
+};
+
+/****************************************************
+ * handle for camera parameter menu
+ ***************************************************/
+menu_rtos_handle_t menu_hardware_camera_parameter_handle = {
+		.drv_handle = {
+				.entry_cnt = 3,                                             //3 entries
+				.entry_list = (menu_entry_t*)menu_hardware_camera_parameter_entries,  //list of all entries
 				.draw = menu_list_draw,                                     //emtry draw function
 		},
 };

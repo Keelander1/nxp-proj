@@ -214,6 +214,7 @@ void hmi_task(void *args)
 	menu_rtos_init(&menu_main_drive_handle);		//drive menu handle
 	menu_rtos_init(&menu_main_hardware_handle);		//hardware menu handle
 	menu_rtos_init(&menu_hardware_camera_handle);	//camera menu handle
+	menu_rtos_init(&menu_hardware_camera_parameter_handle);	//camera menu handle
 	menu_rtos_init(&menu_hardware_ppm_handle);		//motors menu handle
 	menu_rtos_init(&menu_ppm_servo_motor_handle);	//servo menu handle
 	menu_rtos_init(&menu_ppm_motor_left_handle);	//left BLDC menu handle
