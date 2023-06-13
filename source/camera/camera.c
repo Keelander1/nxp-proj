@@ -56,6 +56,10 @@ const ctimer_config_t TakeShots_config = {
 
 volatile uint8_t pixelCounter = 129;
 volatile uint8_t pixelValues[128] = {0};
+volatile uint8_t edges[128] = {0};
+volatile uint8_t edge_left = 0;		//left Edge Coordinate
+volatile uint8_t edge_right = 0;	//Right Edge Coordinate
+
 volatile uint32_t exposure_time=10000000;
 
 
@@ -350,13 +354,53 @@ void Camera_Exposure_time_task(void *pvParameters)
 				exposure_time = exposure_time-10000;
 			}
 		}
+
+
+//		exposure_time += (16384 - pixel_Values_sum);
+
 		CTIMER0->MSR[0] = exposure_time;
+		Edge_Detection();
 		vTaskDelay(1);
 	}
 }
 //	*********************************************
 
+/*******************************************************************************
+ * Edge Detection
+ ******************************************************************************/
+void Edge_Detection(void)
+{
+	uint8_t threshold = 25;					//threshold for edge detection
+	uint8_t border_offset = 10; 	//offset from Middle for Edge Border Left & Right
+	uint8_t left_edge_found = 0;			//0 if NO Left Edge found, 1 if found
+	uint8_t right_edge_found = 0;			//0 if NO Right Edge found, 1 if found
 
+	edge_right = 127;
+	edge_left = 0;
+
+	for(uint8_t x=0;x<(128-4);x=x+4){
+		if((pixelValues[x+4]+threshold)<pixelValues[x])
+		{
+			edges[x+2] = 1;	//1 = Right Edge
+			if(((x+2) >= (64-border_offset)) && (right_edge_found == 0))
+			{
+				edge_right = x + 2;
+				right_edge_found = 1;
+			}
+		}
+		else if((pixelValues[x+4]-threshold)>pixelValues[x])
+		{
+			edges[x+2] = 2;	//2 = Left Edge
+			if(((x+2) < (64 + border_offset)) && (left_edge_found == 0))
+			{
+				edge_left = x + 2;
+				left_edge_found = 1;
+			}
+		}
+		else edges[x+2] = 0;	//0 = No Edge
+	}
+
+}
 
 
 /*Transfer ADC result values to voltages and logical values

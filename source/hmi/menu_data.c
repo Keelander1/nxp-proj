@@ -226,21 +226,21 @@ const static menu_entry_t menu_hardware_camera_parameter_entries[] = {
 				/****************************************************
 				 * automatic Exposure Time
 				 ****************************************************/
-				.str = "Auto Exposure",										//display "Auto Exposure"
+				.str = "Show Exposure",										//display "Show Exposure"
 				.type = MENU_CHECK,											//type is MENU_CHECK
-				.act = &((all_param_t*)&const_all_param)->system.buzzer,
+				.act = &((all_param_t*)&const_all_param)->camera.exposure_show,
 				.en = true,													//element is clickable
 
 		},
 		{
 				/****************************************************
-				 * left motor init value
+				 * Camera Edge Detect Throttle Value
 				 ****************************************************/
-				.str = "Exposure Value",										//display "Exposure Value"
+				.str = "Edge Throttle",											//display "Exposure Value"
 				.type = MENU_VALUE,												//type is MENU_VALUE
-				.val = &(CTIMER0->MSR[0]),										//get saved init value
-				.min_val = 0,													//min value for left BLDC init value
-				.max_val = 0,													//max value for left BLDC init value
+				.val = &((all_param_t*)&const_all_param)->camera.throttle,		//get saved init value
+				.min_val = 0,													//min value
+				.max_val = 100,													//max value
 				.func = 0,														//write value
 				.en = true,														//element is changeable
 		},

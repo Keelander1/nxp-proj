@@ -62,6 +62,17 @@ typedef struct _system_param_t {
 } system_param_t;
 
 /*******************************************************************************
+ * camera_param_t
+ * contains camera parameters
+ * param throttle:	throttle for flag detection
+ ******************************************************************************/
+typedef struct _camera_param_t {
+	int32_t throttle;
+	uint32_t edge_show;
+	uint32_t exposure_show;
+} camera_param_t;
+
+/*******************************************************************************
  * all_param_t
  * contains all parameters
  * param drive:		contains drive parameters
@@ -72,6 +83,7 @@ typedef struct _all_param_t {
 	drive_param_t drive;
 	motor_param_t motors;
 	system_param_t system;
+	camera_param_t camera;
 } all_param_t;
 
 

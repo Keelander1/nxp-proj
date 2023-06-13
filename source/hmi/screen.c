@@ -50,6 +50,11 @@
  */
 
 extern volatile uint8_t pixelValues[128];
+extern volatile uint8_t edges[128];
+extern volatile uint8_t edge_right;
+extern volatile uint8_t edge_left;
+volatile uint32_t edge_throttle;
+
 
 void screen_main();
 /*******************************************************************************
@@ -158,53 +163,44 @@ void menu_open_hardware_parameter_camera() {
 }
 
 void menu_page_pixelanzeige_camera(uint8_t refresh)    {								// Neu Martin Fürstberger 27.05.23
-//	char pixelValuestr[128];
-//	temp_str[0] = ((time / 3600) % 10) + '0';
-//	pixelValuestr[0] = pixelValues[0]+'0';
-
-//	********************************************Martin
-
-//		uint8_t x=0;
-//		uint8_t y=13;
-//		ssd1309_rtos_lock(&g_disp_0);
-//										//x1,y1, x2,  y2
-//		ssd1309_draw_rect(&g_disp_0.disp_obj, 0, 13, 127, 63, true, OFF);
-//		while(y<64){
-//			for(x=0;x<128;x++){
-//				if(pixelValues[x]>=192-(3*y)){
-//					ssd1309_set_pixel(&g_disp_0.disp_obj,x,y,ON);
-//				}
-//			}
-//			y++;
-//		}
-//
-//	ssd1309_rtos_unlock(&g_disp_0);
-
-
-
-//}
-//	*********************************************
-
-//	*********************************************Tobias
-//
 		uint8_t x=0;
 		uint8_t y=0;
 		char time_string[15] = "Exp.Time[ms]:";
-		sprintf(&time_string[13], "%d", CTIMER0->MSR[0]/220000);
+		sprintf(&time_string[13], "%d", CTIMER0->MSR[0]/220000);	//Exposure time in ms
 
 		ssd1309_rtos_lock(&g_disp_0);
 		//x1,y1, x2,  y2
 		ssd1309_draw_rect(&g_disp_0.disp_obj, 0, 13, 127, 63, true, OFF);
+
+		//Print Left & Right Edge
+
+
+
 		for(x=0;x<128;x++){
-			y = 64-(pixelValues[x]/5);
-			ssd1309_set_pixel(&g_disp_0.disp_obj,x, y, ON);
+			y = 64-(pixelValues[x]/5);						//Scale Pixel Values to Display Size
+			ssd1309_set_pixel(&g_disp_0.disp_obj,x, y, ON);	//Print Pixel Values
+
+			//Print all found Edges
+//			if(edges[x] == 1)
+//				ssd1309_draw_rect(&g_disp_0.disp_obj, x, 13, x, 63, true, ON);	//Draw Right Edges
+//			if(edges[x] == 2)
+//				ssd1309_draw_rect(&g_disp_0.disp_obj, x, 13, x+1, 63, true, ON);	//Draw Left Edges
 		}
 
-		ssd1309_rtos_unlock(&g_disp_0);
-		ssd1309_set_pos(&g_disp_0.disp_obj, 0, 18);
-		ssd1309_write_str(&g_disp_0.disp_obj, time_string , ssd1309_font_6x8, false, ON);
+		ssd1309_draw_rect(&g_disp_0.disp_obj, edge_left, 13, edge_left, 63, true, ON); //Draw Left Edge
+		ssd1309_set_pos(&g_disp_0.disp_obj, edge_left +1, 50);
+		ssd1309_write_str(&g_disp_0.disp_obj, "L" , ssd1309_font_6x8, false, ON);
 
-		//}
+		ssd1309_draw_rect(&g_disp_0.disp_obj, edge_right, 13, edge_right, 63, true, ON);	//Draw Right Edge
+		ssd1309_set_pos(&g_disp_0.disp_obj, edge_right - 7, 50);
+		ssd1309_write_str(&g_disp_0.disp_obj, "R" , ssd1309_font_6x8, false, ON);
+
+		//Print Exposure Time
+		ssd1309_rtos_unlock(&g_disp_0);
+		if(((all_param_t*)&const_all_param)->camera.exposure_show){
+			ssd1309_set_pos(&g_disp_0.disp_obj, 0, 18);
+			ssd1309_write_str(&g_disp_0.disp_obj, time_string , ssd1309_font_6x8, false, ON);	//Print Exposure time
+		}
 	}
 
 

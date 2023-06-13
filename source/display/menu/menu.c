@@ -78,7 +78,10 @@ void menu_click(menu_handle_t *handle) {
 	handle->dirty = 1;		//display has to be refreshed
 
 	if (entry->type == MENU_CHECK) {
-		*entry->act += 1;
+		if(*entry->act > 0)
+			*entry->act = 0;
+		else
+			*entry->act = 1;
 	} else if (entry->type == MENU_LINK)
 		entry->link();		//open next menu
 	else if (entry->type == MENU_PAGE) {
