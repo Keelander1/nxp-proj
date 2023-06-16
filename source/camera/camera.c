@@ -391,6 +391,9 @@ void Edge_Detection(void)
 		else edges[x+2] = 0;	//0 = No Edge
 	}
 
+	//printf("LeftEdge: %i \n", edge_left);
+	//printf("RightEdge: %i \n", edge_right);
+
 }
 
 

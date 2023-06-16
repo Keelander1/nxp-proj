@@ -37,10 +37,10 @@ source/main_gustl.o source/main_gustl.d: ../source/main_gustl.c \
  ../source/drive/drive.h \
  C:\Users\keela\OneDrive\Desktop\Studium\EmbeddedSystems\Git_NXP_Cup\nxp-proj\source\display\menu/menu.h \
  C:\Users\keela\OneDrive\Desktop\Studium\EmbeddedSystems\Git_NXP_Cup\nxp-proj\source/servo/servo.h \
- ../source/camera/camera.h \
+ C:\Users\keela\OneDrive\Desktop\Studium\EmbeddedSystems\Git_NXP_Cup\nxp-proj\source/camera/camera.h \
  C:\Users\keela\OneDrive\Desktop\Studium\EmbeddedSystems\Git_NXP_Cup\nxp-proj\drivers/fsl_sctimer.h \
- ../source/rpmMeas/rpmMeas.h ../source/board/board_func.h \
- C:\Users\keela\OneDrive\Desktop\Studium\EmbeddedSystems\Git_NXP_Cup\nxp-proj\source\hmi/hmi.h \
+ C:\Users\keela\OneDrive\Desktop\Studium\EmbeddedSystems\Git_NXP_Cup\nxp-proj\source/hmi/screen.h \
+ C:\Users\keela\OneDrive\Desktop\Studium\EmbeddedSystems\Git_NXP_Cup\nxp-proj\source/hmi/menu_main_screen.h \
  C:\Users\keela\OneDrive\Desktop\Studium\EmbeddedSystems\Git_NXP_Cup\nxp-proj\source/display/display.h \
  C:\Users\keela\OneDrive\Desktop\Studium\EmbeddedSystems\Git_NXP_Cup\nxp-proj\source/display/interface/i2c_rtos_interface.h \
  C:\Users\keela\OneDrive\Desktop\Studium\EmbeddedSystems\Git_NXP_Cup\nxp-proj\drivers/fsl_i2c.h \
@@ -55,11 +55,10 @@ source/main_gustl.o source/main_gustl.d: ../source/main_gustl.c \
  C:\Users\keela\OneDrive\Desktop\Studium\EmbeddedSystems\Git_NXP_Cup\nxp-proj\source\display\driver\resources/ssd1309_img.h \
  C:\Users\keela\OneDrive\Desktop\Studium\EmbeddedSystems\Git_NXP_Cup\nxp-proj\source/display/menu/menu_rtos.h \
  C:\Users\keela\OneDrive\Desktop\Studium\EmbeddedSystems\Git_NXP_Cup\nxp-proj\source/display/menu/menu.h \
- C:\Users\keela\OneDrive\Desktop\Studium\EmbeddedSystems\Git_NXP_Cup\nxp-proj\source\hmi/menu_data.h \
- C:\Users\keela\OneDrive\Desktop\Studium\EmbeddedSystems\Git_NXP_Cup\nxp-proj\source\hmi/screen.h \
- C:\Users\keela\OneDrive\Desktop\Studium\EmbeddedSystems\Git_NXP_Cup\nxp-proj\source\hmi/menu_main_screen.h \
  C:\Users\keela\OneDrive\Desktop\Studium\EmbeddedSystems\Git_NXP_Cup\nxp-proj\source/display/driver/resources/ssd1309_img.h \
- C:\Users\keela\OneDrive\Desktop\Studium\EmbeddedSystems\Git_NXP_Cup\nxp-proj\source\hmi/hmi.h \
+ C:\Users\keela\OneDrive\Desktop\Studium\EmbeddedSystems\Git_NXP_Cup\nxp-proj\source/hmi/hmi.h \
+ C:\Users\keela\OneDrive\Desktop\Studium\EmbeddedSystems\Git_NXP_Cup\nxp-proj\source/hmi/menu_data.h \
+ C:\Users\keela\OneDrive\Desktop\Studium\EmbeddedSystems\Git_NXP_Cup\nxp-proj\source/hmi/screen.h \
  C:\Users\keela\OneDrive\Desktop\Studium\EmbeddedSystems\Git_NXP_Cup\nxp-proj\source/display/menu/design/menu_list.h \
  C:\Users\keela\OneDrive\Desktop\Studium\EmbeddedSystems\Git_NXP_Cup\nxp-proj\source\display\menu/menu_rtos.h \
  C:\Users\keela\OneDrive\Desktop\Studium\EmbeddedSystems\Git_NXP_Cup\nxp-proj\source/settings.h \
@@ -68,6 +67,11 @@ source/main_gustl.o source/main_gustl.d: ../source/main_gustl.c \
  C:\Users\keela\OneDrive\Desktop\Studium\EmbeddedSystems\Git_NXP_Cup\nxp-proj\source/drive/drive.h \
  C:\Users\keela\OneDrive\Desktop\Studium\EmbeddedSystems\Git_NXP_Cup\nxp-proj\source\hmi/screen.h \
  C:\Users\keela\OneDrive\Desktop\Studium\EmbeddedSystems\Git_NXP_Cup\nxp-proj\source/drive/drive.h \
+ ../source/camera/camera.h ../source/rpmMeas/rpmMeas.h \
+ ../source/board/board_func.h \
+ C:\Users\keela\OneDrive\Desktop\Studium\EmbeddedSystems\Git_NXP_Cup\nxp-proj\source\hmi/hmi.h \
+ C:\Users\keela\OneDrive\Desktop\Studium\EmbeddedSystems\Git_NXP_Cup\nxp-proj\source\hmi/menu_data.h \
+ C:\Users\keela\OneDrive\Desktop\Studium\EmbeddedSystems\Git_NXP_Cup\nxp-proj\source\hmi/screen.h \
  ../source/param.h \
  C:\Users\keela\OneDrive\Desktop\Studium\EmbeddedSystems\Git_NXP_Cup\nxp-proj\utilities/fsl_debug_console.h \
  C:\Users\keela\OneDrive\Desktop\Studium\EmbeddedSystems\Git_NXP_Cup\nxp-proj\component\serial_manager/serial_manager.h \
@@ -112,11 +116,10 @@ C:\Users\keela\OneDrive\Desktop\Studium\EmbeddedSystems\Git_NXP_Cup\nxp-proj\sou
 ../source/drive/drive.h:
 C:\Users\keela\OneDrive\Desktop\Studium\EmbeddedSystems\Git_NXP_Cup\nxp-proj\source\display\menu/menu.h:
 C:\Users\keela\OneDrive\Desktop\Studium\EmbeddedSystems\Git_NXP_Cup\nxp-proj\source/servo/servo.h:
-../source/camera/camera.h:
+C:\Users\keela\OneDrive\Desktop\Studium\EmbeddedSystems\Git_NXP_Cup\nxp-proj\source/camera/camera.h:
 C:\Users\keela\OneDrive\Desktop\Studium\EmbeddedSystems\Git_NXP_Cup\nxp-proj\drivers/fsl_sctimer.h:
-../source/rpmMeas/rpmMeas.h:
-../source/board/board_func.h:
-C:\Users\keela\OneDrive\Desktop\Studium\EmbeddedSystems\Git_NXP_Cup\nxp-proj\source\hmi/hmi.h:
+C:\Users\keela\OneDrive\Desktop\Studium\EmbeddedSystems\Git_NXP_Cup\nxp-proj\source/hmi/screen.h:
+C:\Users\keela\OneDrive\Desktop\Studium\EmbeddedSystems\Git_NXP_Cup\nxp-proj\source/hmi/menu_main_screen.h:
 C:\Users\keela\OneDrive\Desktop\Studium\EmbeddedSystems\Git_NXP_Cup\nxp-proj\source/display/display.h:
 C:\Users\keela\OneDrive\Desktop\Studium\EmbeddedSystems\Git_NXP_Cup\nxp-proj\source/display/interface/i2c_rtos_interface.h:
 C:\Users\keela\OneDrive\Desktop\Studium\EmbeddedSystems\Git_NXP_Cup\nxp-proj\drivers/fsl_i2c.h:
@@ -131,11 +134,10 @@ C:\Users\keela\OneDrive\Desktop\Studium\EmbeddedSystems\Git_NXP_Cup\nxp-proj\sou
 C:\Users\keela\OneDrive\Desktop\Studium\EmbeddedSystems\Git_NXP_Cup\nxp-proj\source\display\driver\resources/ssd1309_img.h:
 C:\Users\keela\OneDrive\Desktop\Studium\EmbeddedSystems\Git_NXP_Cup\nxp-proj\source/display/menu/menu_rtos.h:
 C:\Users\keela\OneDrive\Desktop\Studium\EmbeddedSystems\Git_NXP_Cup\nxp-proj\source/display/menu/menu.h:
-C:\Users\keela\OneDrive\Desktop\Studium\EmbeddedSystems\Git_NXP_Cup\nxp-proj\source\hmi/menu_data.h:
-C:\Users\keela\OneDrive\Desktop\Studium\EmbeddedSystems\Git_NXP_Cup\nxp-proj\source\hmi/screen.h:
-C:\Users\keela\OneDrive\Desktop\Studium\EmbeddedSystems\Git_NXP_Cup\nxp-proj\source\hmi/menu_main_screen.h:
 C:\Users\keela\OneDrive\Desktop\Studium\EmbeddedSystems\Git_NXP_Cup\nxp-proj\source/display/driver/resources/ssd1309_img.h:
-C:\Users\keela\OneDrive\Desktop\Studium\EmbeddedSystems\Git_NXP_Cup\nxp-proj\source\hmi/hmi.h:
+C:\Users\keela\OneDrive\Desktop\Studium\EmbeddedSystems\Git_NXP_Cup\nxp-proj\source/hmi/hmi.h:
+C:\Users\keela\OneDrive\Desktop\Studium\EmbeddedSystems\Git_NXP_Cup\nxp-proj\source/hmi/menu_data.h:
+C:\Users\keela\OneDrive\Desktop\Studium\EmbeddedSystems\Git_NXP_Cup\nxp-proj\source/hmi/screen.h:
 C:\Users\keela\OneDrive\Desktop\Studium\EmbeddedSystems\Git_NXP_Cup\nxp-proj\source/display/menu/design/menu_list.h:
 C:\Users\keela\OneDrive\Desktop\Studium\EmbeddedSystems\Git_NXP_Cup\nxp-proj\source\display\menu/menu_rtos.h:
 C:\Users\keela\OneDrive\Desktop\Studium\EmbeddedSystems\Git_NXP_Cup\nxp-proj\source/settings.h:
@@ -144,6 +146,12 @@ C:\Users\keela\OneDrive\Desktop\Studium\EmbeddedSystems\Git_NXP_Cup\nxp-proj\sou
 C:\Users\keela\OneDrive\Desktop\Studium\EmbeddedSystems\Git_NXP_Cup\nxp-proj\source/drive/drive.h:
 C:\Users\keela\OneDrive\Desktop\Studium\EmbeddedSystems\Git_NXP_Cup\nxp-proj\source\hmi/screen.h:
 C:\Users\keela\OneDrive\Desktop\Studium\EmbeddedSystems\Git_NXP_Cup\nxp-proj\source/drive/drive.h:
+../source/camera/camera.h:
+../source/rpmMeas/rpmMeas.h:
+../source/board/board_func.h:
+C:\Users\keela\OneDrive\Desktop\Studium\EmbeddedSystems\Git_NXP_Cup\nxp-proj\source\hmi/hmi.h:
+C:\Users\keela\OneDrive\Desktop\Studium\EmbeddedSystems\Git_NXP_Cup\nxp-proj\source\hmi/menu_data.h:
+C:\Users\keela\OneDrive\Desktop\Studium\EmbeddedSystems\Git_NXP_Cup\nxp-proj\source\hmi/screen.h:
 ../source/param.h:
 C:\Users\keela\OneDrive\Desktop\Studium\EmbeddedSystems\Git_NXP_Cup\nxp-proj\utilities/fsl_debug_console.h:
 C:\Users\keela\OneDrive\Desktop\Studium\EmbeddedSystems\Git_NXP_Cup\nxp-proj\component\serial_manager/serial_manager.h:

@@ -50,6 +50,10 @@ int32_t* servoMiddle= &((all_param_t*)&const_all_param)->motors.servo.init; 	//s
 int32_t* servoLeft= &((all_param_t*)&const_all_param)->motors.servo.min;		//servo min value
 int32_t* servoRight= &((all_param_t*)&const_all_param)->motors.servo.max;		//servo max value
 
+
+extern volatile uint8_t edge_left;		//left Edge Coordinate
+extern volatile uint8_t edge_right;	//Right Edge Coordinate
+
 const ctimer_config_t BLDC_config = {
 		.mode = kCTIMER_TimerMode,   /* TC is incremented every rising APB bus clock edge */
 		.input = kCTIMER_Capture_0,  /*!< Timer capture channel 0 */
@@ -158,7 +162,11 @@ void ESC_Init_Task(void *pvParameters)
 
 void Camera_Test_Drive (uint8_t state)
 {
-	int16_t testValue;							//calculated test value for min to max speed in µs
+	menu_page_pixel_display_camera(1);
+	int16_t testValueSpeed;							//calculated test value for min to max speed in µs
+	int16_t Stearing_Value;
+	float servo_Value = 30;
+	int16_t middleLeftRight = 0;
 	if(state==MENU_DEACT)
 		{
 			//calculate timer register value for stop
@@ -168,12 +176,44 @@ void Camera_Test_Drive (uint8_t state)
 			return;
 		}
 	//calculate test value for selected speed
-	testValue= *BLDCLeftMinValue + BLDCTestValue*(*BLDCLeftMaxValue-*BLDCLeftMinValue)/100;
+	testValueSpeed= *BLDCLeftMinValue + BLDCTestValue*(*BLDCLeftMaxValue-*BLDCLeftMinValue)/100;// Fester Wert definiert--> evtl. noch dynamisch machen!!!
 
 	//calculate timer register value for test speed
-	CTIMER3->MSR[0] = CTIMER3_PWM_PERIOD - testValue * CTIMER3_PWM_PERIOD / 20000;
-	CTIMER3->MSR[2] = CTIMER3_PWM_PERIOD - testValue * CTIMER3_PWM_PERIOD / 20000;
+	CTIMER3->MSR[0] = CTIMER3_PWM_PERIOD - testValueSpeed * CTIMER3_PWM_PERIOD / 20000;
+	CTIMER3->MSR[2] = CTIMER3_PWM_PERIOD - testValueSpeed * CTIMER3_PWM_PERIOD / 20000;
 
+	//if left steering is tested
+	middleLeftRight = (edge_left + edge_right) /2;
+	servo_Value = 1.5625 * middleLeftRight - 100;
+
+	servo_Value = servo_Value *4;
+	if (servo_Value >= 100) servo_Value = 100;
+	if (servo_Value <= -100) servo_Value = -100;
+
+	if(servo_Value <=0)
+	{
+		//calculate test value for left steering
+		Stearing_Value= *servoMiddle+ servo_Value*(*servoMiddle-*servoLeft)/100;
+	}
+	else
+	{
+		//calculate test value for right steering
+		Stearing_Value= *servoMiddle +servo_Value*(*servoRight-*servoMiddle)/100;
+	}
+	//set test value to timer register
+	CTIMER1->MSR[2] = CTIMER1_PWM_PERIOD - Stearing_Value * CTIMER1_PWM_PERIOD / 20000;
 	//for Debugging
-	printf("TestValueLeft: %i \t TimerRegister: %i \n", testValue, CTIMER3->MSR[0]);
+	//printf("Servo_Value: %i \t TimerRegister: %i \n", testValueSpeed, CTIMER1->MSR[2]);
+	//printf("Servo_MinLeft: %i \t TimerRegister: %i \n", *servoLeft, CTIMER1->MSR[2]);
+	//printf("Servo_MaxRight: %i \t TimerRegister: %i \n", *servoRight, CTIMER1->MSR[2]);
+	//printf("LeftEdge: %i \n", edge_left);
+	//printf("RightEdge: %i \n", edge_right);
+	ssd1309_draw_rect(&g_disp_0.disp_obj, edge_left, 13, edge_left, 63, true, ON); //Draw Left Edge
+	ssd1309_set_pos(&g_disp_0.disp_obj, edge_left +1, 50);
+	ssd1309_write_str(&g_disp_0.disp_obj, "L" , ssd1309_font_6x8, false, ON);
+
+	ssd1309_draw_rect(&g_disp_0.disp_obj, edge_right, 13, edge_right, 63, true, ON);	//Draw Right Edge
+	ssd1309_set_pos(&g_disp_0.disp_obj, edge_right - 7, 50);
+	ssd1309_write_str(&g_disp_0.disp_obj, "R" , ssd1309_font_6x8, false, ON);
+
 }

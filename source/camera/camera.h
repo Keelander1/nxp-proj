@@ -78,4 +78,7 @@ void Calculate_PixelValues_Task(void *pvParameters);
 void Camera_Exposure_time_task(void *pvParameters);
 void Edge_Detection(void);
 
+
+
 #endif /* CAMERA_CAMERA_H_ */
+

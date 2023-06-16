@@ -54,6 +54,8 @@
 #include "param.h"
 #include "menu.h"
 #include "servo/servo.h"
+#include "camera/camera.h"
+#include "hmi/screen.h"
 /*******************************************************************************
  * Defines
  ******************************************************************************/

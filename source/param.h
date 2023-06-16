@@ -57,6 +57,7 @@
  * contains system parameters
  * param buzzer:	activate or deactivate buzzer
  ******************************************************************************/
+
 typedef struct _system_param_t {
 	uint32_t buzzer;
 } system_param_t;
