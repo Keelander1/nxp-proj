@@ -43,7 +43,13 @@
 
 /*******************************************************************************
  * Parameters
+
  ******************************************************************************/
+int32_t BLDCTestValue=10;	//value for test purpose
+int32_t* servoMiddle= &((all_param_t*)&const_all_param)->motors.servo.init; 	//servo init value
+int32_t* servoLeft= &((all_param_t*)&const_all_param)->motors.servo.min;		//servo min value
+int32_t* servoRight= &((all_param_t*)&const_all_param)->motors.servo.max;		//servo max value
+
 const ctimer_config_t BLDC_config = {
 		.mode = kCTIMER_TimerMode,   /* TC is incremented every rising APB bus clock edge */
 		.input = kCTIMER_Capture_0,  /*!< Timer capture channel 0 */
@@ -148,4 +154,26 @@ void ESC_Init_Task(void *pvParameters)
 
 		vTaskSuspend(NULL);	//suspend Task
 	}
+}
+
+void Camera_Test_Drive (uint8_t state)
+{
+	int16_t testValue;							//calculated test value for min to max speed in µs
+	if(state==MENU_DEACT)
+		{
+			//calculate timer register value for stop
+			CTIMER3->MSR[0] = CTIMER3_PWM_PERIOD - *BLDCLeftInitValue*CTIMER3_PWM_PERIOD/20000;//Linker Motor aus
+			CTIMER3->MSR[2] = CTIMER3_PWM_PERIOD - *BLDCRightInitValue*CTIMER3_PWM_PERIOD/20000;//Rechter Motor aus
+			CTIMER1->MSR[2] = CTIMER1_PWM_PERIOD -(*servoMiddle)*CTIMER1_PWM_PERIOD/20000;	//Servo Mitte
+			return;
+		}
+	//calculate test value for selected speed
+	testValue= *BLDCLeftMinValue + BLDCTestValue*(*BLDCLeftMaxValue-*BLDCLeftMinValue)/100;
+
+	//calculate timer register value for test speed
+	CTIMER3->MSR[0] = CTIMER3_PWM_PERIOD - testValue * CTIMER3_PWM_PERIOD / 20000;
+	CTIMER3->MSR[2] = CTIMER3_PWM_PERIOD - testValue * CTIMER3_PWM_PERIOD / 20000;
+
+	//for Debugging
+	printf("TestValueLeft: %i \t TimerRegister: %i \n", testValue, CTIMER3->MSR[0]);
 }

@@ -52,7 +52,8 @@
 #include "queue.h"
 #include "board.h"
 #include "param.h"
-
+#include "menu.h"
+#include "servo/servo.h"
 /*******************************************************************************
  * Defines
  ******************************************************************************/
@@ -75,6 +76,6 @@ void BLDC_Init(void);
 void CTIMER3_Init(void);
 void delay_ms(uint32_t value);
 void ESC_Init_Task(void *pvParameters);
-
+void Camera_Test_Drive (uint8_t state);
 
 #endif /* DRIVE_DRIVE_H_ */

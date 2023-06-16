@@ -44,6 +44,7 @@
 #include "display/menu/design/menu_list.h"
 #include "param.h"
 #include "settings.h"
+#include "drive/drive.h"
 //#include "camera/camera.h"
 
 /****************************************************
