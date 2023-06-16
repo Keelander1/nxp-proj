@@ -147,12 +147,12 @@ void SCTimer_CamCLK_Init(void)
 	//Set PWM at PIO3_27 to 3,676MHz (Cam_CLK_frequency max=8MHz)
 	//***************************************************
 	//Event 0 for Counter Limit
-	SCT0->MATCHREL[0] = (24-1); 				//Match 0 @ 12/44MHz = 272,72ns Limit Counter		//Changed to 24 (545,45 ns)
+	SCT0->MATCHREL[0] = (26-1); 				//Match 0 @ 12/44MHz = 272,72ns Limit Counter		//Changed to 26 (590,90 ns)
 	SCT0->EV[0].STATE = 0xFFFFFFFF; 			//Event 0 happens in all states
 	SCT0->EV[0].CTRL = (1 << 12); 				//Match 0 condition only
 	SCT0->OUT[1].SET = (1 << 0); 				//Event 0 will set SCT0_OUT1
 	//Event 1 for PWM Duty Cycle
-	SCT0->MATCHREL[1] = (6-1); 					//Match 1 @ 6/44MHz = 136,36ns						//Changed to 12 (272,72 ns)
+	SCT0->MATCHREL[1] = (13-1); 				//Match 1 @ 6/44MHz = 136,36ns						//Changed to 13 (295,45 ns)
 	SCT0->EV[1].STATE = 0xFFFFFFFF; 			//Event 1 happens in all states
 	SCT0->EV[1].CTRL = (1 << 0) | (1 << 12); 	//Match 1 condition only
 	SCT0->OUT[1].CLR = (1 << 1); 				//Event 1 will clear SCT0_OUT1
@@ -174,7 +174,7 @@ void SCTimer_SIEvents_Init(void)
 
 	//**************************************
 	//Event 2 for SI Set Event
-	SCT0->MATCHREL[2] = (22-1); 			//Match 2 @ 11/44MHz = 250ns							//Changed to 22 (500 ns)
+	SCT0->MATCHREL[2] = (24-1); 			//Match 2 @ 11/44MHz = 250ns							//Changed to 24 (545,45 ns)
 	SCT0->EV[2].STATE = 0; 					//Event 2 happens only in State 0
 	SCT0->EV[2].CTRL = (2 << 0)|(1 << 12); 	//Match 2 condition only
 	SCT0->OUT[0].SET = (1 << 2); 			//Event 2 will set SCT0_OUT0
@@ -223,7 +223,7 @@ void SCTimer_ADCTrigger_Init(void)
 {
 	//**************************************
 	//Event 4 for ADC Trigger Event
-	SCT0->MATCHREL[4] = (16-1); 				//Match 4 @ 9/44MHz = 204,54ns (Cam_AO settlingTime Min120ns)	//Changed to 18 (409,091 ns)
+	SCT0->MATCHREL[4] = (22-1); 			//Match 4 @ 9/44MHz = 204,54ns (Cam_AO settlingTime Min120ns)	//Changed to 22 (500,00 ns)
 	SCT0->EV[4].STATE = 0xFFFFFFF;			//Event 4 happens in all states
 	SCT0->EV[4].CTRL = (4 << 0)|(1 << 12); 	//Match 4 condition only
 
@@ -342,23 +342,14 @@ void ADC0_SEQA_IRQHandler(void)
 void Camera_Exposure_time_task(void *pvParameters)
 {
 	while(1){
-		uint16_t pixel_Values_sum = 0;
+		int32_t pixel_Values_sum = 0;
 
 		for(uint8_t x=0;x<128;x++){
-			pixel_Values_sum = pixel_Values_sum + pixelValues[x];
+			pixel_Values_sum = pixel_Values_sum + pixelValues[x];						// Sum of all 128 ADC-Camera-Values
 		}
-		if(pixel_Values_sum < 16384){
-			exposure_time = exposure_time+10000;
-		}else{
-			if(pixel_Values_sum > 16384){
-				exposure_time = exposure_time-10000;
-			}
-		}
-
-
-//		exposure_time += (16384 - pixel_Values_sum);
-
-		CTIMER0->MSR[0] = exposure_time;
+		exposure_time = exposure_time + ((16384-pixel_Values_sum))*10;					// Gain = 10 (can become unstable !!!)
+																						// 16384 = 128 * ADC-Medium-Value (0 ... 256)
+		CTIMER0->MSR[0] = exposure_time;												// Exposure Time in s = exposure_time/220 MHz
 		Edge_Detection();
 		vTaskDelay(1);
 	}
@@ -371,7 +362,7 @@ void Camera_Exposure_time_task(void *pvParameters)
 void Edge_Detection(void)
 {
 	uint8_t threshold = 25;					//threshold for edge detection
-	uint8_t border_offset = 10; 	//offset from Middle for Edge Border Left & Right
+	uint8_t border_offset = 10; 			//offset from Middle for Edge Border Left & Right
 	uint8_t left_edge_found = 0;			//0 if NO Left Edge found, 1 if found
 	uint8_t right_edge_found = 0;			//0 if NO Right Edge found, 1 if found
 

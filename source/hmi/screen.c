@@ -112,9 +112,9 @@ void menu_page_main_about(uint8_t refresh) {
 	ssd1309_set_pos(&g_disp_0.disp_obj, 8, 18);
 	ssd1309_write_str(&g_disp_0.disp_obj, "Made for NXP Cup", ssd1309_font_6x8, false, ON);
 	ssd1309_set_pos(&g_disp_0.disp_obj, 11, 34);
-	ssd1309_write_str(&g_disp_0.disp_obj, "By Arne Kulinna", ssd1309_font_6x8, false, ON);
+	ssd1309_write_str(&g_disp_0.disp_obj, "By Students", ssd1309_font_6x8, false, ON);
 	ssd1309_set_pos(&g_disp_0.disp_obj, 29, 50);
-	ssd1309_write_str(&g_disp_0.disp_obj, "March 2020", ssd1309_font_6x8, false, ON);
+	ssd1309_write_str(&g_disp_0.disp_obj, "June 2023", ssd1309_font_6x8, false, ON);
 
 	ssd1309_rtos_unlock(&g_disp_0);
 }
@@ -162,7 +162,7 @@ void menu_open_hardware_parameter_camera() {
 	menu_reset(&curr_menu_handle->drv_handle);
 }
 
-void menu_page_pixelanzeige_camera(uint8_t refresh)    {								// Neu Martin Fürstberger 27.05.23
+void menu_page_pixel_display_camera(uint8_t refresh)    {								// new Martin Fürstberger 27.05.23
 		uint8_t x=0;
 		uint8_t y=0;
 		char time_string[15] = "Exp.Time[ms]:";
@@ -182,7 +182,7 @@ void menu_page_pixelanzeige_camera(uint8_t refresh)    {								// Neu Martin F�
 
 			//Print all found Edges
 //			if(edges[x] == 1)
-//				ssd1309_draw_rect(&g_disp_0.disp_obj, x, 13, x, 63, true, ON);	//Draw Right Edges
+//				ssd1309_draw_rect(&g_disp_0.disp_obj, x, 13, x, 63, true, ON);		//Draw Right Edges
 //			if(edges[x] == 2)
 //				ssd1309_draw_rect(&g_disp_0.disp_obj, x, 13, x+1, 63, true, ON);	//Draw Left Edges
 		}

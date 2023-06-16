@@ -201,9 +201,9 @@ const static menu_entry_t menu_hardware_camera_entries[] = {
 				.en = true,
 		},
 
-		{		.str = "Pixelanzeige",							// Neu Martin Fürstberger 27.05.23
+		{		.str = "Pixel_Display",							// new Martin Fürstberger 27.05.23
 				.type = MENU_PAGE,
-				.func = menu_page_pixelanzeige_camera,
+				.func = menu_page_pixel_display_camera,
 				.en = true,
 		},
 

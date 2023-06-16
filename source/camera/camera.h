@@ -74,7 +74,6 @@ void SCTimer_ADCTrigger_Init(void);
 void ADC_Config(void);
 void ADC_Calibration(void);
 void CTIMER0_Init(void);
-void menu_page_pixelanzeige_camera(uint8_t refresh);
 void Calculate_PixelValues_Task(void *pvParameters);
 void Camera_Exposure_time_task(void *pvParameters);
 void Edge_Detection(void);
