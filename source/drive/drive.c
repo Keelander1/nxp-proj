@@ -208,12 +208,12 @@ void Camera_Test_Drive (uint8_t state)
 	//printf("Servo_MaxRight: %i \t TimerRegister: %i \n", *servoRight, CTIMER1->MSR[2]);
 	//printf("LeftEdge: %i \n", edge_left);
 	//printf("RightEdge: %i \n", edge_right);
-	ssd1309_draw_rect(&g_disp_0.disp_obj, edge_left, 13, edge_left, 63, true, ON); //Draw Left Edge
-	ssd1309_set_pos(&g_disp_0.disp_obj, edge_left +1, 50);
-	ssd1309_write_str(&g_disp_0.disp_obj, "L" , ssd1309_font_6x8, false, ON);
-
-	ssd1309_draw_rect(&g_disp_0.disp_obj, edge_right, 13, edge_right, 63, true, ON);	//Draw Right Edge
-	ssd1309_set_pos(&g_disp_0.disp_obj, edge_right - 7, 50);
-	ssd1309_write_str(&g_disp_0.disp_obj, "R" , ssd1309_font_6x8, false, ON);
+//	ssd1309_draw_rect(&g_disp_0.disp_obj, edge_left, 13, edge_left, 63, true, ON); //Draw Left Edge
+//	ssd1309_set_pos(&g_disp_0.disp_obj, edge_left +1, 50);
+//	ssd1309_write_str(&g_disp_0.disp_obj, "L" , ssd1309_font_6x8, false, ON);
+//
+//	ssd1309_draw_rect(&g_disp_0.disp_obj, edge_right, 13, edge_right, 63, true, ON);	//Draw Right Edge
+//	ssd1309_set_pos(&g_disp_0.disp_obj, edge_right - 7, 50);
+//	ssd1309_write_str(&g_disp_0.disp_obj, "R" , ssd1309_font_6x8, false, ON);
 
 }
