@@ -361,8 +361,8 @@ void Camera_Exposure_time_task(void *pvParameters)
  ******************************************************************************/
 void Edge_Detection(void)
 {
-	uint8_t threshold = 25;					//threshold for edge detection
-	uint8_t border_offset = 10; 			//offset from Middle for Edge Border Left & Right
+	uint8_t threshold = 30;					//threshold for edge detection
+	uint8_t border_offset = 30; 			//offset from Middle for Edge Border Left & Right (max 63)
 	uint8_t left_edge_found = 0;			//0 if NO Left Edge found, 1 if found
 	uint8_t right_edge_found = 0;			//0 if NO Right Edge found, 1 if found
 
@@ -373,7 +373,7 @@ void Edge_Detection(void)
 		if((pixelValues[x+4]+threshold)<pixelValues[x])
 		{
 			edges[x+2] = 1;	//1 = Right Edge
-			if(((x+2) >= (64-border_offset)) && (right_edge_found == 0))
+			if(((x+2) >= (63-border_offset)) && (right_edge_found == 0))
 			{
 				edge_right = x + 2;
 				right_edge_found = 1;
