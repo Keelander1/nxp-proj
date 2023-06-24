@@ -278,7 +278,7 @@ void menu_func_bldc_motor_right_max(uint8_t state) {
 void menu_func_restore() {
 
 	all_param->motors.servo.init = 1500;
-	all_param->motors.servo.min = 1110;
+	all_param->motors.servo.min = 970;
 	all_param->motors.servo.max = 2130;
 	all_param->motors.servo.fac = 16384;
 	all_param->motors.BLDCLeft.init = 1000;

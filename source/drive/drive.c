@@ -46,6 +46,8 @@
 
  ******************************************************************************/
 int32_t BLDCTestValue=10;	//value for test purpose
+int8_t Lenkfaktor = 5;
+
 int32_t* servoMiddle= &((all_param_t*)&const_all_param)->motors.servo.init; 	//servo init value
 int32_t* servoLeft= &((all_param_t*)&const_all_param)->motors.servo.min;		//servo min value
 int32_t* servoRight= &((all_param_t*)&const_all_param)->motors.servo.max;		//servo max value
@@ -186,7 +188,7 @@ void Camera_Test_Drive (uint8_t state)
 	middleLeftRight = (edge_left + edge_right) /2;
 	servo_Value = 1.5625 * middleLeftRight - 100;
 
-	servo_Value = servo_Value *4;
+	servo_Value = servo_Value * Lenkfaktor;
 	if (servo_Value >= 100) servo_Value = 100;
 	if (servo_Value <= -100) servo_Value = -100;
 
@@ -202,18 +204,5 @@ void Camera_Test_Drive (uint8_t state)
 	}
 	//set test value to timer register
 	CTIMER1->MSR[2] = CTIMER1_PWM_PERIOD - Stearing_Value * CTIMER1_PWM_PERIOD / 20000;
-	//for Debugging
-	//printf("Servo_Value: %i \t TimerRegister: %i \n", testValueSpeed, CTIMER1->MSR[2]);
-	//printf("Servo_MinLeft: %i \t TimerRegister: %i \n", *servoLeft, CTIMER1->MSR[2]);
-	//printf("Servo_MaxRight: %i \t TimerRegister: %i \n", *servoRight, CTIMER1->MSR[2]);
-	//printf("LeftEdge: %i \n", edge_left);
-	//printf("RightEdge: %i \n", edge_right);
-//	ssd1309_draw_rect(&g_disp_0.disp_obj, edge_left, 13, edge_left, 63, true, ON); //Draw Left Edge
-//	ssd1309_set_pos(&g_disp_0.disp_obj, edge_left +1, 50);
-//	ssd1309_write_str(&g_disp_0.disp_obj, "L" , ssd1309_font_6x8, false, ON);
-//
-//	ssd1309_draw_rect(&g_disp_0.disp_obj, edge_right, 13, edge_right, 63, true, ON);	//Draw Right Edge
-//	ssd1309_set_pos(&g_disp_0.disp_obj, edge_right - 7, 50);
-//	ssd1309_write_str(&g_disp_0.disp_obj, "R" , ssd1309_font_6x8, false, ON);
 
 }
