@@ -65,7 +65,7 @@ main-build: Gustl_SumEck.axf
 Gustl_SumEck.axf: $(OBJS) $(USER_OBJS) makefile $(OPTIONAL_TOOL_DEPS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: MCU Linker'
-	arm-none-eabi-gcc -nostdlib -L"C:\Users\keela\OneDrive\Desktop\Studium\EmbeddedSystems\Git_NXP_Cup\nxp-proj\libs" -Xlinker -Map="Gustl_SumEck.map" -Xlinker --gc-sections -Xlinker -print-memory-usage -Xlinker --sort-section=alignment -Xlinker --cref -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -T Gustl_SumEck_Debug.ld -o "Gustl_SumEck.axf" $(OBJS) $(USER_OBJS) $(LIBS) -lpower_hardabi
+	arm-none-eabi-gcc -nostdlib -L"C:\nxp\Pojects\nxp-proj\libs" -Xlinker -Map="Gustl_SumEck.map" -Xlinker --gc-sections -Xlinker -print-memory-usage -Xlinker --sort-section=alignment -Xlinker --cref -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -T Gustl_SumEck_Debug.ld -o "Gustl_SumEck.axf" $(OBJS) $(USER_OBJS) $(LIBS) -lpower_hardabi
 	@echo 'Finished building target: $@'
 	@echo ' '
 

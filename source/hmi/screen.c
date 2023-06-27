@@ -51,6 +51,7 @@
 
 extern volatile uint8_t pixelValues[128];
 extern volatile uint8_t edges[128];
+extern volatile uint8_t edgesMiddle[128];
 extern volatile uint8_t edge_right;
 extern volatile uint8_t edge_left;
 volatile uint32_t edge_throttle;
@@ -180,11 +181,15 @@ void menu_page_pixel_display_camera(uint8_t refresh)    {								// new Martin F
 			y = 64-(pixelValues[x]/5);						//Scale Pixel Values to Display Size
 			ssd1309_set_pixel(&g_disp_0.disp_obj,x, y, ON);	//Print Pixel Values
 
-			//Print all found Edges
-//			if(edges[x] == 1)
-//				ssd1309_draw_rect(&g_disp_0.disp_obj, x, 13, x, 63, true, ON);		//Draw Right Edges
-//			if(edges[x] == 2)
-//				ssd1309_draw_rect(&g_disp_0.disp_obj, x, 13, x+1, 63, true, ON);	//Draw Left Edges
+//			Print all found Edges
+			if(edges[x] == 1)
+				ssd1309_draw_rect(&g_disp_0.disp_obj, x, 13, x, 18, true, ON);		//Draw Right Edges
+			if(edgesMiddle[x] == 1)
+				ssd1309_draw_rect(&g_disp_0.disp_obj, x, 13, x, 30, true, ON);		//Draw Right Edges
+			if(edges[x] == 2)
+				ssd1309_draw_rect(&g_disp_0.disp_obj, x, 13, x, 18, true, ON);	//Draw Left Edges
+			if(edgesMiddle[x] == 2)
+				ssd1309_draw_rect(&g_disp_0.disp_obj, x, 13, x, 30, true, ON);	//Draw Left Edges
 		}
 
 		ssd1309_draw_rect(&g_disp_0.disp_obj, edge_left, 13, edge_left, 63, true, ON); //Draw Left Edge

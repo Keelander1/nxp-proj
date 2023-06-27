@@ -57,8 +57,11 @@ const ctimer_config_t TakeShots_config = {
 volatile uint8_t pixelCounter = 129;
 volatile uint8_t pixelValues[128] = {0};
 volatile uint8_t edges[128] = {0};
+volatile uint8_t edgesMiddle[128] = {0};
 volatile uint8_t edge_left = 0;		//left Edge Coordinate
 volatile uint8_t edge_right = 0;	//Right Edge Coordinate
+volatile uint8_t edge_right_previus = 102;
+volatile uint8_t edge_left_previus = 25;
 
 volatile uint32_t exposure_time=10000000;
 
@@ -362,34 +365,97 @@ void Camera_Exposure_time_task(void *pvParameters)
 void Edge_Detection(void)
 {
 	uint8_t threshold = 20;					//threshold for edge detection
-	uint8_t border_offset = 60; 			//offset from Middle for Edge Border Left & Right (max 63)
-	uint8_t left_edge_found = 0;			//0 if NO Left Edge found, 1 if found
-	uint8_t right_edge_found = 0;			//0 if NO Right Edge found, 1 if found
+	uint8_t border_offset = 5; 			//offset from previus Edge for Edge Border Left & Right
+//	uint8_t left_edge_found = 0;			//0 if NO Left Edge found, 1 if found
+//	uint8_t right_edge_found = 0;			//0 if NO Right Edge found, 1 if found
+
+//	uint8_t edgeWidth[128] = {0};
+	uint8_t right_edge_width_max = 0;
+	uint8_t left_edge_width_max = 0;
+	uint8_t edgeWidth = 0;
+	uint8_t edgeMiddle = 0;
+
+	uint8_t right_edge_begin = 0;
+	uint8_t right_edge_end = 0;
+	uint8_t left_edge_begin = 0;
+	uint8_t left_edge_end = 0;
+
 
 	edge_right = 127;
 	edge_left = 0;
 
-	for(uint8_t x=0;x<(128-4);x=x+4){
-		if((pixelValues[x+4]+threshold)<pixelValues[x])
+
+	for(uint8_t x=1;x<=(127-1);x=x+1){
+		edgesMiddle[x] = 0;
+
+		if((pixelValues[x-1]-pixelValues[x+1])>threshold)
 		{
-			edges[x+2] = 1;	//1 = Right Edge
-			if(((x+2) >= (64-border_offset)) && (right_edge_found == 0))
-			{
-				edge_right = x + 2;
-				right_edge_found = 1;
-			}
+			edges[x] = 1;	//1 = Right Edge (Falling Edge)
+
+//			if(((x) >= (edge_right_previus - border_offset)) && ((x) <= (edge_right_previus + border_offset)) /*&& (right_edge_found == 0)*/)
+//			{
+				if((edges[x] == 1) && (edges[x-1] != 1))
+					right_edge_begin = x;
+//			}
 		}
-		else if((pixelValues[x+4]-threshold)>pixelValues[x])
+
+		else if((pixelValues[x+1]-pixelValues[x-1])>threshold)
 		{
-			edges[x+2] = 2;	//2 = Left Edge
-			if(((x+2) < (64 + border_offset)) && (left_edge_found == 0))
-			{
-				edge_left = x + 2;
-				left_edge_found = 1;
-			}
+			edges[x] = 2;	//2 = Left Edge (Rising Edge)
+
+//			if(((x) >= (edge_left_previus - border_offset)) && ((x) <= (edge_left_previus + border_offset)) /*&& (left_edge_found == 0)*/)
+//			{
+				if((edges[x] == 2) && (edges[x-1] != 2))
+					left_edge_begin = x;
+//			}
 		}
+
 		else edges[x+2] = 0;	//0 = No Edge
+
+
+
+		if((edges[x] != 1) && (edges[x-1] == 1)){
+			right_edge_end = x-1;
+			if((right_edge_end - right_edge_begin) >= 3){
+				edgesMiddle[(right_edge_end - right_edge_begin)/2 + right_edge_begin] = 1;
+//				edgesWidth[(right_edge_end - right_edge_begin)/2 + right_edge_begin] = right_edge_end - right_edge_begin;
+//				right_edge_found = 1;
+				edgeWidth = right_edge_end - right_edge_begin;
+				edgeMiddle = edgeWidth/2 + right_edge_begin;
+				if(edgeWidth > right_edge_width_max){
+					edge_right = edgeMiddle;
+					right_edge_width_max = edgeWidth;
+				}
+			}
+		}
+
+		if((edges[x] != 2) && (edges[x-1] == 2)){
+			left_edge_end = x-1;
+			if((left_edge_end - left_edge_begin) >= 3){
+				edgesMiddle[(left_edge_end - left_edge_begin)/2 + left_edge_begin] = 2;
+//				edgesWidh[(left_edge_end - left_edge_begin)/2 + left_edge_begin] = left_edge_end - left_edge_begin;
+//				left_edge_found = 1;
+				edgeWidth = left_edge_end - left_edge_begin;
+				edgeMiddle = edgeWidth/2 + left_edge_begin;
+				if(edgeWidth > left_edge_width_max){
+					edge_left = edgeMiddle;
+					left_edge_width_max = edgeWidth;
+				}
+			}
+		}
 	}
+
+
+	if(edge_left>edge_right){
+		if((edge_left+edge_right) < 128)
+			edge_right = 127;
+		else edge_left = 0;
+	}
+
+
+
+	edge_right_previus = edge_right;
+	edge_left_previus = edge_left;
 
 	//printf("LeftEdge: %i \n", edge_left);
 	//printf("RightEdge: %i \n", edge_right);
