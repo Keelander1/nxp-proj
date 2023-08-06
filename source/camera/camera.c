@@ -57,7 +57,7 @@ const ctimer_config_t TakeShots_config = {
 volatile uint8_t pixelCounter = 129;
 volatile uint8_t pixelValues[128] = {0};
 volatile uint8_t edges[128] = {0};
-volatile uint8_t edgesMiddle[128] = {0};
+volatile uint8_t edgesMiddle[128] = {0}; //all detected edges
 volatile uint8_t edge_left = 0;		//left Edge Coordinate
 volatile uint8_t edge_right = 0;	//Right Edge Coordinate
 volatile uint8_t edge_right_previus = 102;
@@ -359,20 +359,28 @@ void Camera_Exposure_time_task(void *pvParameters)
 }
 //	*********************************************
 
+
+enum position {
+	right = 1,
+    left = 2
+};
+
 /*******************************************************************************
  * Edge Detection
  ******************************************************************************/
 void Edge_Detection(void)
 {
 	uint8_t threshold = 20;					//threshold for edge detection
-	uint8_t border_offset = 5; 			//offset from previus Edge for Edge Border Left & Right
+	uint8_t edge_min_width = 2;
+	uint8_t edge_min_hight = 30;
 //	uint8_t left_edge_found = 0;			//0 if NO Left Edge found, 1 if found
 //	uint8_t right_edge_found = 0;			//0 if NO Right Edge found, 1 if found
 
 //	uint8_t edgeWidth[128] = {0};
-	uint8_t right_edge_width_max = 0;
-	uint8_t left_edge_width_max = 0;
+	uint8_t right_edge_hight_max = 0;
+	uint8_t left_edge_hight_max = 0;
 	uint8_t edgeWidth = 0;
+	uint8_t edgeHight = 0;
 	uint8_t edgeMiddle = 0;
 
 	uint8_t right_edge_begin = 0;
@@ -385,81 +393,93 @@ void Edge_Detection(void)
 	edge_left = 0;
 
 
-	for(uint8_t x=1;x<=(127-1);x=x+1){
+	for(uint8_t x=1;x<=126;x=x+1){
 		edgesMiddle[x] = 0;
 
+		//search for falling Pixel
 		if((pixelValues[x-1]-pixelValues[x+1])>threshold)
 		{
-			edges[x] = 1;	//1 = Right Edge (Falling Edge)
+			edges[x] = right;	//1 = Right Edge (Falling Edge)
 
-//			if(((x) >= (edge_right_previus - border_offset)) && ((x) <= (edge_right_previus + border_offset)) /*&& (right_edge_found == 0)*/)
-//			{
-				if((edges[x] == 1) && (edges[x-1] != 1))
+				if(edges[x-1] != right)
 					right_edge_begin = x;
-//			}
 		}
 
+		//search for rising Pixel
 		else if((pixelValues[x+1]-pixelValues[x-1])>threshold)
 		{
-			edges[x] = 2;	//2 = Left Edge (Rising Edge)
+			edges[x] = left;	//2 = Left Edge (Rising Edge)
 
-//			if(((x) >= (edge_left_previus - border_offset)) && ((x) <= (edge_left_previus + border_offset)) /*&& (left_edge_found == 0)*/)
-//			{
-				if((edges[x] == 2) && (edges[x-1] != 2))
+				if(edges[x-1] != left)
 					left_edge_begin = x;
-//			}
 		}
 
-		else edges[x+2] = 0;	//0 = No Edge
+		//no rising or falling Pixel found
+		else edges[x] = 0;	//0 = No Edge
 
-
-
-		if((edges[x] != 1) && (edges[x-1] == 1)){
+		//search for falling Edges
+		if((edges[x] != right || x == 126) && (edges[x-1] == right)){	//right edge ends
 			right_edge_end = x-1;
-			if((right_edge_end - right_edge_begin) >= 3){
-				edgesMiddle[(right_edge_end - right_edge_begin)/2 + right_edge_begin] = 1;
-//				edgesWidth[(right_edge_end - right_edge_begin)/2 + right_edge_begin] = right_edge_end - right_edge_begin;
-//				right_edge_found = 1;
-				edgeWidth = right_edge_end - right_edge_begin;
+			edgeHight = pixelValues[right_edge_begin] - pixelValues[right_edge_end];
+			edgeWidth = right_edge_end - right_edge_begin;
+			if((edgeWidth >= edge_min_width) && (edgeHight >= edge_min_hight)){		//filtering
 				edgeMiddle = edgeWidth/2 + right_edge_begin;
-				if(edgeWidth > right_edge_width_max){
+				edgesMiddle[edgeMiddle] = right;	//middle of the edge
+				if(edgeHight > right_edge_hight_max){	//the steepest edge is chosen
 					edge_right = edgeMiddle;
-					right_edge_width_max = edgeWidth;
+					right_edge_hight_max = edgeHight;
 				}
 			}
 		}
 
-		if((edges[x] != 2) && (edges[x-1] == 2)){
+		//search for rising Edges
+		if((edges[x] != left || x == 126) && (edges[x-1] == left)){		//left edge ends
 			left_edge_end = x-1;
-			if((left_edge_end - left_edge_begin) >= 3){
-				edgesMiddle[(left_edge_end - left_edge_begin)/2 + left_edge_begin] = 2;
-//				edgesWidh[(left_edge_end - left_edge_begin)/2 + left_edge_begin] = left_edge_end - left_edge_begin;
-//				left_edge_found = 1;
-				edgeWidth = left_edge_end - left_edge_begin;
+			edgeHight = pixelValues[right_edge_end] - pixelValues[right_edge_begin];
+			edgeWidth = left_edge_end - left_edge_begin;
+			if((edgeWidth >= edge_min_width) && (edgeHight >= edge_min_hight)){		//filtering
 				edgeMiddle = edgeWidth/2 + left_edge_begin;
-				if(edgeWidth > left_edge_width_max){
+				edgesMiddle[edgeMiddle] = left;		//middle of the edge
+				if(edgeHight > left_edge_hight_max){
 					edge_left = edgeMiddle;
-					left_edge_width_max = edgeWidth;
+					left_edge_hight_max = edgeHight;
 				}
 			}
 		}
 	}
 
 
-	if(edge_left>edge_right){
-		if((edge_left+edge_right) < 128)
-			edge_right = 127;
-		else edge_left = 0;
+//temporärer Fix, bis Bug für linke Flanke gefunden wurde
+	left_edge_hight_max = 0;
+	for(uint8_t x=1;x<=126;x=x+1){
+		if(edges[x] == left){
+			left_edge_begin = x;
+			while(edges[x] == left)
+				x++;
+			left_edge_end = x-1;
+			edgeWidth = left_edge_end - left_edge_begin;
+			edgeHight = pixelValues[right_edge_end] - pixelValues[right_edge_begin];
+			edgeMiddle = edgeWidth/2 + left_edge_begin;
+			edgesMiddle[edgeMiddle] = left;
+			if(edgeHight > left_edge_hight_max){
+				edge_left = edgeMiddle;
+				left_edge_hight_max = edgeHight;
+			}
+		}
 	}
+
+
+//	if(edge_left>edge_right){
+//		if((edge_left+edge_right) < 128)
+//			edge_right = 127;
+//		else edge_left = 0;
+//	}
+
 
 
 
 	edge_right_previus = edge_right;
 	edge_left_previus = edge_left;
-
-	//printf("LeftEdge: %i \n", edge_left);
-	//printf("RightEdge: %i \n", edge_right);
-
 }
 
 

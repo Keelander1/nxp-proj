@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<JavaSwv>
+<config ITM_Enabled="1" ITM_Privilege="8" clockSpeed="0" swoClockSpeed="0"/>
+<DwtPcSampleRate CycleTap="false" PostScaler="12"/>
+</JavaSwv>
