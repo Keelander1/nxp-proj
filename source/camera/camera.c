@@ -57,11 +57,13 @@ const ctimer_config_t TakeShots_config = {
 volatile uint8_t pixelCounter = 129;
 volatile uint8_t pixelValues[128] = {0};
 volatile uint8_t edges[128] = {0};
-volatile uint8_t edgesMiddle[128] = {0}; //all detected edges
-volatile uint8_t edge_left = 0;		//left Edge Coordinate
-volatile uint8_t edge_right = 0;	//Right Edge Coordinate
-volatile uint8_t edge_right_previus = 102;
-volatile uint8_t edge_left_previus = 25;
+volatile uint8_t edgesMiddle[128] = {0}; //all detected edge
+volatile uint8_t edge_left_found = 0;	//1 if found
+volatile uint8_t edge_right_found = 0;	//1 if found
+volatile uint8_t edge_left = 0;			//left Edge Coordinate
+volatile uint8_t edge_right = 0;		//Right Edge Coordinate
+volatile uint8_t detection_mode = 0;
+
 
 volatile uint32_t exposure_time=10000000;
 
@@ -365,32 +367,36 @@ enum position {
     left = 2
 };
 
+enum mode {
+	init = 0,
+	trace = 1
+};
+
 /*******************************************************************************
  * Edge Detection
  ******************************************************************************/
 void Edge_Detection(void)
 {
+	//Parameter
 	uint8_t threshold = 20;					//threshold for edge detection
 	uint8_t edge_min_width = 2;
 	uint8_t edge_min_hight = 30;
-//	uint8_t left_edge_found = 0;			//0 if NO Left Edge found, 1 if found
-//	uint8_t right_edge_found = 0;			//0 if NO Right Edge found, 1 if found
+	uint8_t trace_offset = 7;
 
-//	uint8_t edgeWidth[128] = {0};
 	uint8_t right_edge_hight_max = 0;
 	uint8_t left_edge_hight_max = 0;
 	uint8_t edgeWidth = 0;
 	uint8_t edgeHight = 0;
 	uint8_t edgeMiddle = 0;
-
 	uint8_t right_edge_begin = 0;
 	uint8_t right_edge_end = 0;
 	uint8_t left_edge_begin = 0;
 	uint8_t left_edge_end = 0;
+	uint8_t xmin;
+	uint8_t xmax;
 
-
-	edge_right = 127;
-	edge_left = 0;
+	edge_right_found = 0;
+	edge_left_found = 0;
 
 
 	for(uint8_t x=1;x<=126;x=x+1){
@@ -400,86 +406,94 @@ void Edge_Detection(void)
 		if((pixelValues[x-1]-pixelValues[x+1])>threshold)
 		{
 			edges[x] = right;	//1 = Right Edge (Falling Edge)
-
-				if(edges[x-1] != right)
-					right_edge_begin = x;
 		}
 
 		//search for rising Pixel
 		else if((pixelValues[x+1]-pixelValues[x-1])>threshold)
 		{
 			edges[x] = left;	//2 = Left Edge (Rising Edge)
-
-				if(edges[x-1] != left)
-					left_edge_begin = x;
 		}
 
 		//no rising or falling Pixel found
 		else edges[x] = 0;	//0 = No Edge
 
-		//search for falling Edges
-		if((edges[x] != right || x == 126) && (edges[x-1] == right)){	//right edge ends
+
+	}
+
+	switch(detection_mode) {
+		case init:
+			xmin = 1; xmax = 126; break;
+		case trace:
+			xmin = edge_right - trace_offset;
+			xmax = edge_right + trace_offset;
+			if(xmin < 1)
+				xmin = 1;
+			if(xmax > 126)
+				xmax = 126;
+			break;
+	}
+
+	//Search for falling (right) Edge
+	for(uint8_t x=1;x<=126;x=x+1){
+		if(edges[x] == right){
+			right_edge_begin = x;
+			while((edges[x] == right) && (x <=126))
+				x++;
 			right_edge_end = x-1;
-			edgeHight = pixelValues[right_edge_begin] - pixelValues[right_edge_end];
 			edgeWidth = right_edge_end - right_edge_begin;
-			if((edgeWidth >= edge_min_width) && (edgeHight >= edge_min_hight)){		//filtering
+			edgeHight = pixelValues[right_edge_begin] - pixelValues[right_edge_end];
+
+			if((edgeWidth >= edge_min_width) && (edgeHight >= edge_min_hight)){		//noise filter
 				edgeMiddle = edgeWidth/2 + right_edge_begin;
-				edgesMiddle[edgeMiddle] = right;	//middle of the edge
-				if(edgeHight > right_edge_hight_max){	//the steepest edge is chosen
+				edgesMiddle[edgeMiddle] = right;
+				if((edgeHight > right_edge_hight_max) && (edgeMiddle >= xmin) && (edgeMiddle <= xmax)){	//taking highest edge in area
 					edge_right = edgeMiddle;
 					right_edge_hight_max = edgeHight;
-				}
-			}
-		}
-
-		//search for rising Edges
-		if((edges[x] != left || x == 126) && (edges[x-1] == left)){		//left edge ends
-			left_edge_end = x-1;
-			edgeHight = pixelValues[right_edge_end] - pixelValues[right_edge_begin];
-			edgeWidth = left_edge_end - left_edge_begin;
-			if((edgeWidth >= edge_min_width) && (edgeHight >= edge_min_hight)){		//filtering
-				edgeMiddle = edgeWidth/2 + left_edge_begin;
-				edgesMiddle[edgeMiddle] = left;		//middle of the edge
-				if(edgeHight > left_edge_hight_max){
-					edge_left = edgeMiddle;
-					left_edge_hight_max = edgeHight;
+					edge_right_found = 1;
 				}
 			}
 		}
 	}
 
+	switch(detection_mode) {
+		case init:
+			xmin = 1; xmax = 126; break;
+		case trace:
+			xmin = edge_left - trace_offset;
+			xmax = edge_left + trace_offset;
+			if(xmin < 1)
+				xmin = 1;
+			if(xmax > 126)
+				xmax = 126;
+			break;
+	}
 
-//temporärer Fix, bis Bug für linke Flanke gefunden wurde
-	left_edge_hight_max = 0;
-	for(uint8_t x=1;x<=126;x=x+1){
+	//Search for rising (left) Edge
+	for(uint8_t x=1;x<=125;x=x+1){
 		if(edges[x] == left){
 			left_edge_begin = x;
-			while(edges[x] == left)
+			while((edges[x] == left) && (x <=126))
 				x++;
 			left_edge_end = x-1;
 			edgeWidth = left_edge_end - left_edge_begin;
-			edgeHight = pixelValues[right_edge_end] - pixelValues[right_edge_begin];
-			edgeMiddle = edgeWidth/2 + left_edge_begin;
-			edgesMiddle[edgeMiddle] = left;
-			if(edgeHight > left_edge_hight_max){
-				edge_left = edgeMiddle;
-				left_edge_hight_max = edgeHight;
+			edgeHight = pixelValues[left_edge_end] - pixelValues[left_edge_begin];
+
+			if((edgeWidth >= edge_min_width) && (edgeHight >= edge_min_hight)){		//noise filter
+				edgeMiddle = edgeWidth/2 + left_edge_begin;
+				edgesMiddle[edgeMiddle] = left;
+				if((edgeHight > left_edge_hight_max) && (edgeMiddle >= xmin) && (edgeMiddle <= xmax)){	//taking highest edge in area
+					edge_left = edgeMiddle;
+					left_edge_hight_max = edgeHight;
+					edge_left_found = 1;
+				}
 			}
 		}
 	}
 
-
-//	if(edge_left>edge_right){
-//		if((edge_left+edge_right) < 128)
-//			edge_right = 127;
-//		else edge_left = 0;
-//	}
-
-
-
-
-	edge_right_previus = edge_right;
-	edge_left_previus = edge_left;
+	if((edge_left_found == 0) && (edge_right_found == 0))
+		detection_mode = init;
+	if((edge_left_found == 1) && (edge_right_found == 1))
+		detection_mode = trace;
 }
 
 

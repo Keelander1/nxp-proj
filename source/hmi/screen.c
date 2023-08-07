@@ -54,6 +54,8 @@ extern volatile uint8_t edges[128];
 extern volatile uint8_t edgesMiddle[128];
 extern volatile uint8_t edge_right;
 extern volatile uint8_t edge_left;
+extern volatile uint8_t edge_right_found;
+extern volatile uint8_t edge_left_found;
 volatile uint32_t edge_throttle;
 
 
@@ -192,13 +194,17 @@ void menu_page_pixel_display_camera(uint8_t refresh)    {								// new Martin F
 				ssd1309_draw_rect(&g_disp_0.disp_obj, x, 13, x, 30, true, ON);	//Draw Left Edges
 		}
 
-		ssd1309_draw_rect(&g_disp_0.disp_obj, edge_left, 13, edge_left, 63, true, ON); //Draw Left Edge
-		ssd1309_set_pos(&g_disp_0.disp_obj, edge_left +1, 50);
-		ssd1309_write_str(&g_disp_0.disp_obj, "L" , ssd1309_font_6x8, false, ON);
+		if(edge_left_found){
+			ssd1309_draw_rect(&g_disp_0.disp_obj, edge_left, 13, edge_left, 63, true, ON); //Draw Left Edge
+			ssd1309_set_pos(&g_disp_0.disp_obj, edge_left +1, 50);
+			ssd1309_write_str(&g_disp_0.disp_obj, "L" , ssd1309_font_6x8, false, ON);
+		}
 
-		ssd1309_draw_rect(&g_disp_0.disp_obj, edge_right, 13, edge_right, 63, true, ON);	//Draw Right Edge
-		ssd1309_set_pos(&g_disp_0.disp_obj, edge_right - 7, 50);
-		ssd1309_write_str(&g_disp_0.disp_obj, "R" , ssd1309_font_6x8, false, ON);
+		if(edge_right_found){
+			ssd1309_draw_rect(&g_disp_0.disp_obj, edge_right, 13, edge_right, 63, true, ON);	//Draw Right Edge
+			ssd1309_set_pos(&g_disp_0.disp_obj, edge_right - 7, 50);
+			ssd1309_write_str(&g_disp_0.disp_obj, "R" , ssd1309_font_6x8, false, ON);
+		}
 
 		//Print Exposure Time
 		ssd1309_rtos_unlock(&g_disp_0);
@@ -207,7 +213,6 @@ void menu_page_pixel_display_camera(uint8_t refresh)    {								// new Martin F
 			ssd1309_write_str(&g_disp_0.disp_obj, time_string , ssd1309_font_6x8, false, ON);	//Print Exposure time
 		}
 	}
-
 
 
 /*
