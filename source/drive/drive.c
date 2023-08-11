@@ -55,6 +55,8 @@ int32_t* servoRight= &((all_param_t*)&const_all_param)->motors.servo.max;		//ser
 
 extern volatile uint8_t edge_left;		//left Edge Coordinate
 extern volatile uint8_t edge_right;	//Right Edge Coordinate
+extern volatile uint8_t edge_left_found;
+extern volatile uint8_t edge_right_found;
 
 const ctimer_config_t BLDC_config = {
 		.mode = kCTIMER_TimerMode,   /* TC is incremented every rising APB bus clock edge */
@@ -186,7 +188,12 @@ void Camera_Test_Drive (uint8_t state)
 
 	//if left steering is tested
 	middleLeftRight = (edge_left + edge_right) /2;
+
+	if((edge_left_found == 0) && (edge_right_found == 0))
+		middleLeftRight = 63;
 	servo_Value = 1.5625 * middleLeftRight - 100;
+
+
 
 	servo_Value = servo_Value * Lenkfaktor;
 	if (servo_Value >= 100) servo_Value = 100;

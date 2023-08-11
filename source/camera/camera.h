@@ -77,6 +77,7 @@ void CTIMER0_Init(void);
 void Calculate_PixelValues_Task(void *pvParameters);
 void Camera_Exposure_time_task(void *pvParameters);
 void Edge_Detection(void);
+void Edge_Calibration(void);
 
 
 

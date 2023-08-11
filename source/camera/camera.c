@@ -63,6 +63,8 @@ volatile uint8_t edge_right_found = 0;	//1 if found
 volatile uint8_t edge_left = 0;			//left Edge Coordinate
 volatile uint8_t edge_right = 0;		//Right Edge Coordinate
 volatile uint8_t detection_mode = 0;
+volatile uint8_t track_state = 0;
+volatile uint8_t edge_distance = 100;	//distance between track boarder
 
 
 volatile uint32_t exposure_time=10000000;
@@ -362,6 +364,16 @@ void Camera_Exposure_time_task(void *pvParameters)
 //	*********************************************
 
 
+
+void Edge_Capibraton(void)
+		{edge_distance = edge_right - edge_left;}
+
+
+
+/*******************************************************************************
+ * Edge Detection
+ ******************************************************************************/
+
 enum position {
 	right = 1,
     left = 2
@@ -372,9 +384,13 @@ enum mode {
 	trace = 1
 };
 
-/*******************************************************************************
- * Edge Detection
- ******************************************************************************/
+enum track {
+	track = 0,
+	finish = 1,
+	tree_stribes = 2,
+	four_stribes = 3
+};
+
 void Edge_Detection(void)
 {
 	//Parameter
@@ -394,10 +410,13 @@ void Edge_Detection(void)
 	uint8_t left_edge_end = 0;
 	uint8_t xmin;
 	uint8_t xmax;
+	uint8_t right_edge_count = 0;
+	uint8_t left_edge_count = 0;
 
 	edge_right_found = 0;
 	edge_left_found = 0;
 
+	detection_mode = init;
 
 	for(uint8_t x=1;x<=126;x=x+1){
 		edgesMiddle[x] = 0;
@@ -446,7 +465,8 @@ void Edge_Detection(void)
 			if((edgeWidth >= edge_min_width) && (edgeHight >= edge_min_hight)){		//noise filter
 				edgeMiddle = edgeWidth/2 + right_edge_begin;
 				edgesMiddle[edgeMiddle] = right;
-				if((edgeHight > right_edge_hight_max) && (edgeMiddle >= xmin) && (edgeMiddle <= xmax)){	//taking highest edge in area
+				right_edge_count++;
+				if(/*(edgeHight > right_edge_hight_max) && */ (edgeMiddle >= xmin) && (edgeMiddle <= xmax)){	//taking highest edge in area
 					edge_right = edgeMiddle;
 					right_edge_hight_max = edgeHight;
 					edge_right_found = 1;
@@ -481,7 +501,8 @@ void Edge_Detection(void)
 			if((edgeWidth >= edge_min_width) && (edgeHight >= edge_min_hight)){		//noise filter
 				edgeMiddle = edgeWidth/2 + left_edge_begin;
 				edgesMiddle[edgeMiddle] = left;
-				if((edgeHight > left_edge_hight_max) && (edgeMiddle >= xmin) && (edgeMiddle <= xmax)){	//taking highest edge in area
+				left_edge_count++;
+				if((edgeHight > left_edge_hight_max) && (edgeMiddle >= xmin) && (edgeMiddle <= xmax) && (left_edge_hight_max == 0)){	//taking highest edge in area
 					edge_left = edgeMiddle;
 					left_edge_hight_max = edgeHight;
 					edge_left_found = 1;
@@ -494,6 +515,19 @@ void Edge_Detection(void)
 		detection_mode = init;
 	if((edge_left_found == 1) && (edge_right_found == 1))
 		detection_mode = trace;
+
+
+	if((right_edge_count == 5) && (left_edge_count == 5)){
+		track_state = 3;
+	}
+
+	if((right_edge_count == 4) && (left_edge_count == 4)){
+		track_state = 2;
+	}
+
+	if((right_edge_count == 3) && (left_edge_count == 3)){
+		track_state = 1;
+	}
 }
 
 
