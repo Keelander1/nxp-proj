@@ -45,7 +45,7 @@
  * Parameters
 
  ******************************************************************************/
-int32_t BLDCTestValue=10;	//value for test purpose
+int32_t BLDCTestValue=20;	//value for test purpose
 int8_t Lenkfaktor = 5;
 
 int32_t* servoMiddle= &((all_param_t*)&const_all_param)->motors.servo.init; 	//servo init value
@@ -54,9 +54,15 @@ int32_t* servoRight= &((all_param_t*)&const_all_param)->motors.servo.max;		//ser
 
 
 extern volatile uint8_t edge_left;		//left Edge Coordinate
-extern volatile uint8_t edge_right;	//Right Edge Coordinate
+extern volatile uint8_t edge_right;	 //Right Edge Coordinate
+extern volatile uint8_t	edge_center; //Edge Center Coordinate
 extern volatile uint8_t edge_left_found;
 extern volatile uint8_t edge_right_found;
+const uint16_t track_width = 520; //Width of the track in mm
+const uint16_t axle_distance = 176; //Distance between Axles in mm
+const uint16_t camera_distance = 380; //Distance between Camera View and Car Center in mm
+
+
 
 const ctimer_config_t BLDC_config = {
 		.mode = kCTIMER_TimerMode,   /* TC is incremented every rising APB bus clock edge */
@@ -155,7 +161,7 @@ void ESC_Init_Task(void *pvParameters)
 		/*CTIMER3->MSR[0] = CTIMER3_PWM_PERIOD - (*BLDCLeftMaxValue);		//Set motor to full speed
 		CTIMER3->MSR[2] = CTIMER3_PWM_PERIOD - (*BLDCRightMaxValue);		//Set motor to full speed
 		vTaskDelay(1000);
-		CTIMER3->MSR[0] = CTIMER3_PWM_PERIOD - (*BLDCLeftMinValue);		//Stop motor
+		CTIMER3->MSR[0] = CTIMER3_PWM_PERIOD - (*BLDCLeftMinValue);			//Stop motor
 		CTIMER3->MSR[2] = CTIMER3_PWM_PERIOD - (*BLDCRightMinValue);		//Stop motor*/
 
 		//***************************************************************
@@ -169,8 +175,9 @@ void Camera_Test_Drive (uint8_t state)
 	menu_page_pixel_display_camera(1);
 	int16_t testValueSpeed;							//calculated test value for min to max speed in µs
 	int16_t Stearing_Value;
-	float servo_Value = 30;
-	int16_t middleLeftRight = 0;
+	int16_t x = camera_distance;
+	int16_t y = edge_center - 63;
+	int16_t servo_Value = 0; //between -100 and 100
 	if(state==MENU_DEACT)
 		{
 			//calculate timer register value for stop
@@ -186,14 +193,12 @@ void Camera_Test_Drive (uint8_t state)
 	CTIMER3->MSR[0] = CTIMER3_PWM_PERIOD - testValueSpeed * CTIMER3_PWM_PERIOD / 20000;
 	CTIMER3->MSR[2] = CTIMER3_PWM_PERIOD - testValueSpeed * CTIMER3_PWM_PERIOD / 20000;
 
-	//if left steering is tested
-	middleLeftRight = (edge_left + edge_right) /2;
+
+	servo_Value = y;
+
 
 	if((edge_left_found == 0) && (edge_right_found == 0))
-		middleLeftRight = 63;
-	servo_Value = 1.5625 * middleLeftRight - 100;
-
-
+		servo_Value = 0;
 
 	servo_Value = servo_Value * Lenkfaktor;
 	if (servo_Value >= 100) servo_Value = 100;

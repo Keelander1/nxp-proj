@@ -62,9 +62,11 @@ volatile uint8_t edge_left_found = 0;	//1 if found
 volatile uint8_t edge_right_found = 0;	//1 if found
 volatile uint8_t edge_left = 0;			//left Edge Coordinate
 volatile uint8_t edge_right = 0;		//Right Edge Coordinate
+volatile int16_t edge_center = 0;
 volatile uint8_t detection_mode = 0;
 volatile uint8_t track_state = 0;
-volatile uint8_t edge_distance = 100;	//distance between track boarder
+volatile uint8_t edge_distance = 80;	//distance between track boarders (Schätzwert)
+//volatile uint8_t camera_distance = 0;	//TODO: implement
 
 
 volatile uint32_t exposure_time=10000000;
@@ -416,7 +418,7 @@ void Edge_Detection(void)
 	edge_right_found = 0;
 	edge_left_found = 0;
 
-	detection_mode = init;
+//	detection_mode = init; //for debugging
 
 	for(uint8_t x=1;x<=126;x=x+1){
 		edgesMiddle[x] = 0;
@@ -513,21 +515,29 @@ void Edge_Detection(void)
 
 	if((edge_left_found == 0) && (edge_right_found == 0))
 		detection_mode = init;
-	if((edge_left_found == 1) && (edge_right_found == 1))
+	if((edge_left_found == 0) && (edge_right_found == 1))
+		edge_center = edge_right - edge_distance/2;
+	if((edge_left_found == 1) && (edge_right_found == 0))
+		edge_center = edge_left + edge_distance/2;
+	if((edge_left_found == 1) && (edge_right_found == 1)){
 		detection_mode = trace;
+		edge_center = (edge_right + edge_left)/2;
+	}
 
 
 	if((right_edge_count == 5) && (left_edge_count == 5)){
-		track_state = 3;
+		track_state = four_stribes;
 	}
 
-	if((right_edge_count == 4) && (left_edge_count == 4)){
-		track_state = 2;
+	else if((right_edge_count == 4) && (left_edge_count == 4)){
+		track_state = tree_stribes;
 	}
 
-	if((right_edge_count == 3) && (left_edge_count == 3)){
-		track_state = 1;
+	else if((right_edge_count == 3) && (left_edge_count == 3)){
+		track_state = finish;
 	}
+	else
+		track_state = track;
 }
 
 
