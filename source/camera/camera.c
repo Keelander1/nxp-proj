@@ -54,8 +54,10 @@ const ctimer_config_t TakeShots_config = {
 };
 
 
-volatile uint8_t pixelCounter = 129;
-volatile uint8_t pixelValues[128] = {0};
+volatile uint8_t pixelCounter = 129;	// PixelCounter for camera 1
+volatile uint8_t pixelValues[128] = {0};// PixelValue Array for camera 1
+volatile uint8_t pixelCounter2 = 129;	// PixelCounter for camera 2
+volatile uint8_t pixelValues[128] = {0};// PixelValue Array for camera 2
 volatile uint8_t edges[128] = {0};
 volatile uint8_t edgesMiddle[128] = {0}; //all detected edge
 volatile uint8_t edge_left_found = 0;	//1 if found
@@ -150,10 +152,13 @@ void SCTimer_CamCLK_Init(void)
 	IOCON->PIO[3][27] &= 0xFFFFFFF0; 	//Clear FUNC bits of P3.27
 	IOCON->PIO[3][27] |= 0x02;     		//Set FUNC bits to SCT0_OUT1 function FUNC2 P3.27
 	GPIO->DIR[3]      |= 1<<27;         //Set PIO3_27 (SCT0_OUT1) to output
+
+
+
 	//**********************************
 
 	//***************************************************
-	//Set PWM at PIO3_27 to 3,676MHz (Cam_CLK_frequency max=8MHz)
+	//Set PWM at PIO3_27 to 3,676MHz (Cam_CLK_frequency max=8MHz) // old numbers (review later)
 	//***************************************************
 	//Event 0 for Counter Limit
 	SCT0->MATCHREL[0] = (26-1); 				//Match 0 @ 12/44MHz = 272,72ns Limit Counter		//Changed to 26 (590,90 ns)
