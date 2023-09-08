@@ -57,7 +57,7 @@ const ctimer_config_t TakeShots_config = {
 volatile uint8_t pixelCounter = 129;	// PixelCounter for camera 1
 volatile uint8_t pixelValues[128] = {0};// PixelValue Array for camera 1
 volatile uint8_t pixelCounter2 = 129;	// PixelCounter for camera 2
-volatile uint8_t pixelValues[128] = {0};// PixelValue Array for camera 2
+volatile uint8_t pixelValues2[128] = {0};// PixelValue Array for camera 2
 volatile uint8_t edges[128] = {0};
 volatile uint8_t edgesMiddle[128] = {0}; //all detected edge
 volatile uint8_t edge_left_found = 0;	//1 if found
@@ -148,11 +148,17 @@ void SCTimer_Clock_Config(void)
 void SCTimer_CamCLK_Init(void)
 {
 	//**********************************
+	//Camera 1
 	//Configure Pin P[3][27] (J13 Pin13) (CAM_CLK/SCT0_OUT1)
 	IOCON->PIO[3][27] &= 0xFFFFFFF0; 	//Clear FUNC bits of P3.27
 	IOCON->PIO[3][27] |= 0x02;     		//Set FUNC bits to SCT0_OUT1 function FUNC2 P3.27
 	GPIO->DIR[3]      |= 1<<27;         //Set PIO3_27 (SCT0_OUT1) to output
 
+	//Camera 2
+	//Configure Pin P[0][28] (J13 Pin14) (CAM_CLK/SCT0_OUT7)
+	IOCON->PIO[3][29] &= 0xFFFFFFF0; 	//Clear FUNC bits of P0.28
+	IOCON->PIO[3][29] |= 0x02;			//Set FUNC bits to SCT0_OUT3 function FUNC2 P3.29
+	GPIO->DIR[3]	  |= 1<<29;			//Set PIO3_29 (SCT0_OUT3) to output
 
 
 	//**********************************
@@ -164,12 +170,22 @@ void SCTimer_CamCLK_Init(void)
 	SCT0->MATCHREL[0] = (26-1); 				//Match 0 @ 12/44MHz = 272,72ns Limit Counter		//Changed to 26 (590,90 ns)
 	SCT0->EV[0].STATE = 0xFFFFFFFF; 			//Event 0 happens in all states
 	SCT0->EV[0].CTRL = (1 << 12); 				//Match 0 condition only
+
+	//Camera 1
 	SCT0->OUT[1].SET = (1 << 0); 				//Event 0 will set SCT0_OUT1
+	//Camera 2
+	SCT0->OUT[3].SET = (1 << 0);				//Event 0 will set SCT0_OUT3
+
+
 	//Event 1 for PWM Duty Cycle
 	SCT0->MATCHREL[1] = (13-1); 				//Match 1 @ 6/44MHz = 136,36ns						//Changed to 13 (295,45 ns)
 	SCT0->EV[1].STATE = 0xFFFFFFFF; 			//Event 1 happens in all states
 	SCT0->EV[1].CTRL = (1 << 0) | (1 << 12); 	//Match 1 condition only
+
+	//Camera 1
 	SCT0->OUT[1].CLR = (1 << 1); 				//Event 1 will clear SCT0_OUT1
+	//Camera 2
+	SCT0->OUT[3].CLR = (1 << 1);				//Event 1 will clear SCT0_OUT3
 	//***************************************************
 }
 
@@ -180,26 +196,41 @@ void SCTimer_CamCLK_Init(void)
 void SCTimer_SIEvents_Init(void)
 {
 	//**********************************
+	//Camera 1
 	//Configure Pin P[3][26] (J13 Pin15) (CAM_SI/SCT0_OUT0)
 	IOCON->PIO[3][26] &= 0xFFFFFFF0; 	//clear FUNC bits of P3.26
 	IOCON->PIO[3][26] |= 0x02;     		//Set FUNC bits to SCT0_OUT0 function FUNC2 P3.26
 	GPIO->DIR[3]      |= 1<<26;       	//set PIO3_26 (SCT0_OUT0) to output
 	//**********************************
 
+	//Camera 2
+	//Configure Pin P[3][28] (J13 Pin16) (CAM_SI/SCT0_OUT2)
+	IOCON->PIO[3][28] &= 0xFFFFFFF0; 	//clear FUNC bits of P3.28
+	IOCON->PIO[3][28] |= 0x02;     		//Set FUNC bits to SCT0_OUT2 function FUNC2 P3.28
+	GPIO->DIR[3]      |= 1<<28;       	//set PIO3_28 (SCT0_OUT2) to output
+
+
 	//**************************************
 	//Event 2 for SI Set Event
 	SCT0->MATCHREL[2] = (24-1); 			//Match 2 @ 11/44MHz = 250ns							//Changed to 24 (545,45 ns)
 	SCT0->EV[2].STATE = 0; 					//Event 2 happens only in State 0
 	SCT0->EV[2].CTRL = (2 << 0)|(1 << 12); 	//Match 2 condition only
+	//Camera 1
 	SCT0->OUT[0].SET = (1 << 2); 			//Event 2 will set SCT0_OUT0
+	//Camera 2
+	SCT0->OUT[2].SET = (1 << 2); 			//Event 2 will set SCT0_OUT2
 	//**************************************
+
 
 	//**************************************
 	//Event 3 for SI reset Event
 	SCT0->MATCHREL[3] = (2-1); 				//Match 3 @ 1/44MHz = 22,727ns							//Changed to 2 (45,454ns)
 	SCT0->EV[3].STATE = 0xFFFFFFF; 			//Event 3 happens in every state
 	SCT0->EV[3].CTRL = (3 << 0)|(1 << 12);	//Match 3 condition only
+	//Camera 1
 	SCT0->OUT[0].CLR = (1 << 3); 			//Event 3 will clear SCT0_OUT0
+	//Camera 2
+	SCT0->OUT[2].CLR = (1 << 3); 			//Event 3 will clear SCT0_OUT2
 	//**************************************
 }
 
