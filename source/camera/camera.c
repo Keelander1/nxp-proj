@@ -56,7 +56,6 @@ const ctimer_config_t TakeShots_config = {
 
 volatile uint8_t pixelCounter = 129;	// PixelCounter for camera 1
 volatile uint8_t pixelValues[128] = {0};// PixelValue Array for camera 1
-volatile uint8_t pixelCounter2 = 129;	// PixelCounter for camera 2
 volatile uint8_t pixelValues2[128] = {0};// PixelValue Array for camera 2
 volatile uint8_t edges[128] = {0};
 volatile uint8_t edgesMiddle[128] = {0}; //all detected edge
@@ -321,6 +320,13 @@ void ADC_Config(void)
 	GPIO->DIR[0]      &= ~(1 << 16);    //Set PIO0_16 (ADC0_4) to input
 	//******************************
 
+	//*******************************
+	//Configure Pin P[0][31] (J12 Pin4) (ADC0IN5)
+	IOCON->PIO[0][31] &= 0xFFFFFFFF0; 	//Clear FUNC bits of P0.31 Func 0 is ADC0_5
+	IOCON->PIO[0][31] &= ~(1 << 8);		//Disable DIGIMODE --> Analog input
+	GPIO->DIR[0]      &= ~(1 << 31);    //Set PIO0_31 (ADC0_5) to input
+	//*******************************
+
 	//*********************************************
 	//Power up ADC0 peripheral in normal-power mode
 	SYSCON->PDRUNCFG[0] &= ~(1 << 10); 				//Power Up ADC (PDEN_ADC0)
@@ -352,6 +358,7 @@ void ADC_Config(void)
 	//ADC Sequence A configuration
 	ADC0->SEQ_CTRL[0] &= ~(1 << 31); 	//Sequence A Disable for Configuration
 	ADC0->SEQ_CTRL[0] |= (1 << 4); 		//Select Channel Input 4 for ADC Conversion in Sequence A
+	ADC0->SEQ_CTRL[0] |= (1 << 5); 		//Select Channel Input 5 for ADC Conversion in Sequence A
 	ADC0->SEQ_CTRL[0] |= (3 << 12); 	//SCTIMER Output 4 Trigger SCT0_OUT4
 	ADC0->SEQ_CTRL[0] |= (1 << 18); 	//TRIGPOL positive Edge
 	ADC0->SEQ_CTRL[0] |= (1 << 19); 	//Bypass Trigger Synchronization
@@ -376,7 +383,8 @@ void ADC0_SEQA_IRQHandler(void)
 {
 	if(pixelCounter<129) //Save Pixel Values
 	{
-		pixelValues[pixelCounter] = ADC0->SEQ_GDAT[0] >> 8;	//Reading current pixel
+		pixelValues[pixelCounter] = ADC0->DAT[4] >> 8;	//Reading current pixel
+		pixelValues2[pixelCounter] = ADC0->DAT[5] >> 8;
 		pixelCounter++;										//Next ISR is next pixel
 	}
 
