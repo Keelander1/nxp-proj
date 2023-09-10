@@ -183,7 +183,7 @@ void menu_page_pixel_display_camera(uint8_t refresh)    {								// new Martin F
 
 
 		for(x=0;x<128;x++){
-			y = 64-(pixelValues2[x]/5);						//Scale Pixel Values to Display Size
+			y = 64-(pixelValues[x]/5);						//Scale Pixel Values to Display Size
 			ssd1309_set_pixel(&g_disp_0.disp_obj,x, y, ON);	//Print Pixel Values
 
 //			Print all found Edges

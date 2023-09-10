@@ -8846,29 +8846,29 @@ LOAD linker stubs
                               0x91720 (size before relaxing)
  .debug_str     0x00093e1d       0xd1 ./source/hmi/menu_main_screen.o
                               0x91587 (size before relaxing)
- .debug_str     0x00093eee      0x22c ./source/hmi/screen.o
-                              0x91998 (size before relaxing)
- .debug_str     0x0009411a      0x197 ./source/drive/drive.o
+ .debug_str     0x00093eee      0x22b ./source/hmi/screen.o
+                              0x91997 (size before relaxing)
+ .debug_str     0x00094119      0x197 ./source/drive/drive.o
                               0x91821 (size before relaxing)
- .debug_str     0x000942b1       0x61 ./source/display/menu/design/menu_list.o
+ .debug_str     0x000942b0       0x61 ./source/display/menu/design/menu_list.o
                                0x9341 (size before relaxing)
- .debug_str     0x00094312       0x7e ./source/display/menu/menu.o
+ .debug_str     0x00094311       0x7e ./source/display/menu/menu.o
                                0x494a (size before relaxing)
- .debug_str     0x00094390       0x32 ./source/display/menu/menu_rtos.o
+ .debug_str     0x0009438f       0x32 ./source/display/menu/menu_rtos.o
                                0x932d (size before relaxing)
- .debug_str     0x000943c2      0x99d ./source/display/interface/i2c_rtos_interface.o
+ .debug_str     0x000943c1      0x99d ./source/display/interface/i2c_rtos_interface.o
                               0x8fa7f (size before relaxing)
- .debug_str     0x00094d5f      0x12a ./source/display/driver/ssd1309.o
+ .debug_str     0x00094d5e      0x12a ./source/display/driver/ssd1309.o
                                0x4b19 (size before relaxing)
- .debug_str     0x00094e89       0x56 ./source/display/driver/ssd1309_rtos.o
+ .debug_str     0x00094e88       0x56 ./source/display/driver/ssd1309_rtos.o
                                0x956c (size before relaxing)
- .debug_str     0x00094edf       0xee ./source/display/adapter/disp_adapter.o
+ .debug_str     0x00094ede       0xee ./source/display/adapter/disp_adapter.o
                               0x913ae (size before relaxing)
- .debug_str     0x00094fcd       0x76 ./source/display/adapter/menu_adapter.o
+ .debug_str     0x00094fcc       0x76 ./source/display/adapter/menu_adapter.o
                               0x9109b (size before relaxing)
- .debug_str     0x00095043       0x39 ./source/display/display.o
+ .debug_str     0x00095042       0x39 ./source/display/display.o
                               0x91796 (size before relaxing)
- .debug_str     0x0009507c      0x5bf ./source/camera/camera.o
+ .debug_str     0x0009507b      0x5c0 ./source/camera/camera.o
                               0x90854 (size before relaxing)
  .debug_str     0x0009563b       0x75 ./source/board/board_func.o
                               0x8eada (size before relaxing)
@@ -10237,8 +10237,8 @@ pcTimerGetName                                    ./freertos/freertos_kernel/tim
 pixelCounter                                      ./source/camera/camera.o
 pixelCounter2                                     ./source/camera/camera.o
 pixelValues                                       ./source/camera/camera.o
-pixelValues2                                      ./source/camera/camera.o
                                                   ./source/hmi/screen.o
+pixelValues2                                      ./source/camera/camera.o
 portArch_Name                                     ./freertos/freertos_kernel/tasks.o
 pvPortMalloc                                      ./freertos/freertos_kernel/portable/MemMang/heap_4.o
                                                   ./freertos/freertos_kernel/timers.o
