@@ -56,6 +56,7 @@ const ctimer_config_t TakeShots_config = {
 
 volatile uint8_t pixelCounter = 129;	// PixelCounter for camera 1
 volatile uint8_t pixelValues[128] = {0};// PixelValue Array for camera 1
+volatile uint8_t pixelCounter2 = 129;	// PixelCounter for camera 2
 volatile uint8_t pixelValues2[128] = {0};// PixelValue Array for camera 2
 volatile uint8_t edges[128] = {0};
 volatile uint8_t edgesMiddle[128] = {0}; //all detected edge
@@ -71,6 +72,7 @@ volatile uint8_t edge_distance = 80;	//distance between track boarders (Schätzw
 
 
 volatile uint32_t exposure_time=10000000;
+volatile uint32_t exposure_time2=10000000;
 
 
 const int16_t VREFn = 0; 				//mV
@@ -85,6 +87,7 @@ void CAM_Init(void)
 	//*******************************
 	//Camera Initialization Functions
 	CTIMER0_Init(); 				//CTIMER0 Initialization
+	CTIMER4_Init();					//CTIMER2 Initialization
 	SCTimer_Clock_Config(); 		//SCTimer Clock Configuration
 	SCTimer_CamCLK_Init();			//Initialize PWM Signal for Camera Clock (3,63MHz)
 	SCTimer_SIEvents_Init();		//Initialize Start Signal for Camera (SI)
@@ -110,14 +113,36 @@ void CTIMER0_Init(void)
 	//***********************************
 	//ADC Interrupt configuration
 	//CTIMER0-> INTEN |= (1<<0);
-	NVIC_SetPriority(CTIMER0_IRQn, 0);		//Enable NVIC interrupt for sequence A.			??? Sequence A interrupt is defined lower is this the Timer interrupt?
-	EnableIRQ(CTIMER0_IRQn);				//Enable ADC Sequence A Interrupt				??? Sequence A interrupt is defined lower is this the Timer interrupt?
+	NVIC_SetPriority(CTIMER0_IRQn, 0);
+	EnableIRQ(CTIMER0_IRQn);
 	//Enabling NVIC will block DMA trigger!!!!
 	//***********************************
 
 	CTIMER_StartTimer(CTIMER0); //Start CTIMER0
 }
 
+/*******************************************************************************
+ * CTIMER1 Initialization function
+ ******************************************************************************/
+void CTIMER4_Init(void)
+{
+	/* CTIMER3 peripheral initialization */
+	CTIMER_Init(CTIMER4, &TakeShots_config);
+
+	CTIMER4-> MCR  = 0;						//Delete current Configuration
+	CTIMER4-> MCR |= (1<<0)|(1<<1)|(1<<24);	//Interrupt when MR0 = value in TC, Timer Counter reset and reload MR with MSR at Match0
+
+	CTIMER4->MSR[0] = exposure_time2;		//Initialize MSR0 with  220000 --> Timer overflow every 1ms  ((1/220MHZ)*220000)
+	//***********************************
+	//ADC Interrupt configuration
+	//CTIMER0-> INTEN |= (1<<0);
+	NVIC_SetPriority(CTIMER4_IRQn, 0);
+	EnableIRQ(CTIMER4_IRQn);
+	//Enabling NVIC will block DMA trigger!!!!
+	//***********************************
+
+	CTIMER_StartTimer(CTIMER4); //Start CTIMER0
+}
 
 /*******************************************************************************
  * SCTimer Clock Configuration
@@ -210,16 +235,21 @@ void SCTimer_SIEvents_Init(void)
 
 
 	//**************************************
-	//Event 2 for SI Set Event
+	//Event 2 for SI Set Event Camera1
 	SCT0->MATCHREL[2] = (24-1); 			//Match 2 @ 11/44MHz = 250ns							//Changed to 24 (545,45 ns)
 	SCT0->EV[2].STATE = 0; 					//Event 2 happens only in State 0
 	SCT0->EV[2].CTRL = (2 << 0)|(1 << 12); 	//Match 2 condition only
 	//Camera 1
 	SCT0->OUT[0].SET = (1 << 2); 			//Event 2 will set SCT0_OUT0
-	//Camera 2
-	SCT0->OUT[2].SET = (1 << 2); 			//Event 2 will set SCT0_OUT2
+
 	//**************************************
 
+	//Event 5 for SI Set Event Camera2
+	SCT0->MATCHREL[5]=(24-1);				//Match 5 @ 24/44MHz = 545,45 ns
+	SCT0->EV[5].STATE = 0;					//Event 5 happens only in State 0
+	SCT0->EV[5].CTRL = (5 << 0)|(1 << 12);	//Match 5 condition only
+	//Camera 2
+	SCT0->OUT[2].SET = (1 << 5); 			//Event 5 will set SCT0_OUT2
 
 	//**************************************
 	//Event 3 for SI reset Event
@@ -257,6 +287,31 @@ void CTIMER0_IRQHandler(uint32_t flags)
 	//**********************************
 
 	CTIMER_ClearStatusFlags(CTIMER0,kCTIMER_Match0Flag);
+}
+
+/*******************************************************************************
+ * Allow Start Signal for Camera (SI) to happen
+ *    Allows Event 2 to happen once every interrupt (Set and Clear SI)
+ ******************************************************************************/
+void CTIMER4_IRQHandler(uint32_t flags)
+{
+	pixelCounter2 = 0; //new picture start at pixel 0
+
+	//**********************************
+
+	SCT0->EV[5].STATE = 0xFFFFFFF; 		//Event 5 happens in all states
+	SCT0->CTRL &= ~(1 << 2); 			//Unhalt SCT0 by clearing bit 2 of CTRL
+
+	uint8_t i=0;						// Delay for Si-Signal
+	while(i<10){						// Delay for Si-Signal
+	i++;}								// Delay for Si-Signal
+	i=0;								// Delay for Si-Signal
+
+	SCT0->EV[5].STATE = 0; 				//Event 5 happens only in State 0
+	SCT0->CTRL &= ~(1 << 2); 			//Unhalt SCT0 by clearing bit 2 of CTRL
+	//**********************************
+
+	CTIMER_ClearStatusFlags(CTIMER4,kCTIMER_Match0Flag);
 }
 
 
@@ -381,11 +436,16 @@ void ADC_Config(void)
  ******************************************************************************/
 void ADC0_SEQA_IRQHandler(void)
 {
-	if(pixelCounter<129) //Save Pixel Values
+	if(pixelCounter<129) //Save Pixel Values Camera 1
 	{
-		pixelValues[pixelCounter] = ADC0->DAT[4] >> 8;	//Reading current pixel
-		pixelValues2[pixelCounter] = ADC0->DAT[5] >> 8;
+		pixelValues[pixelCounter] = ADC0->DAT[4] >> 8;		//Reading current pixel
 		pixelCounter++;										//Next ISR is next pixel
+	}
+
+	if(pixelCounter2<129)//Save Pixel Values Camera 2
+	{
+		pixelValues2[pixelCounter2] = ADC0->DAT[5] >> 8;	//Reading current pixel
+		pixelCounter2++;									//Next ISR is next pixel
 	}
 
 	ADC0->FLAGS = (1<<28);									//Delete interrupt flags
@@ -395,6 +455,7 @@ void ADC0_SEQA_IRQHandler(void)
 void Camera_Exposure_time_task(void *pvParameters)
 {
 	while(1){
+		//Camera 1
 		int32_t pixel_Values_sum = 0;
 
 		for(uint8_t x=0;x<128;x++){
@@ -403,6 +464,18 @@ void Camera_Exposure_time_task(void *pvParameters)
 		exposure_time = exposure_time + ((16384-pixel_Values_sum))*10;					// Gain = 10 (can become unstable !!!)
 																						// 16384 = 128 * ADC-Medium-Value (0 ... 256)
 		CTIMER0->MSR[0] = exposure_time;												// Exposure Time in s = exposure_time/220 MHz
+
+		//Camera 2
+		int32_t pixel_Values_sum2 = 0;
+
+		for(uint8_t x=0;x<128;x++){
+		pixel_Values_sum2 = pixel_Values_sum2 + pixelValues2[x];						// Sum of all 128 ADC-Camera-Values
+		}
+		exposure_time2 = exposure_time2 + ((16384-pixel_Values_sum2))*10;					// Gain = 10 (can become unstable !!!)
+																						// 16384 = 128 * ADC-Medium-Value (0 ... 256)
+		CTIMER4->MSR[0] = exposure_time2;												// Exposure Time in s = exposure_time2/220 MHz
+
+
 		Edge_Detection();
 		vTaskDelay(1);
 	}
