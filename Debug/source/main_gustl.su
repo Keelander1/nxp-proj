@@ -1,2 +1,6 @@
+<<<<<<< HEAD
 C:\Users\keela\OneDrive\Desktop\Studium\Master ET\Semester2NXP\nxp-proj\drivers/fsl_gpio.h:198:20:GPIO_PortClear	24	static
+=======
+D:\Studium\NXP-Cup\nxp-proj\nxp-proj\drivers/fsl_gpio.h:198:20:GPIO_PortClear	24	static
+>>>>>>> 802ad969ad474d377fb737460084b9cf8df979b7
 ../source/main_gustl.c:34:5:main	16	static

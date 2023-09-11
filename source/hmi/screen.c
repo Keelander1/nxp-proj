@@ -50,6 +50,7 @@
  */
 
 extern volatile uint8_t pixelValues[128];
+extern volatile uint8_t pixelValues2[128];
 extern volatile uint8_t edges[128];
 extern volatile uint8_t edgesMiddle[128];
 extern volatile uint8_t edge_right;

@@ -1,5 +1,10 @@
+<<<<<<< HEAD
 C:\Users\keela\OneDrive\Desktop\Studium\Master ET\Semester2NXP\nxp-proj\drivers/fsl_common.h:552:28:DisableGlobalIRQ	16	static
 C:\Users\keela\OneDrive\Desktop\Studium\Master ET\Semester2NXP\nxp-proj\drivers/fsl_common.h:583:24:EnableGlobalIRQ	24	static
+=======
+D:\Studium\NXP-Cup\nxp-proj\nxp-proj\drivers/fsl_common.h:552:28:DisableGlobalIRQ	16	static
+D:\Studium\NXP-Cup\nxp-proj\nxp-proj\drivers/fsl_common.h:583:24:EnableGlobalIRQ	24	static
+>>>>>>> 802ad969ad474d377fb737460084b9cf8df979b7
 ../component/lists/generic_list.c:16:22:LIST_Error_Check	24	static
 ../component/lists/generic_list.c:62:6:LIST_Init	16	static
 ../component/lists/generic_list.c:85:15:LIST_GetList	16	static
