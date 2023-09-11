@@ -523,7 +523,8 @@ void Edge_Detection(void)
 		detection_mode = trace;
 		edge_center = (edge_right + edge_left)/2;
 	}
-
+	//Umrechnung von Pixel in mm
+	edge_center = (int)(edge_center - 63) * 4.7;
 
 	if((right_edge_count == 5) && (left_edge_count == 5)){
 		track_state = four_stribes;

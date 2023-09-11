@@ -40,7 +40,8 @@
 
 
 #include "drive.h"
-
+//#include <stdio.h>
+#include <math.h>
 /*******************************************************************************
  * Parameters
 
@@ -61,6 +62,18 @@ extern volatile uint8_t edge_right_found;
 const uint16_t track_width = 520; //Width of the track in mm
 const uint16_t axle_distance = 176; //Distance between Axles in mm
 const uint16_t camera_distance = 380; //Distance between Camera View and Car Center in mm
+
+
+
+//Varaibeln für Regler
+double gamma = 0;					//Lenkwinkel
+int16_t Y_ist = 0;					//Ausgang Regelschleife in mm
+int16_t Y_soll = 0;					//Eingang Regelschleife in mm
+int16_t Y_diff = 0;					//Differenz Soll-Ist Regler in mm
+int16_t D = 180;					//Achsabstand des Autos --> muss noch nachgemessen werden
+int16_t u = 0;						// Stellgröße in mm vor Umrechnung in °
+int16_t P_Regler = 1;				//P-Regelverstärkung
+int16_t X = 230;					//Sichtweite Kamera in mm
 
 
 
@@ -93,7 +106,7 @@ void BLDC_Init(void)
 	IOCON->PIO[3][10]	&= 0xFFFFFFF0;      				//Clear FUNC bits of P3.10
 	IOCON->PIO[3][10]	|= 0x3;						//Set FUNC bits to CTIMER3_MAT0 function ALT3 P3.10
 	GPIO->DIR[3]        |= 1<<10;        					//Set P3.10 to output
-	CTIMER3->MSR[0] = CTIMER3_PWM_PERIOD - BLDC_PWM_INIT_LOW_VALUE;		//Initialize MSR with BLDC_PWM_INIT_LOW_VALUE value
+	CTIMER3->MSR[0] = CTIMER3_PWM_PERIOD - BLDC_PWM_INIT_LOW_VALUE;		//Initialize MSR with BLDC_PWM_INIT_LOW_VALUE value (Left)
 	//*************************************************************
 
 	//*************************************************************
@@ -102,13 +115,13 @@ void BLDC_Init(void)
 	IOCON->PIO[0][27]	&= 0xFFFFFFF0;      				//Clear FUNC bits of P0.27
 	IOCON->PIO[0][27]	|= 0x3;						//Set FUNC bits to CTIMER3_MAT2 function ALT3 P0.27
 	GPIO->DIR[0]        |= 1<<27;        					//Set P0.27 to output
-	CTIMER3->MSR[2] = CTIMER3_PWM_PERIOD - BLDC_PWM_INIT_LOW_VALUE;		//Initialize MSR with BLDC_PWM_INIT_LOW_VALUE value
+	CTIMER3->MSR[2] = CTIMER3_PWM_PERIOD - BLDC_PWM_INIT_LOW_VALUE;		//Initialize MSR with BLDC_PWM_INIT_LOW_VALUE value (Right)
 	//*************************************************************
 
 	//*******************************************************************************************************
 	//Create ESC initialization task
-	if (xTaskCreate(ESC_Init_Task, "ESC_Init_Task", configMINIMAL_STACK_SIZE + 100, NULL, 1, NULL) != pdPASS)
-	{ LED3_ON(); } //LED3 is Error
+	//if (xTaskCreate(ESC_Init_Task, "ESC_Init_Task", configMINIMAL_STACK_SIZE + 100, NULL, 1, NULL) != pdPASS)
+	//{ LED3_ON(); } //LED3 is Error
 	//*******************************************************************************************************
 }
 
@@ -175,7 +188,7 @@ void Camera_Test_Drive (uint8_t state)
 	menu_page_pixel_display_camera(1);
 	int16_t testValueSpeed;							//calculated test value for min to max speed in µs
 	int16_t Stearing_Value;
-	int16_t x = camera_distance;
+	//int16_t x = camera_distance;
 	int16_t y = edge_center - 63;
 	int16_t servo_Value = 0; //between -100 and 100
 	if(state==MENU_DEACT)
@@ -216,5 +229,105 @@ void Camera_Test_Drive (uint8_t state)
 	}
 	//set test value to timer register
 	CTIMER1->MSR[2] = CTIMER1_PWM_PERIOD - Stearing_Value * CTIMER1_PWM_PERIOD / 20000;
+
+}
+
+void Real_Drive (uint8_t state)
+{
+	menu_page_pixel_display_camera(1);
+	int16_t servo_Value = 0; //between -100 and 100
+	int16_t Stearing_Value = 0;
+	int16_t Speed_Left_normiert = 0;		// Speed Value Left normiert auf 0 bis 100
+	int16_t Speed_Right_normiert = 0;		// Speed Value Right normiert auf 0 bis 100
+	int16_t Speed = 0;
+	int16_t Max_Speed = 30;
+	int16_t Min_Speed = 10;
+	int16_t SpeedValueLeft = 0;
+	int16_t SpeedValueRight = 0;
+	int16_t Spurweite = 135;				// muss noch Richtig abgemessen werden
+	// Lenkregler
+
+	//Bestimmung Regelfehler
+	Y_ist = edge_center;
+	Y_soll = 0;
+	Y_diff = edge_center - Y_soll;
+	printf("Y_diff: %d \n edge_center: %d", Y_diff, edge_center);
+	// Krümmung in Variable k
+	//k = (2*Y) / (X^2 + Y_diff^2);
+
+	// Stellgröße u = Regelfehler * Regler --> vorerst P mit Verstärkung 1
+
+	u = Y_diff * P_Regler;
+
+
+	// Umrechnung von Stellgröße u in mm auf Lenkwinkel in Grad
+
+	gamma = atan((2.0*D*u) / (X*X + u*u));
+	gamma = gamma * 180 / 3.14;				//Umrechnung Lenkwinkel in Grad
+
+
+	//Begrenzung Lenkwinkel auf +- 60°
+	if (gamma <= -60)
+	{
+		gamma = -60;
+	}
+	else if (gamma >= 60)
+	{
+		gamma = 60;
+	}
+
+	//Skalierung auf +- 100 --> 60 ° entspricht +100
+	gamma = gamma * 10 / 6;
+	servo_Value = (int16_t)gamma;
+
+	if (servo_Value >= 100) servo_Value = 100;
+	if (servo_Value <= -100) servo_Value = -100;
+
+	if(servo_Value <=0)
+	{
+		//calculate test value for left steering
+		Stearing_Value= *servoMiddle+ servo_Value*(*servoMiddle-*servoLeft)/100;
+	}
+	else
+	{
+		//calculate test value for right steering
+		Stearing_Value= *servoMiddle + servo_Value*(*servoRight-*servoMiddle)/100;
+	}
+
+	//Schreiben des Umgerechneten PWM Werts ins Register für die Lenkwinkelsteuerung
+	CTIMER1->MSR[2] = CTIMER1_PWM_PERIOD - Stearing_Value * CTIMER1_PWM_PERIOD / 20000;
+
+	//*********************Beginn Antreibssteuerung
+
+
+
+	Speed = abs(servo_Value);
+	Speed = 100 - Speed;			// da Max Geschwindigkeit, bei Geradeausfahrt
+
+	Speed = Speed * Max_Speed / 100;			// So wird die Maximale Geschwindigkeit erstmal auf 30% beschränkt--> ziel ist natürlich 100%
+	if (Speed <= 10)
+	{
+		Speed = Min_Speed;
+	}
+
+
+	// In Var. Speed soll die Mittleregeschwindigkeit beschrieben werden.
+	// Da jedoch in Kurvenfahrten die Geschwindigkeit des inneren und es äußeren Rades abweichen, werden
+	// im Folgenden für die Motren Rechts und Links die Geschwindkeit angepasst
+
+
+	Speed_Left_normiert  = 0;//Speed;// * (1 + ((Spurweite * Y_diff) / (X*X + Y_diff*Y_diff)));
+	Speed_Right_normiert = 0;//Speed;// * (1 - ((Spurweite * Y_diff) / (X*X + Y_diff*Y_diff)));
+
+
+	//calculate test value for selected speed
+	SpeedValueLeft= *BLDCLeftMinValue + Speed_Left_normiert*(*BLDCLeftMaxValue-*BLDCLeftMinValue)/100;// Fester Wert definiert--> evtl. noch dynamisch machen!!!
+	SpeedValueRight= *BLDCRightMinValue + Speed_Right_normiert*(*BLDCRightMaxValue-*BLDCRightMinValue)/100;// Fester Wert definiert--> evtl. noch dynamisch machen!!!
+
+	//Berechnung Wert des Registers für Rechten und Linken Motor
+	CTIMER3->MSR[0] = CTIMER3_PWM_PERIOD - SpeedValueLeft * CTIMER3_PWM_PERIOD / 20000;	// (Left)
+	CTIMER3->MSR[2] = CTIMER3_PWM_PERIOD - SpeedValueRight * CTIMER3_PWM_PERIOD / 20000; //(Right)
+
+
 
 }

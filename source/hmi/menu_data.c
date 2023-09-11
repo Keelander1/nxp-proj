@@ -143,7 +143,7 @@ const static menu_entry_t menu_main_drive_entries[] = {
 		},
 		{		.str = "Test_Drive",							// new Simonis Leon 16.06.23
 				.type = MENU_PAGE,
-				.func = Camera_Test_Drive,
+				.func = Real_Drive,
 				.en = true,
 		},
 
