@@ -54,10 +54,12 @@ const ctimer_config_t TakeShots_config = {
 };
 
 
-volatile uint8_t pixelCounter = 129;	// PixelCounter for camera 1
-volatile uint8_t pixelValues[128] = {0};// PixelValue Array for camera 1
-volatile uint8_t pixelCounter2 = 129;	// PixelCounter for camera 2
-volatile uint8_t pixelValues2[128] = {0};// PixelValue Array for camera 2
+volatile uint8_t pixelCounter = 129;			// PixelCounter for camera 1
+volatile uint8_t pixelValues[128] = {0};		// PixelValue Array for camera 1
+volatile int8_t calibrationCamera[128] = {0}; 	// Calibration Array for camera 1
+volatile uint8_t pixelCounter2 = 129;			// PixelCounter for camera 2
+volatile uint8_t pixelValues2[128] = {0};		// PixelValue Array for camera 2
+volatile int8_t calibrationCamera2[128] = {0};  // Calibration Array for camera 2
 volatile uint8_t edges[128] = {0};
 volatile uint8_t edgesMiddle[128] = {0}; //all detected edge
 volatile uint8_t edge_left_found = 0;	//1 if found
@@ -87,7 +89,7 @@ void CAM_Init(void)
 	//*******************************
 	//Camera Initialization Functions
 	CTIMER0_Init(); 				//CTIMER0 Initialization
-	CTIMER4_Init();					//CTIMER2 Initialization
+	CTIMER4_Init();					//CTIMER4 Initialization
 	SCTimer_Clock_Config(); 		//SCTimer Clock Configuration
 	SCTimer_CamCLK_Init();			//Initialize PWM Signal for Camera Clock (3,63MHz)
 	SCTimer_SIEvents_Init();		//Initialize Start Signal for Camera (SI)
@@ -141,7 +143,7 @@ void CTIMER4_Init(void)
 	//Enabling NVIC will block DMA trigger!!!!
 	//***********************************
 
-	CTIMER_StartTimer(CTIMER4); //Start CTIMER0
+	CTIMER_StartTimer(CTIMER4); //Start CTIMER4
 }
 
 /*******************************************************************************
@@ -191,7 +193,7 @@ void SCTimer_CamCLK_Init(void)
 	//Set PWM at PIO3_27 to 3,676MHz (Cam_CLK_frequency max=8MHz) // old numbers (review later)
 	//***************************************************
 	//Event 0 for Counter Limit
-	SCT0->MATCHREL[0] = (26-1); 				//Match 0 @ 12/44MHz = 272,72ns Limit Counter		//Changed to 26 (590,90 ns)
+	SCT0->MATCHREL[0] = (32-1); 				//Match 0 @ 12/44MHz = 272,72ns Limit Counter		//Changed to 26 (590,90 ns)
 	SCT0->EV[0].STATE = 0xFFFFFFFF; 			//Event 0 happens in all states
 	SCT0->EV[0].CTRL = (1 << 12); 				//Match 0 condition only
 
@@ -202,7 +204,7 @@ void SCTimer_CamCLK_Init(void)
 
 
 	//Event 1 for PWM Duty Cycle
-	SCT0->MATCHREL[1] = (13-1); 				//Match 1 @ 6/44MHz = 136,36ns						//Changed to 13 (295,45 ns)
+	SCT0->MATCHREL[1] = (16-1); 				//Match 1 @ 6/44MHz = 136,36ns						//Changed to 13 (295,45 ns)
 	SCT0->EV[1].STATE = 0xFFFFFFFF; 			//Event 1 happens in all states
 	SCT0->EV[1].CTRL = (1 << 0) | (1 << 12); 	//Match 1 condition only
 
@@ -278,7 +280,7 @@ void CTIMER0_IRQHandler(uint32_t flags)
 	SCT0->CTRL &= ~(1 << 2); 			//Unhalt SCT0 by clearing bit 2 of CTRL
 
 	uint8_t i=0;						// Delay for Si-Signal
-	while(i<10){						// Delay for Si-Signal
+	while(i<11){						// Delay for Si-Signal
 	i++;}								// Delay for Si-Signal
 	i=0;								// Delay for Si-Signal
 
@@ -303,7 +305,7 @@ void CTIMER4_IRQHandler(uint32_t flags)
 	SCT0->CTRL &= ~(1 << 2); 			//Unhalt SCT0 by clearing bit 2 of CTRL
 
 	uint8_t i=0;						// Delay for Si-Signal
-	while(i<10){						// Delay for Si-Signal
+	while(i<11){						// Delay for Si-Signal
 	i++;}								// Delay for Si-Signal
 	i=0;								// Delay for Si-Signal
 
@@ -436,15 +438,15 @@ void ADC_Config(void)
  ******************************************************************************/
 void ADC0_SEQA_IRQHandler(void)
 {
-	if(pixelCounter<129) //Save Pixel Values Camera 1
+	if(pixelCounter<128) //Save Pixel Values Camera 1
 	{
-		pixelValues[pixelCounter] = ADC0->DAT[4] >> 8;		//Reading current pixel
+		pixelValues[pixelCounter] = (ADC0->DAT[4] >> 8) + calibrationCamera[pixelCounter];		//Reading current pixel and Adding Calibration Array for Camera 1
 		pixelCounter++;										//Next ISR is next pixel
 	}
 
-	if(pixelCounter2<129)//Save Pixel Values Camera 2
+	if(pixelCounter2<128)//Save Pixel Values Camera 2
 	{
-		pixelValues2[pixelCounter2] = ADC0->DAT[5] >> 8;	//Reading current pixel
+		pixelValues2[pixelCounter2] = (ADC0->DAT[5] >> 8) + calibrationCamera2[pixelCounter2];	//Reading current pixel and Adding Calibration Array for Camera 2
 		pixelCounter2++;									//Next ISR is next pixel
 	}
 

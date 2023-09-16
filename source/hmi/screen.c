@@ -50,7 +50,9 @@
  */
 
 extern volatile uint8_t pixelValues[128];
+extern volatile int8_t calibrationCamera[128];
 extern volatile uint8_t pixelValues2[128];
+extern volatile int8_t calibrationCamera2[128];
 extern volatile uint8_t edges[128];
 extern volatile uint8_t edgesMiddle[128];
 extern volatile uint8_t edge_right;
@@ -59,6 +61,7 @@ extern volatile uint8_t edge_center;
 extern volatile uint8_t edge_right_found;
 extern volatile uint8_t edge_left_found;
 extern volatile uint8_t track_state;
+
 //volatile uint32_t edge_throttle;
 
 
@@ -241,6 +244,22 @@ void menu_page_pixel_display_camera(uint8_t refresh)    {								// new Martin F
 //
 //		}
 	}
+void menu_page_calibration_camera(uint8_t refresh)    {
+	uint8_t x=0;
+	uint8_t y=0;
+	for(x=0; x<128; x++){
+		calibrationCamera[x] = calibrationCamera[x] + (128 - pixelValues[x]); //Calibrating Camera
+	}
+
+	ssd1309_rtos_lock(&g_disp_0);
+	ssd1309_draw_rect(&g_disp_0.disp_obj, 0, 13, 127, 63, true, OFF);
+
+	for(x=0;x<128;x++){
+		y = 64-(pixelValues[x]/5);								//Scale Pixel Values to Display Size
+		ssd1309_set_pixel(&g_disp_0.disp_obj,x, y, ON);			//Print Pixel Values
+	}
+	ssd1309_rtos_unlock(&g_disp_0);
+}
 
 void menu_page_pixel_display_camera2(uint8_t refresh)    {								// new Martin Fürstberger 27.05.23
 		uint8_t x=0;
@@ -315,6 +334,23 @@ void menu_page_pixel_display_camera2(uint8_t refresh)    {								// new Martin 
 //
 //		}
 	}
+
+void menu_page_calibration_camera2(uint8_t refresh)    {
+	uint8_t x=0;
+	uint8_t y=0;
+	for(x=0; x<128; x++){
+		calibrationCamera2[x] = calibrationCamera2[x] + (128 - pixelValues2[x]); //Calibrating Camera
+	}
+
+	ssd1309_rtos_lock(&g_disp_0);
+	ssd1309_draw_rect(&g_disp_0.disp_obj, 0, 13, 127, 63, true, OFF);
+
+	for(x=0;x<128;x++){
+		y = 64-(pixelValues2[x]/5);								//Scale Pixel Values to Display Size
+		ssd1309_set_pixel(&g_disp_0.disp_obj,x, y, ON);			//Print Pixel Values
+	}
+	ssd1309_rtos_unlock(&g_disp_0);
+}
 
 /*
 void menu_page_camera_info(uint8_t refresh) {

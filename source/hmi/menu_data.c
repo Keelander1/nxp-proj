@@ -213,11 +213,24 @@ const static menu_entry_t menu_hardware_camera_entries[] = {
 				.en = true,
 		},
 
+		{		.str = "Calibration Cam",					// new Martin Fürstberger 16.09.23
+				.type = MENU_PAGE,
+				.func = menu_page_calibration_camera,
+				.en = true,
+		},
+
+
 		{		.str = "Pixel_Display2",						// new Martin Fürstberger 15.09.23
 				.type = MENU_PAGE,
 				.func = menu_page_pixel_display_camera2,
 				.en = true,
-				},
+		},
+
+		{		.str = "Calibration Cam2",					// new Martin Fürstberger 16.09.23
+				.type = MENU_PAGE,
+				.func = menu_page_calibration_camera2,
+				.en = true,
+		},
 
 
 		{
@@ -605,7 +618,7 @@ menu_rtos_handle_t menu_main_hardware_handle = {
  ***************************************************/
 menu_rtos_handle_t menu_hardware_camera_handle = {
 		.drv_handle = {
-				.entry_cnt = 5,                                             //4 entries
+				.entry_cnt = 7,                                             //4 entries
 				.entry_list = (menu_entry_t*)menu_hardware_camera_entries,  //list of all entries
 				.draw = menu_list_draw,                                     //emtry draw function
 		},
