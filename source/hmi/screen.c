@@ -250,15 +250,8 @@ void menu_page_calibration_camera(uint8_t refresh)    {
 	for(x=0; x<128; x++){
 		calibrationCamera[x] = calibrationCamera[x] + (128 - pixelValues[x]); //Calibrating Camera
 	}
-
-	ssd1309_rtos_lock(&g_disp_0);
-	ssd1309_draw_rect(&g_disp_0.disp_obj, 0, 13, 127, 63, true, OFF);
-
-	for(x=0;x<128;x++){
-		y = 64-(pixelValues[x]/5);								//Scale Pixel Values to Display Size
-		ssd1309_set_pixel(&g_disp_0.disp_obj,x, y, ON);			//Print Pixel Values
-	}
-	ssd1309_rtos_unlock(&g_disp_0);
+	menu_rtos_switch_handle(&curr_menu_handle, &menu_main_hardware_handle);
+	menu_reset(&curr_menu_handle->drv_handle);
 }
 
 void menu_page_pixel_display_camera2(uint8_t refresh)    {								// new Martin Fürstberger 27.05.23
@@ -341,15 +334,8 @@ void menu_page_calibration_camera2(uint8_t refresh)    {
 	for(x=0; x<128; x++){
 		calibrationCamera2[x] = calibrationCamera2[x] + (128 - pixelValues2[x]); //Calibrating Camera
 	}
-
-	ssd1309_rtos_lock(&g_disp_0);
-	ssd1309_draw_rect(&g_disp_0.disp_obj, 0, 13, 127, 63, true, OFF);
-
-	for(x=0;x<128;x++){
-		y = 64-(pixelValues2[x]/5);								//Scale Pixel Values to Display Size
-		ssd1309_set_pixel(&g_disp_0.disp_obj,x, y, ON);			//Print Pixel Values
-	}
-	ssd1309_rtos_unlock(&g_disp_0);
+	menu_rtos_switch_handle(&curr_menu_handle, &menu_main_hardware_handle);
+	menu_reset(&curr_menu_handle->drv_handle);
 }
 
 /*
