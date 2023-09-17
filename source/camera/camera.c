@@ -165,6 +165,7 @@ void SCTimer_Clock_Config(void)
 	SCT0->CONFIG |= 0xE<<3;			//CKSEL Input 7 Rising Edges
 	SCT0->CONFIG |= 1<<17; 			//Auto limit (& two 16-bit timers)
 	//*****************************
+
 }
 
 
@@ -174,6 +175,7 @@ void SCTimer_Clock_Config(void)
 void SCTimer_CamCLK_Init(void)
 {
 	//**********************************
+	EnableIRQ(SCT0_IRQn);				// Enable Interrupt for SC-Timer Events							//17.09.23 Martin Fürstberger
 	//Camera 1
 	//Configure Pin P[3][27] (J13 Pin13) (CAM_CLK/SCT0_OUT1)
 	IOCON->PIO[3][27] &= 0xFFFFFFF0; 	//Clear FUNC bits of P3.27
@@ -244,6 +246,7 @@ void SCTimer_SIEvents_Init(void)
 	//Camera 1
 	SCT0->OUT[0].SET = (1 << 2); 			//Event 2 will set SCT0_OUT0
 
+	SCT0->EVEN |= (1 << 2);					//Event 2 will interrupt								17.09.23 Martin Fürstberger
 	//**************************************
 
 	//Event 5 for SI Set Event Camera2
@@ -253,6 +256,7 @@ void SCTimer_SIEvents_Init(void)
 	//Camera 2
 	SCT0->OUT[2].SET = (1 << 5); 			//Event 5 will set SCT0_OUT2
 
+	SCT0->EVEN |= (1 << 5);					//Event 5 will interrupt								17.09.23 Martin Fürstberger
 	//**************************************
 	//Event 3 for SI reset Event
 	SCT0->MATCHREL[3] = (2-1); 				//Match 3 @ 1/44MHz = 22,727ns							//Changed to 2 (45,454ns)
@@ -272,7 +276,7 @@ void SCTimer_SIEvents_Init(void)
  ******************************************************************************/
 void CTIMER0_IRQHandler(uint32_t flags)
 {
-	pixelCounter = 0; //new picture start at pixel 0
+	//pixelCounter = 0; //new picture start at pixel 0
 
 	//**********************************
 
@@ -297,7 +301,7 @@ void CTIMER0_IRQHandler(uint32_t flags)
  ******************************************************************************/
 void CTIMER4_IRQHandler(uint32_t flags)
 {
-	pixelCounter2 = 0; //new picture start at pixel 0
+	//pixelCounter2 = 0; //new picture start at pixel 0
 
 	//**********************************
 
@@ -451,6 +455,17 @@ void ADC0_SEQA_IRQHandler(void)
 	}
 
 	ADC0->FLAGS = (1<<28);									//Delete interrupt flags
+	SDK_ISR_EXIT_BARRIER;
+}
+void SCT0_IRQHandler(void)
+{
+	if((SCT0->EVFLAG & (1 << 2)) != 0){			//Wenn Bit 2 (Event 2) 1 ist
+		pixelCounter=0;							//new picture start at pixel 0
+	}
+	if((SCT0->EVFLAG & (1 << 5)) != 0){			//Wenn Bit 5 (Event 5) 1 ist
+		pixelCounter2=0;						//new picture start at pixel 0
+	}
+	SCT0->EVFLAG |= (1 << 2) | (1 << 5);		//Reset InterruptFlags
 	SDK_ISR_EXIT_BARRIER;
 }
 
