@@ -56,9 +56,11 @@ const ctimer_config_t TakeShots_config = {
 
 volatile uint8_t pixelCounter = 129;			// PixelCounter for camera 1
 volatile uint8_t pixelValues[128] = {0};		// PixelValue Array for camera 1
+volatile uint8_t pixelValuesUC[128] = {0};		// Uncalibrated PixelValue Array for camera 1
 volatile int8_t calibrationCamera[128] = {0}; 	// Calibration Array for camera 1
 volatile uint8_t pixelCounter2 = 129;			// PixelCounter for camera 2
 volatile uint8_t pixelValues2[128] = {0};		// PixelValue Array for camera 2
+volatile uint8_t pixelValues2UC[128] = {0};		// Uncalibrated PixelValue Array for camera 2
 volatile int8_t calibrationCamera2[128] = {0};  // Calibration Array for camera 2
 volatile uint8_t edges[128] = {0};
 volatile uint8_t edgesMiddle[128] = {0}; //all detected edge
@@ -283,13 +285,13 @@ void CTIMER0_IRQHandler(uint32_t flags)
 	SCT0->EV[2].STATE = 0xFFFFFFF; 		//Event 2 happens in all states
 	SCT0->CTRL &= ~(1 << 2); 			//Unhalt SCT0 by clearing bit 2 of CTRL
 
-	uint8_t i=0;						// Delay for Si-Signal
-	while(i<11){						// Delay for Si-Signal
-	i++;}								// Delay for Si-Signal
-	i=0;								// Delay for Si-Signal
+//	uint8_t i=0;						// Delay for Si-Signal
+//	while(i<11){						// Delay for Si-Signal
+//	i++;}								// Delay for Si-Signal
+//	i=0;								// Delay for Si-Signal
 
-	SCT0->EV[2].STATE = 0; 				//Event 2 happens only in State 0
-	SCT0->CTRL &= ~(1 << 2); 			//Unhalt SCT0 by clearing bit 2 of CTRL
+//	SCT0->EV[2].STATE = 0; 				//Event 2 happens only in State 0
+//	SCT0->CTRL &= ~(1 << 2); 			//Unhalt SCT0 by clearing bit 2 of CTRL
 	//**********************************
 
 	CTIMER_ClearStatusFlags(CTIMER0,kCTIMER_Match0Flag);
@@ -308,13 +310,13 @@ void CTIMER4_IRQHandler(uint32_t flags)
 	SCT0->EV[5].STATE = 0xFFFFFFF; 		//Event 5 happens in all states
 	SCT0->CTRL &= ~(1 << 2); 			//Unhalt SCT0 by clearing bit 2 of CTRL
 
-	uint8_t i=0;						// Delay for Si-Signal
-	while(i<11){						// Delay for Si-Signal
-	i++;}								// Delay for Si-Signal
-	i=0;								// Delay for Si-Signal
+//	uint8_t i=0;						// Delay for Si-Signal
+//	while(i<11){						// Delay for Si-Signal
+//	i++;}								// Delay for Si-Signal
+//	i=0;								// Delay for Si-Signal
 
-	SCT0->EV[5].STATE = 0; 				//Event 5 happens only in State 0
-	SCT0->CTRL &= ~(1 << 2); 			//Unhalt SCT0 by clearing bit 2 of CTRL
+//	SCT0->EV[5].STATE = 0; 				//Event 5 happens only in State 0
+//	SCT0->CTRL &= ~(1 << 2); 			//Unhalt SCT0 by clearing bit 2 of CTRL
 	//**********************************
 
 	CTIMER_ClearStatusFlags(CTIMER4,kCTIMER_Match0Flag);
@@ -444,13 +446,13 @@ void ADC0_SEQA_IRQHandler(void)
 {
 	if(pixelCounter<128) //Save Pixel Values Camera 1
 	{
-		pixelValues[pixelCounter] = (ADC0->DAT[4] >> 8) + calibrationCamera[pixelCounter];		//Reading current pixel and Adding Calibration Array for Camera 1
+		pixelValuesUC[pixelCounter] = (ADC0->DAT[4] >> 8)/* + calibrationCamera[pixelCounter]*/;		//Reading current pixel and Adding Calibration Array for Camera 1
 		pixelCounter++;										//Next ISR is next pixel
 	}
 
 	if(pixelCounter2<128)//Save Pixel Values Camera 2
 	{
-		pixelValues2[pixelCounter2] = (ADC0->DAT[5] >> 8) + calibrationCamera2[pixelCounter2];	//Reading current pixel and Adding Calibration Array for Camera 2
+		pixelValues2UC[pixelCounter2] = (ADC0->DAT[5] >> 8)/* + calibrationCamera2[pixelCounter2]*/;	//Reading current pixel and Adding Calibration Array for Camera 2
 		pixelCounter2++;									//Next ISR is next pixel
 	}
 
@@ -461,9 +463,14 @@ void SCT0_IRQHandler(void)
 {
 	if((SCT0->EVFLAG & (1 << 2)) != 0){			//Wenn Bit 2 (Event 2) 1 ist
 		pixelCounter=0;							//new picture start at pixel 0
+		SCT0->EV[2].STATE = 0; 				//Event 2 happens only in State 0
+		SCT0->CTRL &= ~(1 << 2); 			//Unhalt SCT0 by clearing bit 2 of CTRL
+
 	}
 	if((SCT0->EVFLAG & (1 << 5)) != 0){			//Wenn Bit 5 (Event 5) 1 ist
 		pixelCounter2=0;						//new picture start at pixel 0
+		SCT0->EV[5].STATE = 0; 					//Event 5 happens only in State 0
+		SCT0->CTRL &= ~(1 << 2); 				//Unhalt SCT0 by clearing bit 2 of CTRL
 	}
 	SCT0->EVFLAG |= (1 << 2) | (1 << 5);		//Reset InterruptFlags
 	SDK_ISR_EXIT_BARRIER;
@@ -477,6 +484,7 @@ void Camera_Exposure_time_task(void *pvParameters)
 
 		for(uint8_t x=0;x<128;x++){
 			pixel_Values_sum = pixel_Values_sum + pixelValues[x];						// Sum of all 128 ADC-Camera-Values
+			pixelValues[x]=pixelValuesUC[x]+calibrationCamera[x];						// Calibration Camera 1
 		}
 		exposure_time = exposure_time + ((16384-pixel_Values_sum))*10;					// Gain = 10 (can become unstable !!!)
 																						// 16384 = 128 * ADC-Medium-Value (0 ... 256)
@@ -487,6 +495,7 @@ void Camera_Exposure_time_task(void *pvParameters)
 
 		for(uint8_t x=0;x<128;x++){
 		pixel_Values_sum2 = pixel_Values_sum2 + pixelValues2[x];						// Sum of all 128 ADC-Camera-Values
+		pixelValues2[x]=pixelValues2UC[x]+calibrationCamera2[x];							// Calibration Camera 2
 		}
 		exposure_time2 = exposure_time2 + ((16384-pixel_Values_sum2))*10;					// Gain = 10 (can become unstable !!!)
 																						// 16384 = 128 * ADC-Medium-Value (0 ... 256)
