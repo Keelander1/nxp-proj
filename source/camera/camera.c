@@ -117,7 +117,7 @@ void CTIMER0_Init(void)
 	//***********************************
 	//ADC Interrupt configuration
 	//CTIMER0-> INTEN |= (1<<0);
-	NVIC_SetPriority(CTIMER0_IRQn, 0);
+	//NVIC_SetPriority(CTIMER0_IRQn, 0);
 	EnableIRQ(CTIMER0_IRQn);
 	//Enabling NVIC will block DMA trigger!!!!
 	//***********************************
@@ -140,7 +140,7 @@ void CTIMER4_Init(void)
 	//***********************************
 	//ADC Interrupt configuration
 	//CTIMER0-> INTEN |= (1<<0);
-	NVIC_SetPriority(CTIMER4_IRQn, 0);
+	//NVIC_SetPriority(CTIMER4_IRQn, 0);
 	EnableIRQ(CTIMER4_IRQn);
 	//Enabling NVIC will block DMA trigger!!!!
 	//***********************************
@@ -177,6 +177,7 @@ void SCTimer_Clock_Config(void)
 void SCTimer_CamCLK_Init(void)
 {
 	//**********************************
+	//NVIC_SetPriority(SCT0_IRQn, 0);
 	EnableIRQ(SCT0_IRQn);				// Enable Interrupt for SC-Timer Events							//17.09.23 Martin Fürstberger
 	//Camera 1
 	//Configure Pin P[3][27] (J13 Pin13) (CAM_CLK/SCT0_OUT1)
@@ -197,7 +198,7 @@ void SCTimer_CamCLK_Init(void)
 	//Set PWM at PIO3_27 to 3,676MHz (Cam_CLK_frequency max=8MHz) // old numbers (review later)
 	//***************************************************
 	//Event 0 for Counter Limit
-	SCT0->MATCHREL[0] = (32-1); 				//Match 0 @ 12/44MHz = 272,72ns Limit Counter		//Changed to 26 (590,90 ns)
+	SCT0->MATCHREL[0] = (26-1); 				//Match 0 @ 12/44MHz = 272,72ns Limit Counter		//Changed to 26 (590,90 ns)
 	SCT0->EV[0].STATE = 0xFFFFFFFF; 			//Event 0 happens in all states
 	SCT0->EV[0].CTRL = (1 << 12); 				//Match 0 condition only
 
@@ -208,7 +209,7 @@ void SCTimer_CamCLK_Init(void)
 
 
 	//Event 1 for PWM Duty Cycle
-	SCT0->MATCHREL[1] = (16-1); 				//Match 1 @ 6/44MHz = 136,36ns						//Changed to 13 (295,45 ns)
+	SCT0->MATCHREL[1] = (13-1); 				//Match 1 @ 6/44MHz = 136,36ns						//Changed to 13 (295,45 ns)
 	SCT0->EV[1].STATE = 0xFFFFFFFF; 			//Event 1 happens in all states
 	SCT0->EV[1].CTRL = (1 << 0) | (1 << 12); 	//Match 1 condition only
 
