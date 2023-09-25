@@ -54,10 +54,14 @@ const ctimer_config_t TakeShots_config = {
 };
 
 
-volatile uint8_t pixelCounter = 129;	// PixelCounter for camera 1
-volatile uint8_t pixelValues[128] = {0};// PixelValue Array for camera 1
-volatile uint8_t pixelCounter2 = 129;	// PixelCounter for camera 2
-volatile uint8_t pixelValues2[128] = {0};// PixelValue Array for camera 2
+volatile uint8_t pixelCounter = 129;			// PixelCounter for camera 1
+volatile uint8_t pixelValues[128] = {0};		// PixelValue Array for camera 1
+volatile uint8_t pixelValuesUC[128] = {0};		// Uncalibrated PixelValue Array for camera 1
+volatile int8_t calibrationCamera[128] = {0}; 	// Calibration Array for camera 1
+volatile uint8_t pixelCounter2 = 129;			// PixelCounter for camera 2
+volatile uint8_t pixelValues2[128] = {0};		// PixelValue Array for camera 2
+volatile uint8_t pixelValues2UC[128] = {0};		// Uncalibrated PixelValue Array for camera 2
+volatile int8_t calibrationCamera2[128] = {0};  // Calibration Array for camera 2
 volatile uint8_t edges[128] = {0};
 volatile uint8_t edgesMiddle[128] = {0}; //all detected edge
 volatile uint8_t edge_left_found = 0;	//1 if found
@@ -87,7 +91,7 @@ void CAM_Init(void)
 	//*******************************
 	//Camera Initialization Functions
 	CTIMER0_Init(); 				//CTIMER0 Initialization
-	CTIMER4_Init();					//CTIMER2 Initialization
+	CTIMER4_Init();					//CTIMER4 Initialization
 	SCTimer_Clock_Config(); 		//SCTimer Clock Configuration
 	SCTimer_CamCLK_Init();			//Initialize PWM Signal for Camera Clock (3,63MHz)
 	SCTimer_SIEvents_Init();		//Initialize Start Signal for Camera (SI)
@@ -113,7 +117,7 @@ void CTIMER0_Init(void)
 	//***********************************
 	//ADC Interrupt configuration
 	//CTIMER0-> INTEN |= (1<<0);
-	NVIC_SetPriority(CTIMER0_IRQn, 0);
+	//NVIC_SetPriority(CTIMER0_IRQn, 0);
 	EnableIRQ(CTIMER0_IRQn);
 	//Enabling NVIC will block DMA trigger!!!!
 	//***********************************
@@ -136,12 +140,12 @@ void CTIMER4_Init(void)
 	//***********************************
 	//ADC Interrupt configuration
 	//CTIMER0-> INTEN |= (1<<0);
-	NVIC_SetPriority(CTIMER4_IRQn, 0);
+	//NVIC_SetPriority(CTIMER4_IRQn, 0);
 	EnableIRQ(CTIMER4_IRQn);
 	//Enabling NVIC will block DMA trigger!!!!
 	//***********************************
 
-	CTIMER_StartTimer(CTIMER4); //Start CTIMER0
+	CTIMER_StartTimer(CTIMER4); //Start CTIMER4
 }
 
 /*******************************************************************************
@@ -163,6 +167,7 @@ void SCTimer_Clock_Config(void)
 	SCT0->CONFIG |= 0xE<<3;			//CKSEL Input 7 Rising Edges
 	SCT0->CONFIG |= 1<<17; 			//Auto limit (& two 16-bit timers)
 	//*****************************
+
 }
 
 
@@ -172,6 +177,8 @@ void SCTimer_Clock_Config(void)
 void SCTimer_CamCLK_Init(void)
 {
 	//**********************************
+	//NVIC_SetPriority(SCT0_IRQn, 0);
+	EnableIRQ(SCT0_IRQn);				// Enable Interrupt for SC-Timer Events							//17.09.23 Martin Fürstberger
 	//Camera 1
 	//Configure Pin P[3][27] (J13 Pin13) (CAM_CLK/SCT0_OUT1)
 	IOCON->PIO[3][27] &= 0xFFFFFFF0; 	//Clear FUNC bits of P3.27
@@ -191,7 +198,7 @@ void SCTimer_CamCLK_Init(void)
 	//Set PWM at PIO3_27 to 3,676MHz (Cam_CLK_frequency max=8MHz) // old numbers (review later)
 	//***************************************************
 	//Event 0 for Counter Limit
-	SCT0->MATCHREL[0] = (26-1); 				//Match 0 @ 12/44MHz = 272,72ns Limit Counter		//Changed to 26 (590,90 ns)
+	SCT0->MATCHREL[0] = (500-1); 				//Match 0 @ 12/44MHz = 272,72ns Limit Counter		//Changed to 26 (590,90 ns)
 	SCT0->EV[0].STATE = 0xFFFFFFFF; 			//Event 0 happens in all states
 	SCT0->EV[0].CTRL = (1 << 12); 				//Match 0 condition only
 
@@ -202,7 +209,7 @@ void SCTimer_CamCLK_Init(void)
 
 
 	//Event 1 for PWM Duty Cycle
-	SCT0->MATCHREL[1] = (13-1); 				//Match 1 @ 6/44MHz = 136,36ns						//Changed to 13 (295,45 ns)
+	SCT0->MATCHREL[1] = (250-1); 				//Match 1 @ 6/44MHz = 136,36ns						//Changed to 13 (295,45 ns)
 	SCT0->EV[1].STATE = 0xFFFFFFFF; 			//Event 1 happens in all states
 	SCT0->EV[1].CTRL = (1 << 0) | (1 << 12); 	//Match 1 condition only
 
@@ -236,24 +243,26 @@ void SCTimer_SIEvents_Init(void)
 
 	//**************************************
 	//Event 2 for SI Set Event Camera1
-	SCT0->MATCHREL[2] = (24-1); 			//Match 2 @ 11/44MHz = 250ns							//Changed to 24 (545,45 ns)
+	SCT0->MATCHREL[2] = (480-1); 			//Match 2 @ 11/44MHz = 250ns							//Changed to 24 (545,45 ns)
 	SCT0->EV[2].STATE = 0; 					//Event 2 happens only in State 0
 	SCT0->EV[2].CTRL = (2 << 0)|(1 << 12); 	//Match 2 condition only
 	//Camera 1
 	SCT0->OUT[0].SET = (1 << 2); 			//Event 2 will set SCT0_OUT0
 
+	SCT0->EVEN |= (1 << 2);					//Event 2 will interrupt								17.09.23 Martin Fürstberger
 	//**************************************
 
 	//Event 5 for SI Set Event Camera2
-	SCT0->MATCHREL[5]=(24-1);				//Match 5 @ 24/44MHz = 545,45 ns
+	SCT0->MATCHREL[5]=(480-1);				//Match 5 @ 24/44MHz = 545,45 ns
 	SCT0->EV[5].STATE = 0;					//Event 5 happens only in State 0
 	SCT0->EV[5].CTRL = (5 << 0)|(1 << 12);	//Match 5 condition only
 	//Camera 2
 	SCT0->OUT[2].SET = (1 << 5); 			//Event 5 will set SCT0_OUT2
 
+	SCT0->EVEN |= (1 << 5);					//Event 5 will interrupt								17.09.23 Martin Fürstberger
 	//**************************************
 	//Event 3 for SI reset Event
-	SCT0->MATCHREL[3] = (2-1); 				//Match 3 @ 1/44MHz = 22,727ns							//Changed to 2 (45,454ns)
+	SCT0->MATCHREL[3] = (20-1); 				//Match 3 @ 1/44MHz = 22,727ns							//Changed to 2 (45,454ns)
 	SCT0->EV[3].STATE = 0xFFFFFFF; 			//Event 3 happens in every state
 	SCT0->EV[3].CTRL = (3 << 0)|(1 << 12);	//Match 3 condition only
 	//Camera 1
@@ -270,20 +279,20 @@ void SCTimer_SIEvents_Init(void)
  ******************************************************************************/
 void CTIMER0_IRQHandler(uint32_t flags)
 {
-	pixelCounter = 0; //new picture start at pixel 0
+	//pixelCounter = 0; //new picture start at pixel 0
 
 	//**********************************
 
 	SCT0->EV[2].STATE = 0xFFFFFFF; 		//Event 2 happens in all states
 	SCT0->CTRL &= ~(1 << 2); 			//Unhalt SCT0 by clearing bit 2 of CTRL
 
-	uint8_t i=0;						// Delay for Si-Signal
-	while(i<10){						// Delay for Si-Signal
-	i++;}								// Delay for Si-Signal
-	i=0;								// Delay for Si-Signal
+//	uint8_t i=0;						// Delay for Si-Signal
+//	while(i<11){						// Delay for Si-Signal
+//	i++;}								// Delay for Si-Signal
+//	i=0;								// Delay for Si-Signal
 
-	SCT0->EV[2].STATE = 0; 				//Event 2 happens only in State 0
-	SCT0->CTRL &= ~(1 << 2); 			//Unhalt SCT0 by clearing bit 2 of CTRL
+//	SCT0->EV[2].STATE = 0; 				//Event 2 happens only in State 0
+//	SCT0->CTRL &= ~(1 << 2); 			//Unhalt SCT0 by clearing bit 2 of CTRL
 	//**********************************
 
 	CTIMER_ClearStatusFlags(CTIMER0,kCTIMER_Match0Flag);
@@ -295,20 +304,20 @@ void CTIMER0_IRQHandler(uint32_t flags)
  ******************************************************************************/
 void CTIMER4_IRQHandler(uint32_t flags)
 {
-	pixelCounter2 = 0; //new picture start at pixel 0
+	//pixelCounter2 = 0; //new picture start at pixel 0
 
 	//**********************************
 
 	SCT0->EV[5].STATE = 0xFFFFFFF; 		//Event 5 happens in all states
 	SCT0->CTRL &= ~(1 << 2); 			//Unhalt SCT0 by clearing bit 2 of CTRL
 
-	uint8_t i=0;						// Delay for Si-Signal
-	while(i<10){						// Delay for Si-Signal
-	i++;}								// Delay for Si-Signal
-	i=0;								// Delay for Si-Signal
+//	uint8_t i=0;						// Delay for Si-Signal
+//	while(i<11){						// Delay for Si-Signal
+//	i++;}								// Delay for Si-Signal
+//	i=0;								// Delay for Si-Signal
 
-	SCT0->EV[5].STATE = 0; 				//Event 5 happens only in State 0
-	SCT0->CTRL &= ~(1 << 2); 			//Unhalt SCT0 by clearing bit 2 of CTRL
+//	SCT0->EV[5].STATE = 0; 				//Event 5 happens only in State 0
+//	SCT0->CTRL &= ~(1 << 2); 			//Unhalt SCT0 by clearing bit 2 of CTRL
 	//**********************************
 
 	CTIMER_ClearStatusFlags(CTIMER4,kCTIMER_Match0Flag);
@@ -322,7 +331,7 @@ void SCTimer_ADCTrigger_Init(void)
 {
 	//**************************************
 	//Event 4 for ADC Trigger Event
-	SCT0->MATCHREL[4] = (22-1); 			//Match 4 @ 9/44MHz = 204,54ns (Cam_AO settlingTime Min120ns)	//Changed to 22 (500,00 ns)
+	SCT0->MATCHREL[4] = (260-1); 			//Match 4 @ 9/44MHz = 204,54ns (Cam_AO settlingTime Min120ns)	//Changed to 22 (500,00 ns)
 	SCT0->EV[4].STATE = 0xFFFFFFF;			//Event 4 happens in all states
 	SCT0->EV[4].CTRL = (4 << 0)|(1 << 12); 	//Match 4 condition only
 
@@ -436,19 +445,35 @@ void ADC_Config(void)
  ******************************************************************************/
 void ADC0_SEQA_IRQHandler(void)
 {
-	if(pixelCounter<129) //Save Pixel Values Camera 1
+	if(pixelCounter<128) //Save Pixel Values Camera 1
 	{
-		pixelValues[pixelCounter] = ADC0->DAT[4] >> 8;		//Reading current pixel
+		pixelValuesUC[pixelCounter] = (ADC0->DAT[4] >> 8)/* + calibrationCamera[pixelCounter]*/;		//Reading current pixel and Adding Calibration Array for Camera 1
 		pixelCounter++;										//Next ISR is next pixel
 	}
 
-	if(pixelCounter2<129)//Save Pixel Values Camera 2
+	if(pixelCounter2<128)//Save Pixel Values Camera 2
 	{
-		pixelValues2[pixelCounter2] = ADC0->DAT[5] >> 8;	//Reading current pixel
+		pixelValues2UC[pixelCounter2] = (ADC0->DAT[5] >> 8)/* + calibrationCamera2[pixelCounter2]*/;	//Reading current pixel and Adding Calibration Array for Camera 2
 		pixelCounter2++;									//Next ISR is next pixel
 	}
 
 	ADC0->FLAGS = (1<<28);									//Delete interrupt flags
+	SDK_ISR_EXIT_BARRIER;
+}
+void SCT0_IRQHandler(void)
+{
+	if((SCT0->EVFLAG & (1 << 2)) != 0){			//Wenn Bit 2 (Event 2) 1 ist
+		pixelCounter=0;							//new picture start at pixel 0
+		SCT0->EV[2].STATE = 0; 				//Event 2 happens only in State 0
+		SCT0->CTRL &= ~(1 << 2); 			//Unhalt SCT0 by clearing bit 2 of CTRL
+
+	}
+	if((SCT0->EVFLAG & (1 << 5)) != 0){			//Wenn Bit 5 (Event 5) 1 ist
+		pixelCounter2=0;						//new picture start at pixel 0
+		SCT0->EV[5].STATE = 0; 					//Event 5 happens only in State 0
+		SCT0->CTRL &= ~(1 << 2); 				//Unhalt SCT0 by clearing bit 2 of CTRL
+	}
+	SCT0->EVFLAG |= (1 << 2) | (1 << 5);		//Reset InterruptFlags
 	SDK_ISR_EXIT_BARRIER;
 }
 
@@ -460,6 +485,7 @@ void Camera_Exposure_time_task(void *pvParameters)
 
 		for(uint8_t x=0;x<128;x++){
 			pixel_Values_sum = pixel_Values_sum + pixelValues[x];						// Sum of all 128 ADC-Camera-Values
+			pixelValues[x]=pixelValuesUC[x]+calibrationCamera[x];						// Calibration Camera 1
 		}
 		exposure_time = exposure_time + ((16384-pixel_Values_sum))*10;					// Gain = 10 (can become unstable !!!)
 																						// 16384 = 128 * ADC-Medium-Value (0 ... 256)
@@ -470,6 +496,7 @@ void Camera_Exposure_time_task(void *pvParameters)
 
 		for(uint8_t x=0;x<128;x++){
 		pixel_Values_sum2 = pixel_Values_sum2 + pixelValues2[x];						// Sum of all 128 ADC-Camera-Values
+		pixelValues2[x]=pixelValues2UC[x]+calibrationCamera2[x];							// Calibration Camera 2
 		}
 		exposure_time2 = exposure_time2 + ((16384-pixel_Values_sum2))*10;					// Gain = 10 (can become unstable !!!)
 																						// 16384 = 128 * ADC-Medium-Value (0 ... 256)

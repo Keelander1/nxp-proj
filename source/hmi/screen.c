@@ -50,7 +50,9 @@
  */
 
 extern volatile uint8_t pixelValues[128];
+extern volatile int8_t calibrationCamera[128];
 extern volatile uint8_t pixelValues2[128];
+extern volatile int8_t calibrationCamera2[128];
 extern volatile uint8_t edges[128];
 extern volatile uint8_t edgesMiddle[128];
 extern volatile uint8_t edge_right;
@@ -59,6 +61,7 @@ extern volatile uint8_t edge_center;
 extern volatile uint8_t edge_right_found;
 extern volatile uint8_t edge_left_found;
 extern volatile uint8_t track_state;
+
 //volatile uint32_t edge_throttle;
 
 
@@ -241,8 +244,99 @@ void menu_page_pixel_display_camera(uint8_t refresh)    {								// new Martin F
 //
 //		}
 	}
+void menu_page_calibration_camera(uint8_t refresh)    {
+	uint8_t x=0;
+	uint8_t y=0;
+	for(x=0; x<128; x++){
+		calibrationCamera[x] = calibrationCamera[x] + (128 - pixelValues[x]); //Calibrating Camera
+	}
+	menu_rtos_switch_handle(&curr_menu_handle, &menu_main_hardware_handle);
+	menu_reset(&curr_menu_handle->drv_handle);
+}
+
+void menu_page_pixel_display_camera2(uint8_t refresh)    {								// new Martin Fürstberger 27.05.23
+		uint8_t x=0;
+		uint8_t y=0;
+		char time_string[15] = "Exp.Time[ms]:";
+		sprintf(&time_string[13], "%d", CTIMER4->MSR[0]/220000);	//Exposure time in ms
+
+		ssd1309_rtos_lock(&g_disp_0);
+		//x1,y1, x2,  y2
+		ssd1309_draw_rect(&g_disp_0.disp_obj, 0, 13, 127, 63, true, OFF);
+
+		//Print Left & Right Edge
 
 
+
+		for(x=0;x<128;x++){
+			y = 64-(pixelValues2[x]/5);						//Scale Pixel Values to Display Size
+			ssd1309_set_pixel(&g_disp_0.disp_obj,x, y, ON);	//Print Pixel Values
+
+//			Print all found Edges
+//			if(edges[x] == 1)
+//				ssd1309_draw_rect(&g_disp_0.disp_obj, x, 13, x, 18, true, ON);		//Draw Right Edges
+			if(edgesMiddle[x] == 1)
+				ssd1309_draw_rect(&g_disp_0.disp_obj, x, 13, x, 30, true, ON);		//Draw Right Edges
+//			if(edges[x] == 2)
+//				ssd1309_draw_rect(&g_disp_0.disp_obj, x, 13, x, 18, true, ON);	//Draw Left Edges
+			if(edgesMiddle[x] == 2)
+				ssd1309_draw_rect(&g_disp_0.disp_obj, x, 13, x, 30, true, ON);	//Draw Left Edges
+		}
+
+		if(edge_left_found){
+			ssd1309_draw_rect(&g_disp_0.disp_obj, edge_left, 13, edge_left, 63, true, ON); //Draw Left Edge
+			ssd1309_set_pos(&g_disp_0.disp_obj, edge_left +1, 50);
+			ssd1309_write_str(&g_disp_0.disp_obj, "L" , ssd1309_font_6x8, false, ON);
+		}
+
+		if(edge_right_found){
+			ssd1309_draw_rect(&g_disp_0.disp_obj, edge_right, 13, edge_right, 63, true, ON);	//Draw Right Edge
+			ssd1309_set_pos(&g_disp_0.disp_obj, edge_right - 7, 50);
+			ssd1309_write_str(&g_disp_0.disp_obj, "R" , ssd1309_font_6x8, false, ON);
+		}
+
+		if(edge_right_found || edge_left_found){
+			uint8_t center = (uint8_t) edge_center;
+			if (edge_center < 0)
+				center =0 ;
+			if (edge_center > 127)
+				center = 127;
+			ssd1309_draw_rect(&g_disp_0.disp_obj, center, 43, center, 63, true, ON);	//Draw Right Edge
+			ssd1309_set_pos(&g_disp_0.disp_obj, center - 7, 50);
+			ssd1309_write_str(&g_disp_0.disp_obj, "C" , ssd1309_font_6x8, false, ON);
+		}
+
+		//Print Exposure Time
+		ssd1309_rtos_unlock(&g_disp_0);
+		if(((all_param_t*)&const_all_param)->camera.exposure_show){
+			ssd1309_set_pos(&g_disp_0.disp_obj, 0, 18);
+			ssd1309_write_str(&g_disp_0.disp_obj, time_string , ssd1309_font_6x8, false, ON);	//Print Exposure time
+		}
+
+		//Printing Track State
+//		ssd1309_set_pos(&g_disp_0.disp_obj, 64, 50);
+//		switch(track_state){
+//			case 0:
+//				ssd1309_write_str(&g_disp_0.disp_obj, "T" , ssd1309_font_6x8, false, ON); break; //T: Track
+//			case 1:
+//				ssd1309_write_str(&g_disp_0.disp_obj, "F" , ssd1309_font_6x8, false, ON); break; //F: Finish
+//			case 3:
+//				ssd1309_write_str(&g_disp_0.disp_obj, "3" , ssd1309_font_6x8, false, ON); break; //3: tree_stribes
+//			case 4:
+//				ssd1309_write_str(&g_disp_0.disp_obj, "4" , ssd1309_font_6x8, false, ON); break; //4: four_stribes
+//
+//		}
+	}
+
+void menu_page_calibration_camera2(uint8_t refresh)    {
+	uint8_t x=0;
+	uint8_t y=0;
+	for(x=0; x<128; x++){
+		calibrationCamera2[x] = calibrationCamera2[x] + (128 - pixelValues2[x]); //Calibrating Camera
+	}
+	menu_rtos_switch_handle(&curr_menu_handle, &menu_main_hardware_handle);
+	menu_reset(&curr_menu_handle->drv_handle);
+}
 
 /*
 void menu_page_camera_info(uint8_t refresh) {
