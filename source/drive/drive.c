@@ -56,7 +56,7 @@ int32_t* servoRight= &((all_param_t*)&const_all_param)->motors.servo.max;		//ser
 
 extern volatile uint8_t edge_left;		//left Edge Coordinate
 extern volatile uint8_t edge_right;	 //Right Edge Coordinate
-extern volatile uint8_t	edge_center; //Edge Center Coordinate
+extern volatile int16_t	edge_center; //Edge Center Coordinate
 extern volatile uint8_t edge_left_found;
 extern volatile uint8_t edge_right_found;
 const uint16_t track_width = 520; //Width of the track in mm
@@ -234,7 +234,7 @@ void Camera_Test_Drive (uint8_t state)
 
 void Real_Drive (uint8_t state)
 {
-	menu_page_pixel_display_camera(1);
+	//menu_page_pixel_display_camera(1);
 	int16_t servo_Value = 0; //between -100 and 100
 	int16_t Stearing_Value = 0;
 	int16_t Speed_Left_normiert = 0;		// Speed Value Left normiert auf 0 bis 100
@@ -251,7 +251,7 @@ void Real_Drive (uint8_t state)
 	Y_ist = edge_center;
 	Y_soll = 0;
 	Y_diff = edge_center - Y_soll;
-	printf("Y_diff: %d \n edge_center: %d", Y_diff, edge_center);
+	//printf("Y_diff: %d \n edge_center: %d", Y_diff, edge_center);
 	// Krümmung in Variable k
 	//k = (2*Y) / (X^2 + Y_diff^2);
 
@@ -316,8 +316,8 @@ void Real_Drive (uint8_t state)
 	// im Folgenden für die Motren Rechts und Links die Geschwindkeit angepasst
 
 
-	Speed_Left_normiert  = 0;//Speed;// * (1 + ((Spurweite * Y_diff) / (X*X + Y_diff*Y_diff)));
-	Speed_Right_normiert = 0;//Speed;// * (1 - ((Spurweite * Y_diff) / (X*X + Y_diff*Y_diff)));
+	Speed_Left_normiert  = Speed * (1 + ((Spurweite * Y_diff) / (X*X + Y_diff*Y_diff)));
+	Speed_Right_normiert = Speed * (1 - ((Spurweite * Y_diff) / (X*X + Y_diff*Y_diff)));
 
 
 	//calculate test value for selected speed
