@@ -45,6 +45,7 @@
 
 #include "camera.h"
 
+
 /*******************************************************************************
  * Parameters
  ******************************************************************************/
@@ -69,6 +70,7 @@ volatile uint8_t edge_right_found = 0;	//1 if found
 volatile uint8_t edge_left = 0;			//left Edge Coordinate
 volatile uint8_t edge_right = 0;		//Right Edge Coordinate
 volatile int16_t edge_center = 0;
+volatile int16_t edge_center_mm =0;
 volatile uint8_t detection_mode = 0;
 volatile uint8_t track_state = 0;
 volatile uint8_t edge_distance = 80;	//distance between track boarders (Schätzwert)
@@ -511,9 +513,11 @@ void Camera_Exposure_time_task(void *pvParameters)
 
 
 
-void Edge_Capibraton(void)
-		{edge_distance = edge_right - edge_left;}
+void menu_func_edge_calibration() {
 
+	((all_param_t*)&const_all_param)->camera.edge_distance = edge_right - edge_left;
+
+}
 
 
 /*******************************************************************************
@@ -558,6 +562,8 @@ void Edge_Detection(void)
 	uint8_t xmax;
 	uint8_t right_edge_count = 0;
 	uint8_t left_edge_count = 0;
+
+	edge_distance = ((all_param_t*)&const_all_param)->camera.edge_distance;
 
 	edge_right_found = 0;
 	edge_left_found = 0;
@@ -668,7 +674,7 @@ void Edge_Detection(void)
 		edge_center = (edge_right + edge_left)/2;
 	}
 	//Umrechnung von Pixel in mm
-	edge_center = (int)(edge_center - 63) * 4.7;
+	edge_center_mm = (int)(edge_center - 63) * (500.0/edge_distance);
 
 	if((right_edge_count == 5) && (left_edge_count == 5)){
 		track_state = four_stribes;

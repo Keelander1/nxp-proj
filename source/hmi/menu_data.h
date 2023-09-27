@@ -45,7 +45,7 @@
 #include "param.h"
 #include "settings.h"
 #include "drive/drive.h"
-//#include "camera/camera.h"
+#include "camera/camera.h"
 
 /****************************************************
  * handle for main menu

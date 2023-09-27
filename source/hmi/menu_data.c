@@ -232,7 +232,6 @@ const static menu_entry_t menu_hardware_camera_entries[] = {
 				.en = true,
 		},
 
-
 		{
 				.str = "Back",
 				.type = MENU_LINK,
@@ -262,13 +261,19 @@ const static menu_entry_t menu_hardware_camera_parameter_entries[] = {
 				/****************************************************
 				 * Camera Edge Detect Throttle Value
 				 ****************************************************/
-				.str = "Edge Throttle",											//display "Exposure Value"
+				.str = "Edge Distance",											//display "Edge Distance"
 				.type = MENU_VALUE,												//type is MENU_VALUE
-				.val = &((all_param_t*)&const_all_param)->camera.throttle,		//get saved init value
+				.val = &((all_param_t*)&const_all_param)->camera.edge_distance,		//get saved init value
 				.min_val = 0,													//min value
 				.max_val = 100,													//max value
 				.func = 0,														//write value
 				.en = true,														//element is changeable
+		},
+		{
+				.str = "Calib. Edge Dis.",//display "Yes"
+				.type = MENU_LINK,               //type is MENU_LINK
+				.link = menu_func_edge_calibration,       //link to restore function
+				.en = true,                      //element is clickable
 		},
 		{
 				/****************************************************
@@ -596,7 +601,7 @@ menu_rtos_handle_t menu_main_handle = {
  ***************************************************/
 menu_rtos_handle_t menu_main_drive_handle = {
 		.drv_handle = {
-				.entry_cnt = 5,                                        		//5 entries
+				.entry_cnt = 6,                                        		//5 entries
 				.entry_list = (menu_entry_t*)menu_main_drive_entries,  		//list of all entries
 				.draw = menu_list_draw,                                		//emtry draw function
 		},
@@ -629,7 +634,7 @@ menu_rtos_handle_t menu_hardware_camera_handle = {
  ***************************************************/
 menu_rtos_handle_t menu_hardware_camera_parameter_handle = {
 		.drv_handle = {
-				.entry_cnt = 3,                                             //3 entries
+				.entry_cnt = 4,                                             //3 entries
 				.entry_list = (menu_entry_t*)menu_hardware_camera_parameter_entries,  //list of all entries
 				.draw = menu_list_draw,                                     //emtry draw function
 		},

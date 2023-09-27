@@ -56,6 +56,7 @@
 #include "queue.h"
 #include "board.h"
 #include "fsl_sctimer.h"
+#include "param.h"
 
 
 /*******************************************************************************
@@ -77,7 +78,7 @@ void CTIMER0_Init(void);
 void Calculate_PixelValues_Task(void *pvParameters);
 void Camera_Exposure_time_task(void *pvParameters);
 void Edge_Detection(void);
-void Edge_Calibration(void);
+void menu_func_edge_calibration(void);
 
 
 
