@@ -95,7 +95,7 @@ void ADC_Calibration(void);
 void CTIMER0_Init(void);
 void Calculate_PixelValues_Task(void *pvParameters);
 void Camera_Exposure_time_task(void *pvParameters);
-void Edge_Detection(struct EdgeDetectionData *edgeData);
+void Edge_Detection(struct EdgeDetectionData *edgeData, volatile uint8_t *pixelVal);
 void menu_func_edge_calibration(void);
 
 

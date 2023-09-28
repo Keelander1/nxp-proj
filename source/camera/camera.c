@@ -533,8 +533,8 @@ void Camera_Exposure_time_task(void *pvParameters)
 		CTIMER4->MSR[0] = exposure_time2;												// Exposure Time in s = exposure_time2/220 MHz
 
 
-		Edge_Detection(&edgeData[0]);
-		Edge_Detection(&edgeData[1]);
+		Edge_Detection(&edgeData[0], pixelValues);
+		Edge_Detection(&edgeData[1], pixelValues2);
 
 		vTaskDelay(1);
 	}
@@ -571,7 +571,7 @@ enum track {
 	four_stribes = 3
 };
 
-void Edge_Detection(struct EdgeDetectionData *edgeData){
+void Edge_Detection(struct EdgeDetectionData *edgeData, volatile uint8_t *pixelVal){
 	//Parameter
 	uint8_t threshold = 30;					//threshold for edge detection
 	uint8_t edge_min_width = 1;
@@ -603,13 +603,13 @@ void Edge_Detection(struct EdgeDetectionData *edgeData){
 		edgeData->edgesMiddle[x] = 0;
 
 		//search for falling Pixel
-		if((pixelValues[x-1]-pixelValues[x+1])>threshold)
+		if((pixelVal[x-1]-pixelVal[x+1])>threshold)
 		{
 			edgeData->edges[x] = right;	//1 = Right Edge (Falling Edge)
 		}
 
 		//search for rising Pixel
-		else if((pixelValues[x+1]-pixelValues[x-1])>threshold)
+		else if((pixelVal[x+1]-pixelVal[x-1])>threshold)
 		{
 			edgeData->edges[x] = left;	//2 = Left Edge (Rising Edge)
 		}
@@ -641,7 +641,7 @@ void Edge_Detection(struct EdgeDetectionData *edgeData){
 				x++;
 			right_edge_end = x-1;
 			edgeWidth = right_edge_end - right_edge_begin;
-			edgeHight = pixelValues[right_edge_begin] - pixelValues[right_edge_end];
+			edgeHight = pixelVal[right_edge_begin] - pixelVal[right_edge_end];
 
 			if((edgeWidth >= edge_min_width) && (edgeHight >= edge_min_hight)){		//noise filter
 				edgeMiddle = edgeWidth/2 + right_edge_begin;
@@ -677,7 +677,7 @@ void Edge_Detection(struct EdgeDetectionData *edgeData){
 				x++;
 			left_edge_end = x-1;
 			edgeWidth = left_edge_end - left_edge_begin;
-			edgeHight = pixelValues[left_edge_end] - pixelValues[left_edge_begin];
+			edgeHight = pixelVal[left_edge_end] - pixelVal[left_edge_begin];
 
 			if((edgeWidth >= edge_min_width) && (edgeHight >= edge_min_hight)){		//noise filter
 				edgeMiddle = edgeWidth/2 + left_edge_begin;
@@ -692,7 +692,7 @@ void Edge_Detection(struct EdgeDetectionData *edgeData){
 		}
 	}
 
-	if( ((edgeData->edge_left_found == 0) && (edgeData->edge_right_found == 0)) || (abs(edgeData->edge_right - edgeData->edge_left) < 10) || (edgeData->edge_left > edgeData->edge_right) )
+	if( ((edgeData->edge_left_found == 0) && (edgeData->edge_right_found == 0)) || (abs(edgeData->edge_right - edgeData->edge_left) < 20) || (edgeData->edge_left > edgeData->edge_right) )
 		edgeData->detection_mode = init;
 	else if((edgeData->edge_left_found == 0) && (edgeData->edge_right_found == 1))
 		edgeData->edge_center = edgeData->edge_right - edge_distance/2;
@@ -702,7 +702,7 @@ void Edge_Detection(struct EdgeDetectionData *edgeData){
 		edgeData->detection_mode = trace;
 		edgeData->edge_center = (edgeData->edge_right + edgeData->edge_left)/2;
 	}
-	//Umrechnung von Pixel in mm
+	//Convert Pixel to mm
 	edgeData->edge_center_mm = (int)(edgeData->edge_center - 63) * (500.0/edge_distance);
 
 	if((right_edge_count == 5) && (left_edge_count == 5)){
