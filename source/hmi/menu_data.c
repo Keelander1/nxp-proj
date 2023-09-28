@@ -44,6 +44,7 @@
 int32_t servoTestValue=0;		//value for test purpose
 int32_t BLDCLeftTestValue=0;	//value for test purpose
 int32_t BLDCRightTestValue=0;	//value for test purpose
+//int32_t camSelect;
 
 /****************************************************
  * Entry for drive menu
@@ -206,6 +207,15 @@ const static menu_entry_t menu_hardware_camera_entries[] = {
 				.link = menu_open_hardware_parameter_camera,
 				.en = true,
 		},
+		{
+				.str = "Cam Select",											//display "Edge Distance"
+				.type = MENU_VALUE,												//type is MENU_VALUE
+				.val = &camSelect,		//get saved init value
+				.min_val = 1,													//min value
+				.max_val = 2,													//max value
+//				.func = 0,														//write value
+				.en = true,														//element is changeable
+		},
 
 		{		.str = "Pixel_Display",							// new Martin Fürstberger 27.05.23
 				.type = MENU_PAGE,
@@ -220,17 +230,17 @@ const static menu_entry_t menu_hardware_camera_entries[] = {
 		},
 
 
-		{		.str = "Pixel_Display2",						// new Martin Fürstberger 15.09.23
-				.type = MENU_PAGE,
-				.func = menu_page_pixel_display_camera2,
-				.en = true,
-		},
-
-		{		.str = "Calibration Cam2",					// new Martin Fürstberger 16.09.23
-				.type = MENU_PAGE,
-				.func = menu_page_calibration_camera2,
-				.en = true,
-		},
+//		{		.str = "Pixel_Display2",						// new Martin Fürstberger 15.09.23
+//				.type = MENU_PAGE,
+//				.func = menu_page_pixel_display_camera2,
+//				.en = true,
+//		},
+//
+//		{		.str = "Calibration Cam2",					// new Martin Fürstberger 16.09.23
+//				.type = MENU_PAGE,
+//				.func = menu_page_calibration_camera2,
+//				.en = true,
+//		},
 
 		{
 				.str = "Back",
@@ -270,9 +280,9 @@ const static menu_entry_t menu_hardware_camera_parameter_entries[] = {
 				.en = true,														//element is changeable
 		},
 		{
-				.str = "Calib. Edge Dis.",//display "Yes"
+				.str = "Calib. Edge Dis.",		//display " "
 				.type = MENU_LINK,               //type is MENU_LINK
-				.link = menu_func_edge_calibration,       //link to restore function
+				.link = menu_func_edge_calibration,
 				.en = true,                      //element is clickable
 		},
 		{
@@ -623,7 +633,7 @@ menu_rtos_handle_t menu_main_hardware_handle = {
  ***************************************************/
 menu_rtos_handle_t menu_hardware_camera_handle = {
 		.drv_handle = {
-				.entry_cnt = 7,                                             //4 entries
+				.entry_cnt = 6,                                             //8 entries
 				.entry_list = (menu_entry_t*)menu_hardware_camera_entries,  //list of all entries
 				.draw = menu_list_draw,                                     //emtry draw function
 		},
@@ -634,7 +644,7 @@ menu_rtos_handle_t menu_hardware_camera_handle = {
  ***************************************************/
 menu_rtos_handle_t menu_hardware_camera_parameter_handle = {
 		.drv_handle = {
-				.entry_cnt = 4,                                             //3 entries
+				.entry_cnt = 4,                                             //4 entries
 				.entry_list = (menu_entry_t*)menu_hardware_camera_parameter_entries,  //list of all entries
 				.draw = menu_list_draw,                                     //emtry draw function
 		},

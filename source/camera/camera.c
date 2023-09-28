@@ -64,7 +64,32 @@ volatile uint8_t pixelValues2[128] = {0};		// PixelValue Array for camera 2
 volatile uint8_t pixelValues2UC[128] = {0};		// Uncalibrated PixelValue Array for camera 2
 volatile int8_t calibrationCamera2[128] = {0};  // Calibration Array for camera 2
 
-struct edgeDetectionData edgeData;
+struct EdgeDetectionData edgeData[2] = {
+		{
+			.edges = {0},
+			.edgesMiddle = {0},
+			.edge_left_found = 0,
+			.edge_right_found = 0,
+			.edge_left = 0,
+			.edge_right = 0,
+			.edge_center = 0,
+			.edge_center_mm = 0,
+			.detection_mode = 0,
+			.track_state = 0
+		},
+		{
+			.edges = {0},
+			.edgesMiddle = {0},
+			.edge_left_found = 0,
+			.edge_right_found = 0,
+			.edge_left = 0,
+			.edge_right = 0,
+			.edge_center = 0,
+			.edge_center_mm = 0,
+			.detection_mode = 0,
+			.track_state = 0
+		}
+    };
 
 volatile uint8_t edges[128] = {0};
 volatile uint8_t edgesMiddle[128] = {0}; //all detected edge
@@ -508,7 +533,9 @@ void Camera_Exposure_time_task(void *pvParameters)
 		CTIMER4->MSR[0] = exposure_time2;												// Exposure Time in s = exposure_time2/220 MHz
 
 
-		Edge_Detection();
+		Edge_Detection(&edgeData[0]);
+		Edge_Detection(&edgeData[1]);
+
 		vTaskDelay(1);
 	}
 }
@@ -544,8 +571,7 @@ enum track {
 	four_stribes = 3
 };
 
-void Edge_Detection(void)
-{
+void Edge_Detection(struct EdgeDetectionData *edgeData){
 	//Parameter
 	uint8_t threshold = 30;					//threshold for edge detection
 	uint8_t edge_min_width = 1;
@@ -568,28 +594,28 @@ void Edge_Detection(void)
 	uint8_t right_edge_count = 0;
 	uint8_t left_edge_count = 0;
 
-	edge_right_found = 0;
-	edge_left_found = 0;
+	edgeData->edge_right_found = 0;
+	edgeData->edge_left_found = 0;
 
 //	detection_mode = init; //for debugging
 
 	for(uint8_t x=1;x<=126;x=x+1){
-		edgesMiddle[x] = 0;
+		edgeData->edgesMiddle[x] = 0;
 
 		//search for falling Pixel
 		if((pixelValues[x-1]-pixelValues[x+1])>threshold)
 		{
-			edges[x] = right;	//1 = Right Edge (Falling Edge)
+			edgeData->edges[x] = right;	//1 = Right Edge (Falling Edge)
 		}
 
 		//search for rising Pixel
 		else if((pixelValues[x+1]-pixelValues[x-1])>threshold)
 		{
-			edges[x] = left;	//2 = Left Edge (Rising Edge)
+			edgeData->edges[x] = left;	//2 = Left Edge (Rising Edge)
 		}
 
 		//no rising or falling Pixel found
-		else edges[x] = 0;	//0 = No Edge
+		else edgeData->edges[x] = 0;	//0 = No Edge
 
 
 	}
@@ -598,8 +624,8 @@ void Edge_Detection(void)
 		case init:
 			xmin = 1; xmax = 126; break;
 		case trace:
-			xmin = edge_right - trace_offset;
-			xmax = edge_right + trace_offset;
+			xmin = edgeData->edge_right - trace_offset;
+			xmax = edgeData->edge_right + trace_offset;
 			if(xmin < 1)
 				xmin = 1;
 			if(xmax > 126)
@@ -609,9 +635,9 @@ void Edge_Detection(void)
 
 	//Search for falling (right) Edge
 	for(uint8_t x=1;x<=126;x=x+1){
-		if(edges[x] == right){
+		if(edgeData->edges[x] == right){
 			right_edge_begin = x;
-			while((edges[x] == right) && (x <=126))
+			while((edgeData->edges[x] == right) && (x <=126))
 				x++;
 			right_edge_end = x-1;
 			edgeWidth = right_edge_end - right_edge_begin;
@@ -619,12 +645,12 @@ void Edge_Detection(void)
 
 			if((edgeWidth >= edge_min_width) && (edgeHight >= edge_min_hight)){		//noise filter
 				edgeMiddle = edgeWidth/2 + right_edge_begin;
-				edgesMiddle[edgeMiddle] = right;
+				edgeData->edgesMiddle[edgeMiddle] = right;
 				right_edge_count++;
 				if(/*(edgeHight > right_edge_hight_max) && */ (edgeMiddle >= xmin) && (edgeMiddle <= xmax)){	//taking highest edge in area
-					edge_right = edgeMiddle;
+					edgeData->edge_right = edgeMiddle;
 					right_edge_hight_max = edgeHight;
-					edge_right_found = 1;
+					edgeData->edge_right_found = 1;
 				}
 			}
 		}
@@ -634,8 +660,8 @@ void Edge_Detection(void)
 		case init:
 			xmin = 1; xmax = 126; break;
 		case trace:
-			xmin = edge_left - trace_offset;
-			xmax = edge_left + trace_offset;
+			xmin = edgeData->edge_left - trace_offset;
+			xmax = edgeData->edge_left + trace_offset;
 			if(xmin < 1)
 				xmin = 1;
 			if(xmax > 126)
@@ -645,9 +671,9 @@ void Edge_Detection(void)
 
 	//Search for rising (left) Edge
 	for(uint8_t x=1;x<=125;x=x+1){
-		if(edges[x] == left){
+		if(edgeData->edges[x] == left){
 			left_edge_begin = x;
-			while((edges[x] == left) && (x <=126))
+			while((edgeData->edges[x] == left) && (x <=126))
 				x++;
 			left_edge_end = x-1;
 			edgeWidth = left_edge_end - left_edge_begin;
@@ -655,43 +681,43 @@ void Edge_Detection(void)
 
 			if((edgeWidth >= edge_min_width) && (edgeHight >= edge_min_hight)){		//noise filter
 				edgeMiddle = edgeWidth/2 + left_edge_begin;
-				edgesMiddle[edgeMiddle] = left;
+				edgeData->edgesMiddle[edgeMiddle] = left;
 				left_edge_count++;
 				if((edgeHight > left_edge_hight_max) && (edgeMiddle >= xmin) && (edgeMiddle <= xmax) && (left_edge_hight_max == 0)){	//taking highest edge in area
-					edge_left = edgeMiddle;
+					edgeData->edge_left = edgeMiddle;
 					left_edge_hight_max = edgeHight;
-					edge_left_found = 1;
+					edgeData->edge_left_found = 1;
 				}
 			}
 		}
 	}
 
-	if( ((edge_left_found == 0) && (edge_right_found == 0)) || (abs(edge_right-edge_left) < 10) || (edge_left > edge_right) )
-		detection_mode = init;
-	else if((edge_left_found == 0) && (edge_right_found == 1))
-		edge_center = edge_right - edge_distance/2;
-	else if((edge_left_found == 1) && (edge_right_found == 0))
-		edge_center = edge_left + edge_distance/2;
-	else if((edge_left_found == 1) && (edge_right_found == 1)){
-		detection_mode = trace;
-		edge_center = (edge_right + edge_left)/2;
+	if( ((edgeData->edge_left_found == 0) && (edgeData->edge_right_found == 0)) || (abs(edgeData->edge_right - edgeData->edge_left) < 10) || (edgeData->edge_left > edgeData->edge_right) )
+		edgeData->detection_mode = init;
+	else if((edgeData->edge_left_found == 0) && (edgeData->edge_right_found == 1))
+		edgeData->edge_center = edgeData->edge_right - edge_distance/2;
+	else if((edgeData->edge_left_found == 1) && (edgeData->edge_right_found == 0))
+		edgeData->edge_center = edgeData->edge_left + edge_distance/2;
+	else if((edgeData->edge_left_found == 1) && (edgeData->edge_right_found == 1)){
+		edgeData->detection_mode = trace;
+		edgeData->edge_center = (edgeData->edge_right + edgeData->edge_left)/2;
 	}
 	//Umrechnung von Pixel in mm
-	edge_center_mm = (int)(edge_center - 63) * (500.0/edge_distance);
+	edgeData->edge_center_mm = (int)(edgeData->edge_center - 63) * (500.0/edge_distance);
 
 	if((right_edge_count == 5) && (left_edge_count == 5)){
-		track_state = four_stribes;
+		edgeData->track_state = four_stribes;
 	}
 
 	else if((right_edge_count == 4) && (left_edge_count == 4)){
-		track_state = tree_stribes;
+		edgeData->track_state = tree_stribes;
 	}
 
 	else if((right_edge_count == 3) && (left_edge_count == 3)){
-		track_state = finish;
+		edgeData->track_state = finish;
 	}
 	else
-		track_state = track;
+		edgeData->track_state = track;
 }
 
 

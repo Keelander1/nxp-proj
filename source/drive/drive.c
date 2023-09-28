@@ -54,11 +54,13 @@ int32_t* servoLeft= &((all_param_t*)&const_all_param)->motors.servo.min;		//serv
 int32_t* servoRight= &((all_param_t*)&const_all_param)->motors.servo.max;		//servo max value
 
 
-extern volatile uint8_t edge_left;		//left Edge Coordinate
-extern volatile uint8_t edge_right;	 //Right Edge Coordinate
-extern volatile int16_t	edge_center_mm; //Edge Center Coordinate
-extern volatile uint8_t edge_left_found;
-extern volatile uint8_t edge_right_found;
+//extern volatile uint8_t edge_left;		//left Edge Coordinate
+//extern volatile uint8_t edge_right;	 //Right Edge Coordinate
+//extern volatile int16_t	edge_center_mm; //Edge Center Coordinate
+//extern volatile uint8_t edge_left_found;
+//extern volatile uint8_t edge_right_found;
+
+extern volatile struct EdgeDetectionData edgeData[2];
 const uint16_t track_width = 520; //Width of the track in mm
 const uint16_t axle_distance = 176; //Distance between Axles in mm
 const uint16_t camera_distance = 380; //Distance between Camera View and Car Center in mm
@@ -189,7 +191,7 @@ void Camera_Test_Drive (uint8_t state)
 	int16_t testValueSpeed;							//calculated test value for min to max speed in µs
 	int16_t Stearing_Value;
 	//int16_t x = camera_distance;
-	int16_t y = edge_center_mm - 63;
+	int16_t y = edgeData->edge_center_mm - 63;
 	int16_t servo_Value = 0; //between -100 and 100
 	if(state==MENU_DEACT)
 		{
@@ -210,7 +212,7 @@ void Camera_Test_Drive (uint8_t state)
 	servo_Value = y;
 
 
-	if((edge_left_found == 0) && (edge_right_found == 0))
+	if((edgeData->edge_left_found == 0) && (edgeData->edge_right_found == 0))
 		servo_Value = 0;
 
 	servo_Value = servo_Value * Lenkfaktor;
@@ -248,9 +250,9 @@ void Real_Drive (uint8_t state)
 	// Lenkregler
 
 	//Bestimmung Regelfehler
-	Y_ist = edge_center_mm;
+	Y_ist = edgeData->edge_center_mm;
 	Y_soll = 0;
-	Y_diff = edge_center_mm - Y_soll;
+	Y_diff = edgeData->edge_center_mm - Y_soll;
 	//printf("Y_diff: %d \n edge_center_mm: %d", Y_diff, edge_center_mm);
 	// Krümmung in Variable k
 	//k = (2*Y) / (X^2 + Y_diff^2);
