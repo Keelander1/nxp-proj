@@ -56,7 +56,7 @@ int32_t* servoRight= &((all_param_t*)&const_all_param)->motors.servo.max;		//ser
 
 extern volatile uint8_t edge_left;		//left Edge Coordinate
 extern volatile uint8_t edge_right;	 //Right Edge Coordinate
-extern volatile int16_t	edge_center; //Edge Center Coordinate
+extern volatile int16_t	edge_center_mm; //Edge Center Coordinate
 extern volatile uint8_t edge_left_found;
 extern volatile uint8_t edge_right_found;
 const uint16_t track_width = 520; //Width of the track in mm
@@ -189,7 +189,7 @@ void Camera_Test_Drive (uint8_t state)
 	int16_t testValueSpeed;							//calculated test value for min to max speed in µs
 	int16_t Stearing_Value;
 	//int16_t x = camera_distance;
-	int16_t y = edge_center - 63;
+	int16_t y = edge_center_mm - 63;
 	int16_t servo_Value = 0; //between -100 and 100
 	if(state==MENU_DEACT)
 		{
@@ -248,10 +248,10 @@ void Real_Drive (uint8_t state)
 	// Lenkregler
 
 	//Bestimmung Regelfehler
-	Y_ist = edge_center;
+	Y_ist = edge_center_mm;
 	Y_soll = 0;
-	Y_diff = edge_center - Y_soll;
-	//printf("Y_diff: %d \n edge_center: %d", Y_diff, edge_center);
+	Y_diff = edge_center_mm - Y_soll;
+	//printf("Y_diff: %d \n edge_center_mm: %d", Y_diff, edge_center_mm);
 	// Krümmung in Variable k
 	//k = (2*Y) / (X^2 + Y_diff^2);
 

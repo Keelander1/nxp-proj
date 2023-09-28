@@ -80,6 +80,26 @@ void Camera_Exposure_time_task(void *pvParameters);
 void Edge_Detection(void);
 void menu_func_edge_calibration(void);
 
+/*******************************************************************************
+ * Structures
+ ******************************************************************************/
+
+
+
+struct edgesDetectionData {
+	uint8_t edges[128];
+	uint8_t edgesMiddle[128]; //all detected edge
+	uint8_t edge_left_found;	//1 if found
+	uint8_t edge_right_found;	//1 if found
+	uint8_t edge_left;			//left Edge Coordinate
+	uint8_t edge_right;		//Right Edge Coordinate
+	int16_t edge_center;
+	int16_t edge_center_mm;
+	uint8_t detection_mode;
+	uint8_t track_state;
+//	uint8_t camera_distance;	//TODO: implement
+};
+
 
 
 #endif /* CAMERA_CAMERA_H_ */

@@ -76,8 +76,8 @@ void SERVO_Init(void)
 
 	//*******************************************************************************************************
 	//Create SERVO_Demo task
-	if (xTaskCreate(SERVO_Demo, "SERVO_Demo", configMINIMAL_STACK_SIZE + 100, NULL, 1, NULL) != pdPASS)
-	{ LED3_ON(); } //LED3 is Error
+//	if (xTaskCreate(SERVO_Demo, "SERVO_Demo", configMINIMAL_STACK_SIZE + 100, NULL, 1, NULL) != pdPASS)
+//	{ LED3_ON(); } //LED3 is Error
 	//*******************************************************************************************************
 }
 

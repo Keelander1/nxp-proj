@@ -63,6 +63,9 @@ volatile uint8_t pixelCounter2 = 129;			// PixelCounter for camera 2
 volatile uint8_t pixelValues2[128] = {0};		// PixelValue Array for camera 2
 volatile uint8_t pixelValues2UC[128] = {0};		// Uncalibrated PixelValue Array for camera 2
 volatile int8_t calibrationCamera2[128] = {0};  // Calibration Array for camera 2
+
+struct edgeDetectionData edgeData;
+
 volatile uint8_t edges[128] = {0};
 volatile uint8_t edgesMiddle[128] = {0}; //all detected edge
 volatile uint8_t edge_left_found = 0;	//1 if found
@@ -73,7 +76,7 @@ volatile int16_t edge_center = 0;
 volatile int16_t edge_center_mm =0;
 volatile uint8_t detection_mode = 0;
 volatile uint8_t track_state = 0;
-volatile uint8_t edge_distance = 80;	//distance between track boarders (Schätzwert)
+
 //volatile uint8_t camera_distance = 0;	//TODO: implement
 
 
@@ -544,10 +547,12 @@ enum track {
 void Edge_Detection(void)
 {
 	//Parameter
-	uint8_t threshold = 20;					//threshold for edge detection
-	uint8_t edge_min_width = 2;
+	uint8_t threshold = 30;					//threshold for edge detection
+	uint8_t edge_min_width = 1;
 	uint8_t edge_min_hight = 30;
 	uint8_t trace_offset = 7;
+	uint8_t edge_distance = ((all_param_t*)&const_all_param)->camera.edge_distance;
+
 
 	uint8_t right_edge_hight_max = 0;
 	uint8_t left_edge_hight_max = 0;
@@ -562,8 +567,6 @@ void Edge_Detection(void)
 	uint8_t xmax;
 	uint8_t right_edge_count = 0;
 	uint8_t left_edge_count = 0;
-
-	edge_distance = ((all_param_t*)&const_all_param)->camera.edge_distance;
 
 	edge_right_found = 0;
 	edge_left_found = 0;
@@ -663,13 +666,13 @@ void Edge_Detection(void)
 		}
 	}
 
-	if((edge_left_found == 0) && (edge_right_found == 0))
+	if( ((edge_left_found == 0) && (edge_right_found == 0)) || (abs(edge_right-edge_left) < 10) || (edge_left > edge_right) )
 		detection_mode = init;
-	if((edge_left_found == 0) && (edge_right_found == 1))
+	else if((edge_left_found == 0) && (edge_right_found == 1))
 		edge_center = edge_right - edge_distance/2;
-	if((edge_left_found == 1) && (edge_right_found == 0))
+	else if((edge_left_found == 1) && (edge_right_found == 0))
 		edge_center = edge_left + edge_distance/2;
-	if((edge_left_found == 1) && (edge_right_found == 1)){
+	else if((edge_left_found == 1) && (edge_right_found == 1)){
 		detection_mode = trace;
 		edge_center = (edge_right + edge_left)/2;
 	}

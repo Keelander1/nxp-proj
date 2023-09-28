@@ -141,7 +141,7 @@ const static menu_entry_t menu_main_drive_entries[] = {
 				.max_val = 2,
 				.en = true,
 		},
-		{		.str = "Test_Drive",							// new Simonis Leon 16.06.23
+		{		.str = "Real_Drive",							// new Simonis Leon 16.06.23
 				.type = MENU_PAGE,
 				.func = Real_Drive,
 				.en = true,
