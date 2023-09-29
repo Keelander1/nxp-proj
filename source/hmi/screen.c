@@ -177,58 +177,59 @@ void menu_open_hardware_parameter_camera() {
 void menu_page_pixel_display_camera(uint8_t refresh)    {								// new Martin Fürstberger 27.05.23
 		uint8_t x=0;
 		uint8_t y=0;
+		volatile struct EdgeDetectionData *edgeDat;
+		volatile uint8_t *pixelVal;
 		char time_string[15] = "Exp.Time[ms]:";
-		if(camSelect == cam1){
-			sprintf(&time_string[13], "%d", CTIMER0->MSR[0]/220000);	//Exposure time in ms
-		}
-		else if(camSelect == cam2){
-			sprintf(&time_string[13], "%d", CTIMER0->MSR[0]/220000);	//Exposure time in ms
-		}
+
+		switch(camSelect){
+			case cam1:
+				sprintf(&time_string[13], "%d", CTIMER0->MSR[0]/220000);	//Exposure time in ms
+				edgeDat = &edgeData[0];
+				pixelVal = pixelValues;
+				break;
+			case cam2:
+				sprintf(&time_string[13], "%d", CTIMER4->MSR[0]/220000);	//Exposure time in ms				edgeDat = &edgeData[1];
+				pixelVal = pixelValues2;
+				break;
+			}
 		ssd1309_rtos_lock(&g_disp_0);
 		//x1,y1, x2,  y2
 		ssd1309_draw_rect(&g_disp_0.disp_obj, 0, 13, 127, 63, true, OFF);
 
 		//Print Left & Right Edge
 
-
-
 		for(x=0;x<128;x++){
-			if(camSelect == cam1){
-				y = 64-(pixelValues[x]/5);						//Scale Pixel Values to Display Size
-			}
-			if(camSelect == cam2){
-				y = 64-(pixelValues2[x]/5);						//Scale Pixel Values to Display Size
-			}
+			y = 64-(pixelVal[x]/5);						//Scale Pixel Values to Display Size
 			ssd1309_set_pixel(&g_disp_0.disp_obj,x, y, ON);	//Print Pixel Values
 
 //			Print all found Edges
 //			if(edges[x] == 1)
 //				ssd1309_draw_rect(&g_disp_0.disp_obj, x, 13, x, 18, true, ON);		//Draw Right Edges
-			if(edgeData->edgesMiddle[x] == 1)
+			if(edgeDat->edgesMiddle[x] == 1)
 				ssd1309_draw_rect(&g_disp_0.disp_obj, x, 13, x, 30, true, ON);		//Draw Right Edges
 //			if(edges[x] == 2)
 //				ssd1309_draw_rect(&g_disp_0.disp_obj, x, 13, x, 18, true, ON);	//Draw Left Edges
-			if(edgeData->edgesMiddle[x] == 2)
+			if(edgeDat->edgesMiddle[x] == 2)
 				ssd1309_draw_rect(&g_disp_0.disp_obj, x, 13, x, 30, true, ON);	//Draw Left Edges
 		}
 
-		if(edgeData->edge_left_found){
-			ssd1309_draw_rect(&g_disp_0.disp_obj, edgeData->edge_left, 13, edgeData->edge_left, 63, true, ON); //Draw Left Edge
-			ssd1309_set_pos(&g_disp_0.disp_obj, edgeData->edge_left +1, 50);
+		if(edgeDat->edge_left_found){
+			ssd1309_draw_rect(&g_disp_0.disp_obj, edgeDat->edge_left, 13, edgeDat->edge_left, 63, true, ON); //Draw Left Edge
+			ssd1309_set_pos(&g_disp_0.disp_obj, edgeDat->edge_left +1, 50);
 			ssd1309_write_str(&g_disp_0.disp_obj, "L" , ssd1309_font_6x8, false, ON);
 		}
 
-		if(edgeData->edge_right_found){
-			ssd1309_draw_rect(&g_disp_0.disp_obj, edgeData->edge_right, 13, edgeData->edge_right, 63, true, ON);	//Draw Right Edge
-			ssd1309_set_pos(&g_disp_0.disp_obj, edgeData->edge_right - 7, 50);
+		if(edgeDat->edge_right_found){
+			ssd1309_draw_rect(&g_disp_0.disp_obj, edgeDat->edge_right, 13, edgeDat->edge_right, 63, true, ON);	//Draw Right Edge
+			ssd1309_set_pos(&g_disp_0.disp_obj, edgeDat->edge_right - 7, 50);
 			ssd1309_write_str(&g_disp_0.disp_obj, "R" , ssd1309_font_6x8, false, ON);
 		}
 
-		if(edgeData->edge_right_found || edgeData->edge_left_found){
-			uint8_t center = (uint8_t) edgeData->edge_center;
-			if (edgeData->edge_center < 0)
+		if(edgeDat->edge_right_found || edgeDat->edge_left_found){
+			uint8_t center = (uint8_t) edgeDat->edge_center;
+			if (edgeDat->edge_center < 0)
 				center =0 ;
-			if (edgeData->edge_center > 127)
+			if (edgeDat->edge_center > 127)
 				center = 127;
 			ssd1309_draw_rect(&g_disp_0.disp_obj, center, 43, center, 63, true, ON);	//Draw Right Edge
 			ssd1309_set_pos(&g_disp_0.disp_obj, center - 7, 50);
@@ -258,17 +259,25 @@ void menu_page_pixel_display_camera(uint8_t refresh)    {								// new Martin F
 	}
 void menu_page_calibration_camera(uint8_t refresh)    {
 	uint8_t x=0;
-	uint8_t y=0;
-	if(camSelect == cam1){
-		for(x=0; x<128; x++){
-			calibrationCamera[x] = calibrationCamera[x] + (128 - pixelValues[x]); //Calibrating Camera
-		}
+//	uint8_t y=0;
+	volatile uint8_t *pixelVal;
+	volatile int8_t *calibrationCam;
+
+	switch(camSelect){
+		case cam1:
+			pixelVal = pixelValues;
+			calibrationCam = calibrationCamera;
+			break;
+		case cam2:
+			pixelVal = pixelValues2;
+			calibrationCam = calibrationCamera2;
+			break;
 	}
-	if(camSelect == cam2){
-		for(x=0; x<128; x++){
-			calibrationCamera2[x] = calibrationCamera2[x] + (128 - pixelValues2[x]); //Calibrating Camera
-		}
+
+	for(x=0; x<128; x++){
+		calibrationCam[x] = calibrationCam[x] + (128 - pixelVal[x]); //Calibrating Camera
 	}
+
 	menu_rtos_switch_handle(&curr_menu_handle, &menu_main_hardware_handle);
 	menu_reset(&curr_menu_handle->drv_handle);
 }
@@ -294,31 +303,31 @@ void menu_page_calibration_camera(uint8_t refresh)    {
 ////			Print all found Edges
 ////			if(edges[x] == 1)
 ////				ssd1309_draw_rect(&g_disp_0.disp_obj, x, 13, x, 18, true, ON);		//Draw Right Edges
-//			if(edgeData->edgesMiddle[x] == 1)
+//			if(edgeDat->edgesMiddle[x] == 1)
 //				ssd1309_draw_rect(&g_disp_0.disp_obj, x, 13, x, 30, true, ON);		//Draw Right Edges
 ////			if(edges[x] == 2)
 ////				ssd1309_draw_rect(&g_disp_0.disp_obj, x, 13, x, 18, true, ON);	//Draw Left Edges
-//			if(edgeData->edgesMiddle[x] == 2)
+//			if(edgeDat->edgesMiddle[x] == 2)
 //				ssd1309_draw_rect(&g_disp_0.disp_obj, x, 13, x, 30, true, ON);	//Draw Left Edges
 //		}
 //
-//		if(edgeData->edge_left_found){
-//			ssd1309_draw_rect(&g_disp_0.disp_obj, edgeData->edge_left, 13, edgeData->edge_left, 63, true, ON); //Draw Left Edge
-//			ssd1309_set_pos(&g_disp_0.disp_obj, edgeData->edge_left +1, 50);
+//		if(edgeDat->edge_left_found){
+//			ssd1309_draw_rect(&g_disp_0.disp_obj, edgeDat->edge_left, 13, edgeDat->edge_left, 63, true, ON); //Draw Left Edge
+//			ssd1309_set_pos(&g_disp_0.disp_obj, edgeDat->edge_left +1, 50);
 //			ssd1309_write_str(&g_disp_0.disp_obj, "L" , ssd1309_font_6x8, false, ON);
 //		}
 //
-//		if(edgeData->edge_right_found){
-//			ssd1309_draw_rect(&g_disp_0.disp_obj, edgeData->edge_right, 13, edgeData->edge_right, 63, true, ON);	//Draw Right Edge
-//			ssd1309_set_pos(&g_disp_0.disp_obj, edgeData->edge_right - 7, 50);
+//		if(edgeDat->edge_right_found){
+//			ssd1309_draw_rect(&g_disp_0.disp_obj, edgeDat->edge_right, 13, edgeDat->edge_right, 63, true, ON);	//Draw Right Edge
+//			ssd1309_set_pos(&g_disp_0.disp_obj, edgeDat->edge_right - 7, 50);
 //			ssd1309_write_str(&g_disp_0.disp_obj, "R" , ssd1309_font_6x8, false, ON);
 //		}
 //
-//		if(edgeData->edge_right_found || edgeData->edge_left_found){
-//			uint8_t center = (uint8_t) edgeData->edge_center;
-//			if (edgeData->edge_center < 0)
+//		if(edgeDat->edge_right_found || edgeDat->edge_left_found){
+//			uint8_t center = (uint8_t) edgeDat->edge_center;
+//			if (edgeDat->edge_center < 0)
 //				center =0 ;
-//			if (edgeData->edge_center > 127)
+//			if (edgeDat->edge_center > 127)
 //				center = 127;
 //			ssd1309_draw_rect(&g_disp_0.disp_obj, center, 43, center, 63, true, ON);	//Draw Right Edge
 //			ssd1309_set_pos(&g_disp_0.disp_obj, center - 7, 50);

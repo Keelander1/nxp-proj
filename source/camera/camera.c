@@ -554,23 +554,6 @@ void menu_func_edge_calibration() {
  * Edge Detection
  ******************************************************************************/
 
-enum position {
-	right = 1,
-    left = 2
-};
-
-enum mode {
-	init = 0,
-	trace = 1
-};
-
-enum track {
-	track = 0,
-	finish = 1,
-	tree_stribes = 2,
-	four_stribes = 3
-};
-
 void Edge_Detection(struct EdgeDetectionData *edgeData, volatile uint8_t *pixelVal){
 	//Parameter
 	uint8_t threshold = 30;					//threshold for edge detection
