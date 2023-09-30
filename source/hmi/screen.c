@@ -189,6 +189,7 @@ void menu_page_pixel_display_camera(uint8_t refresh)    {								// new Martin F
 				break;
 			case cam2:
 				sprintf(&time_string[13], "%d", CTIMER4->MSR[0]/220000);	//Exposure time in ms				edgeDat = &edgeData[1];
+				edgeDat = &edgeData[1];
 				pixelVal = pixelValues2;
 				break;
 			}
@@ -257,6 +258,7 @@ void menu_page_pixel_display_camera(uint8_t refresh)    {								// new Martin F
 //
 //		}
 	}
+
 void menu_page_calibration_camera(uint8_t refresh)    {
 	uint8_t x=0;
 //	uint8_t y=0;
@@ -303,31 +305,31 @@ void menu_page_calibration_camera(uint8_t refresh)    {
 ////			Print all found Edges
 ////			if(edges[x] == 1)
 ////				ssd1309_draw_rect(&g_disp_0.disp_obj, x, 13, x, 18, true, ON);		//Draw Right Edges
-//			if(edgeDat->edgesMiddle[x] == 1)
+//			if(edgeData->edgesMiddle[x] == 1)
 //				ssd1309_draw_rect(&g_disp_0.disp_obj, x, 13, x, 30, true, ON);		//Draw Right Edges
 ////			if(edges[x] == 2)
 ////				ssd1309_draw_rect(&g_disp_0.disp_obj, x, 13, x, 18, true, ON);	//Draw Left Edges
-//			if(edgeDat->edgesMiddle[x] == 2)
+//			if(edgeData->edgesMiddle[x] == 2)
 //				ssd1309_draw_rect(&g_disp_0.disp_obj, x, 13, x, 30, true, ON);	//Draw Left Edges
 //		}
 //
-//		if(edgeDat->edge_left_found){
-//			ssd1309_draw_rect(&g_disp_0.disp_obj, edgeDat->edge_left, 13, edgeDat->edge_left, 63, true, ON); //Draw Left Edge
-//			ssd1309_set_pos(&g_disp_0.disp_obj, edgeDat->edge_left +1, 50);
+//		if(edgeData->edge_left_found){
+//			ssd1309_draw_rect(&g_disp_0.disp_obj, edgeData->edge_left, 13, edgeData->edge_left, 63, true, ON); //Draw Left Edge
+//			ssd1309_set_pos(&g_disp_0.disp_obj, edgeData->edge_left +1, 50);
 //			ssd1309_write_str(&g_disp_0.disp_obj, "L" , ssd1309_font_6x8, false, ON);
 //		}
 //
-//		if(edgeDat->edge_right_found){
-//			ssd1309_draw_rect(&g_disp_0.disp_obj, edgeDat->edge_right, 13, edgeDat->edge_right, 63, true, ON);	//Draw Right Edge
-//			ssd1309_set_pos(&g_disp_0.disp_obj, edgeDat->edge_right - 7, 50);
+//		if(edgeData->edge_right_found){
+//			ssd1309_draw_rect(&g_disp_0.disp_obj, edgeData->edge_right, 13, edgeData->edge_right, 63, true, ON);	//Draw Right Edge
+//			ssd1309_set_pos(&g_disp_0.disp_obj, edgeData->edge_right - 7, 50);
 //			ssd1309_write_str(&g_disp_0.disp_obj, "R" , ssd1309_font_6x8, false, ON);
 //		}
 //
-//		if(edgeDat->edge_right_found || edgeDat->edge_left_found){
-//			uint8_t center = (uint8_t) edgeDat->edge_center;
-//			if (edgeDat->edge_center < 0)
+//		if(edgeData->edge_right_found || edgeData->edge_left_found){
+//			uint8_t center = (uint8_t) edgeData->edge_center;
+//			if (edgeData->edge_center < 0)
 //				center =0 ;
-//			if (edgeDat->edge_center > 127)
+//			if (edgeData->edge_center > 127)
 //				center = 127;
 //			ssd1309_draw_rect(&g_disp_0.disp_obj, center, 43, center, 63, true, ON);	//Draw Right Edge
 //			ssd1309_set_pos(&g_disp_0.disp_obj, center - 7, 50);
@@ -340,20 +342,20 @@ void menu_page_calibration_camera(uint8_t refresh)    {
 //			ssd1309_set_pos(&g_disp_0.disp_obj, 0, 18);
 //			ssd1309_write_str(&g_disp_0.disp_obj, time_string , ssd1309_font_6x8, false, ON);	//Print Exposure time
 //		}
+
+		//Printing Track State
+//		ssd1309_set_pos(&g_disp_0.disp_obj, 64, 50);
+//		switch(track_state){
+//			case 0:
+//				ssd1309_write_str(&g_disp_0.disp_obj, "T" , ssd1309_font_6x8, false, ON); break; //T: Track
+//			case 1:
+//				ssd1309_write_str(&g_disp_0.disp_obj, "F" , ssd1309_font_6x8, false, ON); break; //F: Finish
+//			case 3:
+//				ssd1309_write_str(&g_disp_0.disp_obj, "3" , ssd1309_font_6x8, false, ON); break; //3: tree_stribes
+//			case 4:
+//				ssd1309_write_str(&g_disp_0.disp_obj, "4" , ssd1309_font_6x8, false, ON); break; //4: four_stribes
 //
-//		//Printing Track State
-////		ssd1309_set_pos(&g_disp_0.disp_obj, 64, 50);
-////		switch(track_state){
-////			case 0:
-////				ssd1309_write_str(&g_disp_0.disp_obj, "T" , ssd1309_font_6x8, false, ON); break; //T: Track
-////			case 1:
-////				ssd1309_write_str(&g_disp_0.disp_obj, "F" , ssd1309_font_6x8, false, ON); break; //F: Finish
-////			case 3:
-////				ssd1309_write_str(&g_disp_0.disp_obj, "3" , ssd1309_font_6x8, false, ON); break; //3: tree_stribes
-////			case 4:
-////				ssd1309_write_str(&g_disp_0.disp_obj, "4" , ssd1309_font_6x8, false, ON); break; //4: four_stribes
-////
-////		}
+//		}
 //	}
 
 //void menu_page_calibration_camera2(uint8_t refresh)    {

@@ -1,7 +1,7 @@
 ExitOnError 1
 r
 h
-loadfile "C:\nxp\Pojects\nxp-proj\Debug\Gustl_SumEck.hex"
+loadfile "C:\Users\Tobias\Documents\GitHub\nxp-proj\Debug\Gustl_SumEck.hex"
 qc
 
 qc
