@@ -249,10 +249,30 @@ void Real_Drive (uint8_t state)
 	int16_t Spurweite = 135;				// muss noch Richtig abgemessen werden
 	// Lenkregler
 
+	for(uint8_t i = 1; i <2; i++){
+		switch(edgeData[i].edge_left_found + (edgeData[i].edge_right_found << 1)){
+			case 0:	//no Edge found
+				break;
+
+			case 1:	//left Edge found
+				break;
+
+			case 2:	//right Edge found
+				break;
+
+			case 3:	//left & right Edge found
+
+				break;
+		}
+	}
+
+	Y_ist = edgeData[0].edge_center_mm;
+
+
 	//Bestimmung Regelfehler
-	Y_ist = edgeData->edge_center_mm;
+	Y_ist = edgeData[0].edge_center_mm;
 	Y_soll = 0;
-	Y_diff = edgeData->edge_center_mm - Y_soll;
+	Y_diff = edgeData[0].edge_center_mm - Y_soll;
 	//printf("Y_diff: %d \n edge_center_mm: %d", Y_diff, edge_center_mm);
 	// Krümmung in Variable k
 	//k = (2*Y) / (X^2 + Y_diff^2);
