@@ -68,7 +68,7 @@ typedef struct _system_param_t {
  * param throttle:	throttle for flag detection
  ******************************************************************************/
 typedef struct _camera_param_t {
-	int32_t edge_distance;
+	int32_t edge_distance[2];
 	uint32_t edge_show;
 	uint32_t exposure_show;
 } camera_param_t;

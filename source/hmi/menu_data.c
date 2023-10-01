@@ -269,11 +269,23 @@ const static menu_entry_t menu_hardware_camera_parameter_entries[] = {
 		},
 		{
 				/****************************************************
-				 * Camera Edge Detect Throttle Value
+				 * Edge Detect Line Distance
 				 ****************************************************/
 				.str = "Edge Distance",											//display "Edge Distance"
 				.type = MENU_VALUE,												//type is MENU_VALUE
-				.val = &((all_param_t*)&const_all_param)->camera.edge_distance,		//get saved init value
+				.val = &((all_param_t*)&const_all_param)->camera.edge_distance[0],		//get saved init value
+				.min_val = 0,													//min value
+				.max_val = 100,													//max value
+				.func = 0,														//write value
+				.en = true,														//element is changeable
+		},
+		{
+				/****************************************************
+				 * Edge Detect Line Distance
+				 ****************************************************/
+				.str = "Edge Distance2",											//display "Edge Distance"
+				.type = MENU_VALUE,												//type is MENU_VALUE
+				.val = &((all_param_t*)&const_all_param)->camera.edge_distance[1],		//get saved init value
 				.min_val = 0,													//min value
 				.max_val = 100,													//max value
 				.func = 0,														//write value
@@ -644,7 +656,7 @@ menu_rtos_handle_t menu_hardware_camera_handle = {
  ***************************************************/
 menu_rtos_handle_t menu_hardware_camera_parameter_handle = {
 		.drv_handle = {
-				.entry_cnt = 4,                                             //4 entries
+				.entry_cnt = 5,                                             //4 entries
 				.entry_list = (menu_entry_t*)menu_hardware_camera_parameter_entries,  //list of all entries
 				.draw = menu_list_draw,                                     //emtry draw function
 		},

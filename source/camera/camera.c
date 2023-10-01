@@ -44,6 +44,7 @@
 
 
 #include "camera.h"
+#include "screen.h"
 
 
 /*******************************************************************************
@@ -545,7 +546,7 @@ void Camera_Exposure_time_task(void *pvParameters)
 
 void menu_func_edge_calibration() {
 
-	((all_param_t*)&const_all_param)->camera.edge_distance = edge_right - edge_left;
+	((all_param_t*)&const_all_param)->camera.edge_distance[camSelect-1] = edgeData[camSelect-1].edge_right - edgeData[camSelect-1].edge_left;
 
 }
 
@@ -560,7 +561,7 @@ void Edge_Detection(struct EdgeDetectionData *edgeData, volatile uint8_t *pixelV
 	uint8_t edge_min_width = 1;
 	uint8_t edge_min_hight = 30;
 	uint8_t trace_offset = 7;
-	uint8_t edge_distance = ((all_param_t*)&const_all_param)->camera.edge_distance;
+	uint8_t edge_distance = ((all_param_t*)&const_all_param)->camera.edge_distance[camSelect-1];
 
 
 	uint8_t right_edge_hight_max = 0;
