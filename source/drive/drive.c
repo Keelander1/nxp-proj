@@ -249,6 +249,8 @@ void Real_Drive (uint8_t state)
 	int16_t Spurweite = 135;				// muss noch Richtig abgemessen werden
 	// Lenkregler
 
+	// aktuell 0 ist alte
+	// 1 ist neue
 	for(uint8_t i = 1; i <2; i++){
 		switch(edgeData[i].edge_left_found + (edgeData[i].edge_right_found << 1)){
 			case 0:	//no Edge found

@@ -1,5 +1,5 @@
-C:\Users\Tobias\Documents\GitHub\nxp-proj\drivers/fsl_clock.h:698:20:CLOCK_EnableClock	24	static
-C:\Users\Tobias\Documents\GitHub\nxp-proj\drivers/fsl_iocon.h:255:22:IOCON_PinMuxSet	24	static
+C:\Users\keela\OneDrive\Desktop\Studium\Master ET\Semester2NXP\nxp-proj\drivers/fsl_clock.h:698:20:CLOCK_EnableClock	24	static
+C:\Users\keela\OneDrive\Desktop\Studium\Master ET\Semester2NXP\nxp-proj\drivers/fsl_iocon.h:255:22:IOCON_PinMuxSet	24	static
 ../board/pin_mux.c:37:6:BOARD_InitBootPins	8	static
 ../board/pin_mux.c:63:6:BOARD_InitPins	16	static
 ../board/pin_mux.c:135:6:BOARD_InitLEDsPins	24	static
