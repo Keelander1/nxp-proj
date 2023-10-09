@@ -1,4 +1,7 @@
 /Release/
+*.d
+*.o
+*.su
 language.settings.xml
 board.d
 board.o
