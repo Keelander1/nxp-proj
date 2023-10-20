@@ -1,12 +1,11 @@
 /*
  * GENERATED FILE - DO NOT EDIT
- * Copyright (c) 2008-2013 Code Red Technologies Ltd,
- * Copyright 2015, 2018-2019 NXP
- * (c) NXP Semiconductors 2013-2023
+ * Copyright 2008-2013 Code Red Technologies Ltd,
+ * Copyright 2013-2023 NXP
  * Generated linker script file for LPC54628J512
  * Created from library.ldt by FMCreateLinkLibraries
  * Using Freemarker v2.3.30
- * MCUXpresso IDE v11.7.0 [Build 9198] [2023-01-17] on 09.10.2023, 14:42:41
+ * MCUXpresso IDE v11.8.0 [Build 1165] [2023-07-26] on 20.10.2023, 13:56:30
  */
 
 GROUP (

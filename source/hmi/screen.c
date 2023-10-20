@@ -268,17 +268,19 @@ void menu_page_calibration_camera(uint8_t refresh)    {
 	switch(camSelect){
 		case cam1:
 			pixelVal = pixelValues;
-			calibrationCam = calibrationCamera;
+			calibrationCam = calibrationCamera_storage[0];
 			break;
 		case cam2:
 			pixelVal = pixelValues2;
-			calibrationCam = calibrationCamera2;
+			calibrationCam = calibrationCamera_storage[1];
 			break;
 	}
 
 	for(x=0; x<128; x++){
 		calibrationCam[x] = calibrationCam[x] + (128 - pixelVal[x]); //Calibrating Camera
 	}
+
+	param_save();
 
 	menu_rtos_switch_handle(&curr_menu_handle, &menu_main_hardware_handle);
 	menu_reset(&curr_menu_handle->drv_handle);
