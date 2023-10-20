@@ -140,3 +140,4 @@ script.jlink
 .settings/language.settings.xml
 *.ld
 *.axf
+*.ld

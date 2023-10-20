@@ -5,7 +5,7 @@
  * Generated linker script file for LPC54628J512
  * Created from linkscript.ldt by FMCreateLinkLibraries
  * Using Freemarker v2.3.30
- * MCUXpresso IDE v11.8.0 [Build 1165] [2023-07-26] on 20.10.2023, 14:06:06
+ * MCUXpresso IDE v11.8.0 [Build 1165] [2023-07-26] on 20.10.2023, 14:06:51
  */
 
 INCLUDE "Gustl_SumEck_Debug_library.ld"
