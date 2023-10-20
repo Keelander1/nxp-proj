@@ -138,3 +138,5 @@ makefile
 Debug/makefile
 script.jlink
 .settings/language.settings.xml
+*.ld
+*.axf
