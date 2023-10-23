@@ -59,11 +59,12 @@ const ctimer_config_t TakeShots_config = {
 volatile uint8_t pixelCounter = 129;			// PixelCounter for camera 1
 volatile uint8_t pixelValues[128] = {0};		// PixelValue Array for camera 1
 volatile uint8_t pixelValuesUC[128] = {0};		// Uncalibrated PixelValue Array for camera 1
-volatile int8_t calibrationCamera[128] = {0}; 	// Calibration Array for camera 1
+volatile int8_t *calibrationCamera = calibrationCamera_storage[0]; // Calibration Array for camera 1
 volatile uint8_t pixelCounter2 = 129;			// PixelCounter for camera 2
 volatile uint8_t pixelValues2[128] = {0};		// PixelValue Array for camera 2
 volatile uint8_t pixelValues2UC[128] = {0};		// Uncalibrated PixelValue Array for camera 2
-volatile int8_t calibrationCamera2[128] = {0};  // Calibration Array for camera 2
+volatile int8_t *calibrationCamera2 = calibrationCamera_storage[1]; // Calibration Array for camera 2
+
 
 struct EdgeDetectionData edgeData[2] = {
 		{

@@ -50,6 +50,8 @@
 
 #define PARAM_EEPROM_PAGE_NUM	0						//write to EEPROM page 0
 
+#define PARAM_DATA_SIZE sizeof(all_param_t)
+
 #define FSL_FEATURE_EEPROM_PAGE_SIZE (FSL_FEATURE_EEPROM_SIZE / FSL_FEATURE_EEPROM_PAGE_COUNT)	//calculate EEPROM page size
 
 /*******************************************************************************
@@ -71,6 +73,7 @@ typedef struct _camera_param_t {
 	int32_t edge_distance[2];
 	uint32_t edge_show;
 	uint32_t exposure_show;
+//	int8_t calibrationCamera[2][128];
 } camera_param_t;
 
 /*******************************************************************************
@@ -91,6 +94,7 @@ typedef struct _all_param_t {
 extern uint8_t const_all_param[FSL_FEATURE_EEPROM_PAGE_SIZE];	//array with all parameters in integers
 extern all_param_t *all_param;									//pointer to all_param_t
 
+extern int8_t calibrationCamera_storage[2][128];
 /*******************************************************************************
  * API
  ******************************************************************************/
