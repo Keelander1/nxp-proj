@@ -79,6 +79,25 @@ int16_t X = 230;					//Sichtweite Kamera in mm
 
 
 
+// Vars Für State Control
+
+
+float Stellgroese_rad_u = 0;
+float Ausgangsrueckfuehrung_KYP = -6.8948;
+uint16_t Const_Test_Speed = 20;
+uint16_t Speed_Left_normiert = 0;
+uint16_t Speed_Right_normiert = 0;
+uint16_t SpeedValueLeft = 0;
+uint16_t SpeedValueRight = 0;
+float Querabweichung_m_y = 0;
+float Spurweiter_m = 0.14;					//define
+float ReglerSollgroeße_m = 0;				//define
+float servo_Value = 0;
+//int16_t gamma = 0;
+float Stearing_Value = 0;
+
+
+
 const ctimer_config_t BLDC_config = {
 		.mode = kCTIMER_TimerMode,   /* TC is incremented every rising APB bus clock edge */
 		.input = kCTIMER_Capture_0,  /*!< Timer capture channel 0 */
@@ -354,4 +373,69 @@ void Real_Drive (uint8_t state)
 
 
 
+}
+
+
+
+void StateControl(uint8_t state)
+{
+
+	//menu_page_pixel_display_camera(1);
+
+	//if(state==MENU_DEACT)
+	//{
+// Set the Speed -- here is not the Speed decision!!!
+		Speed_Left_normiert  = Const_Test_Speed; //* (1 + ((Spurweite * Y_diff) / (X*X + Y_diff*Y_diff)));
+		Speed_Right_normiert = Const_Test_Speed; //* (1 - ((Spurweite * Y_diff) / (X*X + Y_diff*Y_diff)));
+		//calculate test value for selected speed
+		SpeedValueLeft= *BLDCLeftMinValue + Speed_Left_normiert*(*BLDCLeftMaxValue-*BLDCLeftMinValue)/100;// Fester Wert definiert--> evtl. noch dynamisch machen!!!
+		SpeedValueRight= *BLDCRightMinValue + Speed_Right_normiert*(*BLDCRightMaxValue-*BLDCRightMinValue)/100;// Fester Wert definiert--> evtl. noch dynamisch machen!!!
+//Berechnung und Setzen der Werte der Register für Rechten und Linken Motor
+		CTIMER3->MSR[0] = CTIMER3_PWM_PERIOD - SpeedValueLeft * CTIMER3_PWM_PERIOD / 20000;	// (Left)
+		CTIMER3->MSR[2] = CTIMER3_PWM_PERIOD - SpeedValueRight * CTIMER3_PWM_PERIOD / 20000; //(Right)
+
+
+
+//Bestimmen der Stellgröße
+
+		Querabweichung_m_y = (float)edgeData[0].edge_center_mm / 1000.0;
+		Stellgroese_rad_u = ReglerSollgroeße_m - Ausgangsrueckfuehrung_KYP*Querabweichung_m_y;
+
+		gamma = (int16_t)(Stellgroese_rad_u*0.5*180/3.14);		// 30°Lenkwinkel Entsprechen 60° beim Servo
+//Faktor Lenkwinkel zu Servo-Winkel
+		if (gamma <= -60)
+			{
+				gamma = -60;
+			}
+			else if (gamma >= 60)
+			{
+				gamma = 60;
+			}
+
+			//Skalierung auf +- 100 --> 60 ° entspricht +100
+			gamma = gamma * 10 / 6;
+			servo_Value = (int16_t)gamma;
+
+			if (servo_Value >= 100) servo_Value = 100;
+			if (servo_Value <= -100) servo_Value = -100;
+
+			if(servo_Value <=0)
+			{
+				//calculate test value for left steering
+				Stearing_Value= *servoMiddle+ servo_Value*(*servoMiddle-*servoLeft)/100;
+			}
+			else
+			{
+				//calculate test value for right steering
+				Stearing_Value= *servoMiddle + servo_Value*(*servoRight-*servoMiddle)/100;
+			}
+
+			//Schreiben des Umgerechneten PWM Werts ins Register für die Lenkwinkelsteuerung
+			CTIMER1->MSR[2] = CTIMER1_PWM_PERIOD - Stearing_Value * CTIMER1_PWM_PERIOD / 20000;
+
+
+
+
+
+	//}
 }

@@ -147,6 +147,11 @@ const static menu_entry_t menu_main_drive_entries[] = {
 				.func = Real_Drive,
 				.en = true,
 		},
+		{		.str = "StateControl",							// new Simonis Leon 16.10.23
+						.type = MENU_PAGE,
+						.func = StateControl,
+						.en = true,
+				},
 
 		{
 				.str = "Back",
@@ -623,7 +628,7 @@ menu_rtos_handle_t menu_main_handle = {
  ***************************************************/
 menu_rtos_handle_t menu_main_drive_handle = {
 		.drv_handle = {
-				.entry_cnt = 6,                                        		//5 entries
+				.entry_cnt = 7,                                        		//5 entries
 				.entry_list = (menu_entry_t*)menu_main_drive_entries,  		//list of all entries
 				.draw = menu_list_draw,                                		//emtry draw function
 		},

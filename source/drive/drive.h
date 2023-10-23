@@ -80,4 +80,5 @@ void delay_ms(uint32_t value);
 void ESC_Init_Task(void *pvParameters);
 void Camera_Test_Drive (uint8_t state);
 void Real_Drive (uint8_t state);
+void StateControl(uint8_t state);
 #endif /* DRIVE_DRIVE_H_ */
