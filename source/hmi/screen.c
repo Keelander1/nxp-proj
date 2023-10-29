@@ -50,8 +50,10 @@
  */
 
 extern volatile uint8_t pixelValues[128];
+extern volatile uint8_t pixelValuesUC[128];
 extern volatile int8_t calibrationCamera[128];
 extern volatile uint8_t pixelValues2[128];
+extern volatile uint8_t pixelValues2UC[128];
 extern volatile int8_t calibrationCamera2[128];
 extern volatile struct EdgeDetectionData edgeData[2];
 int32_t camSelect = cam1;
@@ -183,12 +185,12 @@ void menu_page_pixel_display_camera(uint8_t refresh)    {								// new Martin F
 
 		switch(camSelect){
 			case cam1:
-				sprintf(&time_string[13], "%d", CTIMER0->MSR[0]/220000);	//Exposure time in ms
+				sprintf(&time_string[13], "%d", CTIMER0->MSR[0]/110000);	//Exposure time in ms
 				edgeDat = &edgeData[0];
 				pixelVal = pixelValues;
 				break;
 			case cam2:
-				sprintf(&time_string[13], "%d", CTIMER4->MSR[0]/220000);	//Exposure time in ms				edgeDat = &edgeData[1];
+				sprintf(&time_string[13], "%d", CTIMER4->MSR[0]/110000);	//Exposure time in ms				edgeDat = &edgeData[1];
 				edgeDat = &edgeData[1];
 				pixelVal = pixelValues2;
 				break;
@@ -267,17 +269,17 @@ void menu_page_calibration_camera(uint8_t refresh)    {
 
 	switch(camSelect){
 		case cam1:
-			pixelVal = pixelValues;
+			pixelVal = pixelValuesUC;
 			calibrationCam = calibrationCamera_storage[0];
 			break;
 		case cam2:
-			pixelVal = pixelValues2;
+			pixelVal = pixelValues2UC;
 			calibrationCam = calibrationCamera_storage[1];
 			break;
 	}
 
 	for(x=0; x<128; x++){
-		calibrationCam[x] = calibrationCam[x] + (128 - pixelVal[x]); //Calibrating Camera
+		calibrationCam[x] = (128 - pixelVal[x]); //Calibrating Camera
 	}
 
 	param_save();

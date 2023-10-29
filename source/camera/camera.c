@@ -146,6 +146,7 @@ void CTIMER0_Init(void)
 	CTIMER0-> MCR |= (1<<0)|(1<<1)|(1<<24);	//Interrupt when MR0 = value in TC, Timer Counter reset and reload MR with MSR at Match0
 
 	CTIMER0->MSR[0] = exposure_time;				//Initialize MSR0 with  220000 --> Timer overflow every 1ms  ((1/220MHZ)*220000)
+	CTIMER0->PR=1;									//Prescaler (/2)
 	//***********************************
 	//ADC Interrupt configuration
 	//CTIMER0-> INTEN |= (1<<0);
@@ -169,6 +170,7 @@ void CTIMER4_Init(void)
 	CTIMER4-> MCR |= (1<<0)|(1<<1)|(1<<24);	//Interrupt when MR0 = value in TC, Timer Counter reset and reload MR with MSR at Match0
 
 	CTIMER4->MSR[0] = exposure_time2;		//Initialize MSR0 with  220000 --> Timer overflow every 1ms  ((1/220MHZ)*220000)
+	CTIMER4->PR=1;							//Prescaler (/2)
 	//***********************************
 	//ADC Interrupt configuration
 	//CTIMER0-> INTEN |= (1<<0);
@@ -311,22 +313,8 @@ void SCTimer_SIEvents_Init(void)
  ******************************************************************************/
 void CTIMER0_IRQHandler(uint32_t flags)
 {
-	//pixelCounter = 0; //new picture start at pixel 0
-
-	//**********************************
-
 	SCT0->EV[2].STATE = 0xFFFFFFF; 		//Event 2 happens in all states
 	SCT0->CTRL &= ~(1 << 2); 			//Unhalt SCT0 by clearing bit 2 of CTRL
-
-//	uint8_t i=0;						// Delay for Si-Signal
-//	while(i<11){						// Delay for Si-Signal
-//	i++;}								// Delay for Si-Signal
-//	i=0;								// Delay for Si-Signal
-
-//	SCT0->EV[2].STATE = 0; 				//Event 2 happens only in State 0
-//	SCT0->CTRL &= ~(1 << 2); 			//Unhalt SCT0 by clearing bit 2 of CTRL
-	//**********************************
-
 	CTIMER_ClearStatusFlags(CTIMER0,kCTIMER_Match0Flag);
 }
 
@@ -336,22 +324,8 @@ void CTIMER0_IRQHandler(uint32_t flags)
  ******************************************************************************/
 void CTIMER4_IRQHandler(uint32_t flags)
 {
-	//pixelCounter2 = 0; //new picture start at pixel 0
-
-	//**********************************
-
 	SCT0->EV[5].STATE = 0xFFFFFFF; 		//Event 5 happens in all states
 	SCT0->CTRL &= ~(1 << 2); 			//Unhalt SCT0 by clearing bit 2 of CTRL
-
-//	uint8_t i=0;						// Delay for Si-Signal
-//	while(i<11){						// Delay for Si-Signal
-//	i++;}								// Delay for Si-Signal
-//	i=0;								// Delay for Si-Signal
-
-//	SCT0->EV[5].STATE = 0; 				//Event 5 happens only in State 0
-//	SCT0->CTRL &= ~(1 << 2); 			//Unhalt SCT0 by clearing bit 2 of CTRL
-	//**********************************
-
 	CTIMER_ClearStatusFlags(CTIMER4,kCTIMER_Match0Flag);
 }
 
@@ -516,10 +490,10 @@ void Camera_Exposure_time_task(void *pvParameters)
 		int32_t pixel_Values_sum = 0;
 
 		for(uint8_t x=0;x<128;x++){
-			pixel_Values_sum = pixel_Values_sum + pixelValues[x];						// Sum of all 128 ADC-Camera-Values
+			pixel_Values_sum = pixel_Values_sum + pixelValuesUC[x];						// Sum of all 128 ADC-Camera-Values
 			pixelValues[x]=pixelValuesUC[x]+calibrationCamera[x];						// Calibration Camera 1
 		}
-		exposure_time = exposure_time + ((16384-pixel_Values_sum))*10;					// Gain = 10 (can become unstable !!!)
+		exposure_time = exposure_time + ((16384-pixel_Values_sum))*6;					// Gain = 10 (can become unstable !!!)
 																						// 16384 = 128 * ADC-Medium-Value (0 ... 256)
 		CTIMER0->MSR[0] = exposure_time;												// Exposure Time in s = exposure_time/220 MHz
 
@@ -527,10 +501,10 @@ void Camera_Exposure_time_task(void *pvParameters)
 		int32_t pixel_Values_sum2 = 0;
 
 		for(uint8_t x=0;x<128;x++){
-		pixel_Values_sum2 = pixel_Values_sum2 + pixelValues2[x];						// Sum of all 128 ADC-Camera-Values
+		pixel_Values_sum2 = pixel_Values_sum2 + pixelValues2UC[x];						// Sum of all 128 ADC-Camera-Values
 		pixelValues2[x]=pixelValues2UC[x]+calibrationCamera2[x];							// Calibration Camera 2
 		}
-		exposure_time2 = exposure_time2 + ((16384-pixel_Values_sum2))*10;					// Gain = 10 (can become unstable !!!)
+		exposure_time2 = exposure_time2 + ((16384-pixel_Values_sum2))*6;					// Gain = 10 (can become unstable !!!)
 																						// 16384 = 128 * ADC-Medium-Value (0 ... 256)
 		CTIMER4->MSR[0] = exposure_time2;												// Exposure Time in s = exposure_time2/220 MHz
 

@@ -42,6 +42,7 @@
 #include "servo/servo.h"
 #include "drive/drive.h"
 #include "camera/camera.h"
+#include "ultrasonic/ultrasonic.h"
 #include "rpmMeas/rpmMeas.h"
 #include "board/board_func.h"
 #include "hmi.h"

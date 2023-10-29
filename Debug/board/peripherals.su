@@ -1,4 +1,4 @@
-C:\Users\keela\OneDrive\Desktop\Studium\Master ET\Semester2NXP\nxp-proj\drivers/fsl_ctimer.h:452:20:CTIMER_StartTimer	16	static
+D:\Studium\NXP-Cup\nxp-proj\nxp-proj\drivers/fsl_ctimer.h:452:20:CTIMER_StartTimer	16	static
 ../board/peripherals.c:88:6:CTIMER1_init	16	static
 ../board/peripherals.c:146:6:CTIMER3_init	16	static
 ../board/peripherals.c:160:6:BOARD_InitPeripherals	8	static
