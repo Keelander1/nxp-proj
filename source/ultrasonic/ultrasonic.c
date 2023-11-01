@@ -59,6 +59,29 @@ void MRT0_IRQHandler(uint32_t flags)
 
 void PIN_INT_INIT(void)
 {
-
+	SYSCON->AHBCLKCTRL[0] |= 1<<18;		//Enable clock for pin-Interrupt
+	//Configure Pin P[0][23] (J13 Pin8) (Pin-Interrupt)
+	IOCON->PIO[0][23] &= 0xFFFFFFFF0; 	//Clear FUNC bits of P0.16 Func 0 is GPIO-Pin
+	IOCON->PIO[0][23] &=~ (0x2<<4);		//No Pullup-Pulldown
+	IOCON->PIO[0][23] |= (0x1<<4);		//Pulldown enabled
+	GPIO->DIR[0]      &= ~(1 << 23);    //Set PIO0_23  to input
+	SYSCON->AHBCLKCTRL[0] |= (1<<11);	//Enable clock for Input MUX
+	INPUTMUX->PINTSEL[0]=0*32+23;		//Connect Pin 0_23 ==> (0)*32+(23) with Pin Interrupt 0
+	SYSCON->AHBCLKCTRL[0] &= ~(1<<11);	//Disable clock for Input MUX
+	PINT->ISEL &= ~(1<<0);				//Interrupt 0 is edge Sensitive
+	PINT->SIENR	|= 1<<0;				//Rinsing Edge Interrupt enabled
+	PINT->SIENF |= 1<<0;				//Falling Edge Interrupt enabled
+	EnableIRQ(PIN_INT0_IRQn);			//Enable pin Interrupt
+	PINT->IST|=1<<0;					//Clear Interrupt Flags
 }
+void PIN_INT0_IRQHandler(uint32_t flags)
+{
+	if ((PINT->RISE & 1)==1){			//Rising Edge detected
 
+		PINT->RISE|=(1<<0);				//Reset Rising edge Interrupt
+	}
+	if ((PINT->FALL & 1)==1){			//Falling Edge detected
+
+		PINT->FALL|=(1<<0);				//Reset Falling edge Interrupt
+	}
+}
