@@ -174,6 +174,12 @@ const static menu_entry_t menu_main_hardware_entries[] = {
 				.en = true,							//element is clickable
 		},
 		{
+				.str = "USS",						//display "Ultrasonic Sensor"
+				.type = MENU_PAGE,
+				.func = menu_page_display_distance_USS,
+				.en = true,
+		},
+		{
 				.str = "Motors",					//display "Motors"
 				.type = MENU_LINK,					//type is MENU_LINK
 				.link = menu_open_hardware_ppm,		//link to PPM handler
@@ -639,7 +645,7 @@ menu_rtos_handle_t menu_main_drive_handle = {
  ***************************************************/
 menu_rtos_handle_t menu_main_hardware_handle = {
 		.drv_handle = {
-				.entry_cnt = 4,                                         	//4 entries
+				.entry_cnt = 5,                                         	//4 entries
 				.entry_list = (menu_entry_t*)menu_main_hardware_entries,	//list of all entries
 				.draw = menu_list_draw,                                 	//emtry draw function
 		},
