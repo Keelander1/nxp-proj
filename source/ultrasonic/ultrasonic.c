@@ -70,8 +70,6 @@ void PIN_INT_INIT(void)
 	SYSCON->AHBCLKCTRL[0] |= 1<<18;		//Enable clock for pin-Interrupt
 	//Configure Pin P[0][23] (J13 Pin8) (Pin-Interrupt)
 	IOCON->PIO[0][23] &= 0xFFFFFFFF0; 	//Clear FUNC bits of P0.16 Func 0 is GPIO-Pin
-	IOCON->PIO[0][23] &=~ (0x2<<4);		//No Pullup-Pulldown
-	IOCON->PIO[0][23] |= (0x1<<4);		//Pulldown enabled
 	GPIO->DIR[0]      &= ~(1 << 23);    //Set PIO0_23  to input
 	SYSCON->AHBCLKCTRL[0] |= (1<<11);	//Enable clock for Input MUX
 	INPUTMUX->PINTSEL[0]=0*32+23;		//Connect Pin 0_23 ==> (0)*32+(23) with Pin Interrupt 0
@@ -86,12 +84,13 @@ void PIN_INT0_IRQHandler(uint32_t flags)
 {
 	if ((PINT->RISE & 1)==1){			//Rising Edge detected
 		USS_Distance=USS_Distance_Counter;	//Distance is stored in USS_Distance
-		USS_Count=0;					//Timer counts up
+		USS_Count=0;					//Timer stops counting up
 		PINT->RISE|=(1<<0);				//Reset Rising edge Interrupt
 	}
-	if ((PINT->FALL & 1)==1){			//Falling Edge detected
-		USS_Count=1;					//Timer stops counting up
-		USS_Distance_Counter=0;			//Reset Distance Counter
-		PINT->FALL|=(1<<0);				//Reset Falling edge Interrupt
+	if ((PINT->FALL & 1)==1){				//Falling Edge detected
+		USS_Count=1;						//Timer starts counting up
+		MRT0->CHANNEL[0].INTVAL|= 1<<31;	//Timer resets to 0
+		USS_Distance_Counter=0;				//Reset Distance Counter
+		PINT->FALL|=(1<<0);					//Reset Falling edge Interrupt
 	}
 }
