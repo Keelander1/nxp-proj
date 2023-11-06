@@ -77,6 +77,7 @@ void menu_page_pixel_display_camera(uint8_t refresh);
 void menu_page_calibration_camera(uint8_t refresh);
 void menu_page_pixel_display_camera2(uint8_t refresh);
 void menu_page_calibration_camera2(uint8_t refresh);
+void menu_page_display_distance_USS(uint8_t refresh);
 void menu_page_camera_info(uint8_t refresh);
 void menu_close();
 void screen_main();

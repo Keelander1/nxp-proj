@@ -56,6 +56,7 @@ extern volatile uint8_t pixelValues2[128];
 extern volatile uint8_t pixelValues2UC[128];
 extern volatile int8_t calibrationCamera2[128];
 extern volatile struct EdgeDetectionData edgeData[2];
+extern volatile uint32_t USS_Distance;
 int32_t camSelect = cam1;
 
 //extern volatile uint8_t edges[128];
@@ -286,6 +287,19 @@ void menu_page_calibration_camera(uint8_t refresh)    {
 
 	menu_rtos_switch_handle(&curr_menu_handle, &menu_main_hardware_handle);
 	menu_reset(&curr_menu_handle->drv_handle);
+}
+void menu_page_display_distance_USS(uint8_t refresh) {
+
+	char distance_string[14]= "Distance USS: ";
+	sprintf(&distance_string[14], "%d",USS_Distance);	//Distance
+
+	ssd1309_rtos_lock(&g_disp_0);
+	//x1,y1, x2,  y2
+	ssd1309_draw_rect(&g_disp_0.disp_obj, 0, 13, 127, 63, true, OFF);
+	ssd1309_rtos_unlock(&g_disp_0);
+	ssd1309_set_pos(&g_disp_0.disp_obj, 0, 18);
+	ssd1309_write_str(&g_disp_0.disp_obj, distance_string , ssd1309_font_6x8, false, ON);	//Print Exposure time
+
 }
 
 //void menu_page_pixel_display_camera2(uint8_t refresh)    {								// new Martin Fürstberger 27.05.23
