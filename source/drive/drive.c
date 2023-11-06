@@ -2,9 +2,9 @@
  ************************************************************************************************************
  ** Filename: 		drive.c							################
  ** Created on: 	04-12-2020						#####| |########  University of applied sciences
- ** Authors: 		Ecker Christian,				#####| |########  Landshut, Germany
- ** 				Summer Matthias,				#####| |########
- ** 				Ambrosch Markus					#####|  __ |####  Am Lurzenhof 1, 84036 Landshut
+ ** Authors: 										#####| |########  Landshut, Germany
+ ** 												#####| |########
+ ** 												#####|  __ |####  Am Lurzenhof 1, 84036 Landshut
  ** 				                                #####| |##||####
  **													#####|_|##|_|###
  **	ChangeLog:										################
@@ -42,6 +42,7 @@
 #include "drive.h"
 //#include <stdio.h>
 #include <math.h>
+//#include <eigen/eigen.h>
 /*******************************************************************************
  * Parameters
 
@@ -80,7 +81,6 @@ int16_t X = 230;					//Sichtweite Kamera in mm
 
 
 // Vars Für State Control
-
 
 float Stellgroese_rad_u = 0;
 float Ausgangsrueckfuehrung_KYP = -6.8948;
@@ -377,7 +377,7 @@ void Real_Drive (uint8_t state)
 
 
 
-void StateControl(uint8_t state)
+void StateControl_old(uint8_t state)
 {
 
 	//menu_page_pixel_display_camera(1);
@@ -438,4 +438,50 @@ void StateControl(uint8_t state)
 
 
 	//}
+}
+
+
+
+
+
+/*******************************************************************************
+ * Regleung mit Beobachter
+ *
+ *
+ *
+ ******************************************************************************/
+
+void StateControl(uint8_t state)
+{
+	//___________________________________________________________
+	// Input Data for funktion
+	Querabweichung_m_y = (float)edgeData[0].edge_center_mm / 1000.0;
+	y = Querabweichung_m_y;
+	t = 5;				//time[ms] for sum-integration
+	//_____________________________________________________________
+
+	//Reglergleichungen
+	// Gleichung 1
+	u = 0 - k1*x1_hat + k2*x2_hat + k3*x3_hat + k4*x4_hat;
+	//Begrenzung u
+
+	//Gleichung2
+	g_hat = y - y_hat;
+	//Gleichung 3
+	x1_hat_dot = l1*g_hat + b1*u + a11*x1_hat + a12*x2_hat + a13*x3_hat + a14*x4_hat;
+	x2_hat_dot = l2*g_hat + b2*u + a21*x1_hat + a22*x2_hat + a23*x3_hat + a24*x4_hat;
+	x3_hat_dot = l3*g_hat + b3*u + a31*x1_hat + a32*x2_hat + a33*x3_hat + a34*x4_hat;
+	x4_hat_dot = l4*g_hat + b4*u + a41*x1_hat + a42*x2_hat + a43*x3_hat + a44*x4_hat;
+	//Gleichung4
+	x1_hat = x1_hat + x1_hat_dot * t;
+	x2_hat = x2_hat + x2_hat_dot * t;
+	x3_hat = x3_hat + x3_hat_dot * t;
+	x4_hat = x4_hat + x4_hat_dot * t;
+	//Gleichung 5
+	y_hat = c1*x1_hat + c2*x2_hat + c3*x3_hat + c4*x4_hat;
+
+	vTaskDelay(t);
+
+
+
 }
