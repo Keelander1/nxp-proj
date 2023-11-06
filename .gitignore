@@ -141,3 +141,17 @@ script.jlink
 *.ld
 *.axf
 *.ld
+*.d
+*.o
+*.su
+*.mk
+*.axf
+*.hex
+*.map
+*.ld
+Debug/makefile
+script.jlink
+.settings/language.settings.xml
+*.ld
+*.axf
+*.ld
