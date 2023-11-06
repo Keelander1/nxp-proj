@@ -203,7 +203,14 @@ void ESC_Init_Task(void *pvParameters)
 		vTaskSuspend(NULL);	//suspend Task
 	}
 }
-
+/*************************************************************************
+First Test Drive:
+FUNTCTIONALITY:
+--- Test road detection
+--- Test steering with P-Regler
+DESCRIPTION:
+--- Fix speed value
+**************************************************************************/
 void Camera_Test_Drive (uint8_t state)
 {
 	menu_page_pixel_display_camera(1);
@@ -252,7 +259,19 @@ void Camera_Test_Drive (uint8_t state)
 	CTIMER1->MSR[2] = CTIMER1_PWM_PERIOD - Stearing_Value * CTIMER1_PWM_PERIOD / 20000;
 
 }
-
+/*********************************************************************
+ Second Test Drive:
+ FUNTKIONALITY:
+ ---Test if the vehicle stays on the track with higher speed
+ ---Test calculation for speed reduction of the inner wheel, speed raise of the outer wheel
+ 	based on the one-wheel model
+ DESCRIPTION:
+ ---Variable speed value
+ 	[given through SW: proportional decreasing speed with higher steering value
+ 	and different speed of the inner wheel]
+ ---Steering control with P-Regler (same control as of the first test drive)
+ ---Select camera input values depending on the Edge detection for steering control
+ *********************************************************************/
 void Real_Drive (uint8_t state)
 {
 	//menu_page_pixel_display_camera(1);
@@ -377,7 +396,7 @@ void Real_Drive (uint8_t state)
 
 
 
-void StateControl_old(uint8_t state)
+void StateControl(uint8_t state)
 {
 
 	//menu_page_pixel_display_camera(1);
