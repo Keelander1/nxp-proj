@@ -50,10 +50,13 @@
  */
 
 extern volatile uint8_t pixelValues[128];
+extern volatile uint8_t pixelValuesUC[128];
 extern volatile int8_t calibrationCamera[128];
 extern volatile uint8_t pixelValues2[128];
+extern volatile uint8_t pixelValues2UC[128];
 extern volatile int8_t calibrationCamera2[128];
 extern volatile struct EdgeDetectionData edgeData[2];
+extern volatile uint32_t USS_Distance;
 int32_t camSelect = cam1;
 
 //extern volatile uint8_t edges[128];
@@ -183,12 +186,12 @@ void menu_page_pixel_display_camera(uint8_t refresh)    {								// new Martin F
 
 		switch(camSelect){
 			case cam1:
-				sprintf(&time_string[13], "%d", CTIMER0->MSR[0]/220000);	//Exposure time in ms
+				sprintf(&time_string[13], "%d", CTIMER0->MSR[0]/110000);	//Exposure time in ms
 				edgeDat = &edgeData[0];
 				pixelVal = pixelValues;
 				break;
 			case cam2:
-				sprintf(&time_string[13], "%d", CTIMER4->MSR[0]/220000);	//Exposure time in ms				edgeDat = &edgeData[1];
+				sprintf(&time_string[13], "%d", CTIMER4->MSR[0]/110000);	//Exposure time in ms				edgeDat = &edgeData[1];
 				edgeDat = &edgeData[1];
 				pixelVal = pixelValues2;
 				break;
@@ -267,23 +270,36 @@ void menu_page_calibration_camera(uint8_t refresh)    {
 
 	switch(camSelect){
 		case cam1:
-			pixelVal = pixelValues;
+			pixelVal = pixelValuesUC;
 			calibrationCam = calibrationCamera_storage[0];
 			break;
 		case cam2:
-			pixelVal = pixelValues2;
+			pixelVal = pixelValues2UC;
 			calibrationCam = calibrationCamera_storage[1];
 			break;
 	}
 
 	for(x=0; x<128; x++){
-		calibrationCam[x] = calibrationCam[x] + (128 - pixelVal[x]); //Calibrating Camera
+		calibrationCam[x] = (128 - pixelVal[x]); //Calibrating Camera
 	}
 
 	param_save();
 
 	menu_rtos_switch_handle(&curr_menu_handle, &menu_main_hardware_handle);
 	menu_reset(&curr_menu_handle->drv_handle);
+}
+void menu_page_display_distance_USS(uint8_t refresh) {
+
+	char distance_string[14]= "Distance USS: ";
+	sprintf(&distance_string[14], "%d",USS_Distance);	//Distance
+
+	ssd1309_rtos_lock(&g_disp_0);
+	//x1,y1, x2,  y2
+	ssd1309_draw_rect(&g_disp_0.disp_obj, 0, 13, 127, 63, true, OFF);
+	ssd1309_rtos_unlock(&g_disp_0);
+	ssd1309_set_pos(&g_disp_0.disp_obj, 0, 18);
+	ssd1309_write_str(&g_disp_0.disp_obj, distance_string , ssd1309_font_6x8, false, ON);	//Print Exposure time
+
 }
 
 //void menu_page_pixel_display_camera2(uint8_t refresh)    {								// new Martin Fürstberger 27.05.23

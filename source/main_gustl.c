@@ -48,6 +48,7 @@ int main(void)
     Board_Init(); 	//Initialize board peripherals
     PARAM_Init();	//Initialize EEPROM
     CAM_Init();		//Initialize line-Camera
+    Ultrasonic_Init();//Initialize ultrasonic-distance-measurement
     RPMMEAS_Init();	//Initialize speed-measurement
     SERVO_Init();	//Initialize servo-drive
     BLDC_Init();	//Initialize BLDC-drives

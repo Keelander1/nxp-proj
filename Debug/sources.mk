@@ -37,6 +37,7 @@ source/hmi/input_devices \
 source \
 source/rpmMeas \
 source/servo \
+source/ultrasonic \
 startup \
 utilities \
 

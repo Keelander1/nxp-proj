@@ -10,6 +10,7 @@ RM := rm -rf
 -include sources.mk
 -include utilities/subdir.mk
 -include startup/subdir.mk
+-include source/ultrasonic/subdir.mk
 -include source/servo/subdir.mk
 -include source/rpmMeas/subdir.mk
 -include source/hmi/input_devices/subdir.mk
@@ -65,7 +66,11 @@ main-build: Gustl_SumEck.axf
 Gustl_SumEck.axf: $(OBJS) $(USER_OBJS) makefile $(OPTIONAL_TOOL_DEPS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: MCU Linker'
+<<<<<<< HEAD
 	arm-none-eabi-gcc -nostdlib -L"C:\Users\tobia\Documents\git\nxp-proj\libs" -Xlinker -Map="Gustl_SumEck.map" -Xlinker --gc-sections -Xlinker -print-memory-usage -Xlinker --sort-section=alignment -Xlinker --cref -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -T Gustl_SumEck_Debug.ld -o "Gustl_SumEck.axf" $(OBJS) $(USER_OBJS) $(LIBS) -lpower_hardabi
+=======
+	arm-none-eabi-gcc -nostdlib -L"D:\Studium\NXP-Cup\nxp-proj\nxp-proj\libs" -Xlinker -Map="Gustl_SumEck.map" -Xlinker --gc-sections -Xlinker -print-memory-usage -Xlinker --sort-section=alignment -Xlinker --cref -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -T Gustl_SumEck_Debug.ld -o "Gustl_SumEck.axf" $(OBJS) $(USER_OBJS) $(LIBS) -lpower_hardabi
+>>>>>>> 2340b50b78e4ba6629c977e8f135bd97dd62bfb2
 	@echo 'Finished building target: $@'
 	@echo ' '
 
