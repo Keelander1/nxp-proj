@@ -295,6 +295,36 @@ void ESC_Init_Task(void *pvParameters)
 // ---Steering control with P-Regler (same control as of the first test drive)
 // ---Select camera input values depending on the Edge detection for steering control
 // *********************************************************************/
+
+
+void stear(float angle){
+	int16_t direction;
+	uint16_t pwmDelta;
+	uint16_t pwm = ((all_param_t*)&const_all_param)->motors.servo.init;
+
+	if(angle < 0){
+		uint16_t direction = left_corner;
+		angle = angle * -1;
+	}
+	else {
+		direction = right_corner;
+	};
+
+	pwmDelta = (uint16_t) 1478*angle*angle + 574*angle;
+	pwm += pwmDelta*direction;
+
+//	if(pwm > max_pwm){
+//		pwm = max_pwm;
+//	}
+//
+//	if(pwm < min_pwm){
+//		pwm = min_pwm;
+//	}
+
+	CTIMER1->MSR[2] = CTIMER1_PWM_PERIOD - pwm * CTIMER1_PWM_PERIOD / 20000;
+}
+
+
 void Real_Drive (uint8_t state)
 {
 //	//menu_page_pixel_display_camera(1);
@@ -538,36 +568,37 @@ void StateControl(uint8_t state)
 
 
 
+	stear(u);
 
-	gamma = (int16_t)(u*2*180/3.14);		// 30°Lenkwinkel Entsprechen 60° beim Servo
-	//Faktor Lenkwinkel zu Servo-Winkel
-	if (gamma <= -60)
-	{
-		gamma = -60;
-	}
-	else if (gamma >= 60)
-	{
-		gamma = 60;
-	}
-
-	//Skalierung auf +- 100 --> 60 ° entspricht +100
-	gamma = gamma * 10 / 6;
-	servo_Value = (int16_t)gamma;
-
-	if (servo_Value >= 100) servo_Value = 100;
-	if (servo_Value <= -100) servo_Value = -100;
-	if(servo_Value <=0)
-	{
-	//calculate test value for left steering
-	Stearing_Value= *servoMiddle+ servo_Value*(*servoMiddle-*servoLeft)/100;
-	}
-	else
-	{
-	//calculate test value for right steering
-	Stearing_Value= *servoMiddle + servo_Value*(*servoRight-*servoMiddle)/100;
-	}
-	//Schreiben des Umgerechneten PWM Werts ins Register für die Lenkwinkelsteuerung
-	CTIMER1->MSR[2] = CTIMER1_PWM_PERIOD - Stearing_Value * CTIMER1_PWM_PERIOD / 20000;
+//	gamma = (int16_t)(u*2*180/3.14);		// 30°Lenkwinkel Entsprechen 60° beim Servo
+//	//Faktor Lenkwinkel zu Servo-Winkel
+//	if (gamma <= -60)
+//	{
+//		gamma = -60;
+//	}
+//	else if (gamma >= 60)
+//	{
+//		gamma = 60;
+//	}
+//
+//	//Skalierung auf +- 100 --> 60 ° entspricht +100
+//	gamma = gamma * 10 / 6;
+//	servo_Value = (int16_t)gamma;
+//
+//	if (servo_Value >= 100) servo_Value = 100;
+//	if (servo_Value <= -100) servo_Value = -100;
+//	if(servo_Value <=0)
+//	{
+//	//calculate test value for left steering
+//	Stearing_Value= *servoMiddle+ servo_Value*(*servoMiddle-*servoLeft)/100;
+//	}
+//	else
+//	{
+//	//calculate test value for right steering
+//	Stearing_Value= *servoMiddle + servo_Value*(*servoRight-*servoMiddle)/100;
+//	}
+//	//Schreiben des Umgerechneten PWM Werts ins Register für die Lenkwinkelsteuerung
+//	CTIMER1->MSR[2] = CTIMER1_PWM_PERIOD - Stearing_Value * CTIMER1_PWM_PERIOD / 20000;
 
 	// Delay the Task --> for integration over time
 	vTaskDelay(t);

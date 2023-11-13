@@ -71,8 +71,10 @@
 #define CTIMER3_PWM_0_DUTY 0            //Definition of initialization duty
 #define CTIMER3_PWM_PERIOD 4400000			//Definition of PWM period
 
-
-
+enum direction{
+	left_corner = -1,
+	right_corner = 1,
+};
 
 /*******************************************************************************
  * Control System
@@ -136,6 +138,7 @@ void BLDC_Init(void);
 void CTIMER3_Init(void);
 void delay_ms(uint32_t value);
 void ESC_Init_Task(void *pvParameters);
+void stear(float angle);
 void Camera_Test_Drive (uint8_t state);
 void Real_Drive (uint8_t state);
 void StateControl(uint8_t state);
