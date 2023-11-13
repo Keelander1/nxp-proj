@@ -533,7 +533,7 @@ void StateControl_old(uint8_t state)
 void StateControl(uint8_t state)
 {
 	double sleeptime = t/1000.0;
-	menu_page_pixel_display_camera(1);
+	//menu_page_pixel_display_camera(1);
 	//___________________________________________________________
 	// Input Data for funktion
 	Querabweichung_m_y = (float)edgeData[0].edge_center_mm / 1000.0;
@@ -546,7 +546,7 @@ void StateControl(uint8_t state)
 	i = 0 - y;
 	I = I +  i * sleeptime;
 	// Gleichung 1
-	u = 0 + I*KYI - (k1*x1_hat + k2*x2_hat + k3*x3_hat + k4*x4_hat);
+	u = 0 + I*KYI*0 - (k1*x1_hat + k2*x2_hat + k3*x3_hat + k4*x4_hat);
 	//Begrenzung u
 	if (u <= -0.54) u = -0.54;
 	else if (u>=0.54) u = 0.54;
