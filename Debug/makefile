@@ -66,7 +66,7 @@ main-build: Gustl_SumEck.axf
 Gustl_SumEck.axf: $(OBJS) $(USER_OBJS) makefile $(OPTIONAL_TOOL_DEPS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: MCU Linker'
-	arm-none-eabi-gcc -nostdlib -L"D:\Studium\NXP-Cup\nxp-proj\nxp-proj\libs" -Xlinker -Map="Gustl_SumEck.map" -Xlinker --gc-sections -Xlinker -print-memory-usage -Xlinker --sort-section=alignment -Xlinker --cref -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -T Gustl_SumEck_Debug.ld -o "Gustl_SumEck.axf" $(OBJS) $(USER_OBJS) $(LIBS) -lpower_hardabi
+	arm-none-eabi-gcc -nostdlib -L"C:\Users\tobia\Documents\git\nxp-proj\libs" -Xlinker -Map="Gustl_SumEck.map" -Xlinker --gc-sections -Xlinker -print-memory-usage -Xlinker --sort-section=alignment -Xlinker --cref -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -T Gustl_SumEck_Debug.ld -o "Gustl_SumEck.axf" $(OBJS) $(USER_OBJS) $(LIBS) -lpower_hardabi
 	@echo 'Finished building target: $@'
 	@echo ' '
 
@@ -77,7 +77,7 @@ clean:
 
 post-build:
 	-@echo 'Performing post-build steps'
-	-arm-none-eabi-size "Gustl_SumEck.axf"; # arm-none-eabi-objcopy -v -O binary "Gustl_SumEck.axf" "Gustl_SumEck.bin" ; # checksum -p LPC54628J512 -d "Gustl_SumEck.bin";
+	-arm-none-eabi-size "Gustl_SumEck.axf"; # arm-none-eabi-objcopy -v -O binary "Gustl_SumEck.axf" "Gustl_SumEck.bin" ; # checksum -p  -d "Gustl_SumEck.bin";
 	-@echo ' '
 
 .PHONY: all clean dependents main-build post-build
