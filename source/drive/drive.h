@@ -102,7 +102,7 @@
 
 
 	//Reglermatrix B
-#define B1 10.0
+#define B1 5
 #define B2 50.2874
 #define B3 0.0
 #define B4 0.0
@@ -114,17 +114,17 @@
 #define c4 1.0
 
 	//Beobachter L
-#define l1 -3.45
-#define l2 23.7925
-#define l3 42.5756
-#define l4 18.8374
+#define l1 -2.3663
+#define l2 20.9939
+#define l3 50.9347
+#define l4 18.8420
 
 //Regler K
 #define k1 0.0208
 #define k2 0.8729
 #define k3 -10.4644
 #define k4 -14.4163
-#define KYI -1062.0
+#define KYI -3.059988
 
 
 
