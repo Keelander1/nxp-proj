@@ -62,8 +62,8 @@
 #define SOURCE_CLOCK CLOCK_GetFreq(kCLOCK_CoreSysClk) //Get Main-CLK Frequency
 
 /* Channel definitions */
-#define CTIMER3_PWM_LEFT_CHANNEL kCTIMER_Match_0 	//Definition of channel 0 ID
-#define CTIMER3_PWM_RIGHT_CHANNEL kCTIMER_Match_2	//Definition of channel 2 ID
+#define CTIMER3_PWM_LEFT_CHANNEL kCTIMER_Match_0 	//Define channel 0 as match register for the left BLDC
+#define CTIMER3_PWM_RIGHT_CHANNEL kCTIMER_Match_2	//Define channel 2 as match register for the right BLDC
 
 /* BLDC PWM initialization value definitions */
 #define BLDC_PWM_INIT_HIGH_VALUE 330000	//Init High value Sequence 1,5ms

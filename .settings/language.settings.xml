@@ -3,13 +3,8 @@
 	<configuration id="com.crt.advproject.config.exe.debug.2142883907" name="Debug">
 		<extension point="org.eclipse.cdt.core.LanguageSettingsProvider">
 			<provider copy-of="extension" id="org.eclipse.cdt.ui.UserLanguageSettingsProvider"/>
-<<<<<<< HEAD
-			<provider class="org.eclipse.cdt.managedbuilder.language.settings.providers.GCCBuildCommandParser" id="com.crt.advproject.GCCBuildCommandParser" keep-relative-paths="false" name="MCU GCC Build Output Parser" parameter="(arm-none-eabi-gcc)|(arm-none-eabi-[gc]\+\+)|(gcc)|([gc]\+\+)|(clang)" prefer-non-shared="true"/>
-			<provider class="com.crt.advproject.specs.MCUGCCBuiltinSpecsDetector" console="false" env-hash="1557954732371323046" id="com.crt.advproject.GCCBuildSpecCompilerParser" keep-relative-paths="false" name="MCU GCC Built-in Compiler Parser" parameter="${COMMAND} ${FLAGS} -E -P -v -dD &quot;${INPUTS}&quot;" prefer-non-shared="true">
-=======
 			<provider copy-of="extension" id="com.crt.advproject.GCCBuildCommandParser"/>
 			<provider class="com.crt.advproject.specs.MCUGCCBuiltinSpecsDetector" console="false" env-hash="1552996111225729310" id="com.crt.advproject.GCCBuildSpecCompilerParser" keep-relative-paths="false" name="MCU GCC Built-in Compiler Parser" parameter="${COMMAND} ${FLAGS} -E -P -v -dD &quot;${INPUTS}&quot;" prefer-non-shared="true">
->>>>>>> c888182ec4eaf05d715a7c52b131379f56f4f867
 				<language-scope id="org.eclipse.cdt.core.gcc"/>
 				<language-scope id="org.eclipse.cdt.core.g++"/>
 			</provider>
@@ -20,11 +15,7 @@
 		<extension point="org.eclipse.cdt.core.LanguageSettingsProvider">
 			<provider copy-of="extension" id="org.eclipse.cdt.ui.UserLanguageSettingsProvider"/>
 			<provider copy-of="extension" id="com.crt.advproject.GCCBuildCommandParser"/>
-<<<<<<< HEAD
-			<provider class="com.crt.advproject.specs.MCUGCCBuiltinSpecsDetector" console="false" env-hash="1536189864999230534" id="com.crt.advproject.GCCBuildSpecCompilerParser" keep-relative-paths="false" name="MCU GCC Built-in Compiler Parser" parameter="${COMMAND} ${FLAGS} -E -P -v -dD &quot;${INPUTS}&quot;" prefer-non-shared="true">
-=======
 			<provider class="com.crt.advproject.specs.MCUGCCBuiltinSpecsDetector" console="false" env-hash="1663731504136699070" id="com.crt.advproject.GCCBuildSpecCompilerParser" keep-relative-paths="false" name="MCU GCC Built-in Compiler Parser" parameter="${COMMAND} ${FLAGS} -E -P -v -dD &quot;${INPUTS}&quot;" prefer-non-shared="true">
->>>>>>> c888182ec4eaf05d715a7c52b131379f56f4f867
 				<language-scope id="org.eclipse.cdt.core.gcc"/>
 				<language-scope id="org.eclipse.cdt.core.g++"/>
 			</provider>

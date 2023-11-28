@@ -361,7 +361,9 @@ void Real_Drive (uint8_t state)
 
 	//*********************Beginn Antreibssteuerung
 
-
+	//****************************************************
+	//*****************Geschwindigkeit********************
+	//****************************************************
 
 	Speed = abs(servo_Value);
 	Speed = 100 - Speed;			// da Max Geschwindigkeit, bei Geradeausfahrt
