@@ -71,6 +71,66 @@
 #define CTIMER3_PWM_0_DUTY 0            //Definition of initialization duty
 #define CTIMER3_PWM_PERIOD 4400000			//Definition of PWM period
 
+enum direction{
+	left_corner = -1,
+	right_corner = 1,
+};
+
+/*******************************************************************************
+ * Control System
+ ******************************************************************************/
+#define t 20.0
+
+	//ReglermatrixA
+#define a11 -13.0
+#define  a12 -0.7375
+#define a13 0.0
+#define a14 0.0
+
+#define a21 30.1724
+#define a22 -11.4404
+#define a23 0.0
+#define a24 0.0
+
+#define a31 0.0
+#define a32 -1.0
+#define a33 0.0
+#define a34 0.0
+
+#define a41 -2.0
+#define a42 -0.45
+#define a43 2.0
+#define a44 0.0
+
+
+	//Reglermatrix B
+#define B1 5
+#define B2 50.2874
+#define B3 0.0
+#define B4 0.0
+
+	//Reglermatrix C
+#define c1 0.0
+#define c2 0.0
+#define c3 0.0
+#define c4 1.0
+
+	//Beobachter L
+#define l1 -2.3663
+#define l2 20.9939
+#define l3 50.9347
+#define l4 18.8420
+
+//Regler K
+#define k1 0.0208
+#define k2 0.8729
+#define k3 -10.4644
+#define k4 -14.4163
+#define KYI -3.059988
+
+
+
+
 /*******************************************************************************
  * Prototypes
  ******************************************************************************/
@@ -78,7 +138,10 @@ void BLDC_Init(void);
 void CTIMER3_Init(void);
 void delay_ms(uint32_t value);
 void ESC_Init_Task(void *pvParameters);
+void stear(float angle);
 void Camera_Test_Drive (uint8_t state);
 void Real_Drive (uint8_t state);
 void StateControl(uint8_t state);
 #endif /* DRIVE_DRIVE_H_ */
+
+
