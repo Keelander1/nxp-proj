@@ -69,12 +69,12 @@ const uint16_t camera_distance = 380; //Distance between Camera View and Car Cen
 
 
 //Varaibeln für Regler
-//int16_t Y_ist = 0;					//Ausgang Regelschleife in mm
-//int16_t Y_soll = 0;					//Eingang Regelschleife in mm
+int16_t Y_ist = 0;					//Ausgang Regelschleife in mm
+int16_t Y_soll = 0;					//Eingang Regelschleife in mm
 int16_t Y_diff = 0;					//Differenz Soll-Ist Regler in mm
-//int16_t D = 180;					//Achsabstand des Autos --> muss noch nachgemessen werden
+int16_t D = 180;					//Achsabstand des Autos --> muss noch nachgemessen werden
 //int16_t u = 0;						// Stellgröße in mm vor Umrechnung in °
-//int16_t P_Regler = 1;				//P-Regelverstärkung
+int16_t P_Regler = 1;				//P-Regelverstärkung
 double X = 230.0;					//Sichtweite Kamera in mm
 
 
@@ -331,7 +331,7 @@ void stear(float angle){
 
 void Real_Drive (uint8_t state)
 {
-<<<<<<< HEAD
+
 	//menu_page_pixel_display_camera(1);
 	int16_t servo_Value = 0; //between -100 and 100
 	int16_t Stearing_Value = 0;
@@ -452,7 +452,6 @@ void Real_Drive (uint8_t state)
 
 
 
-=======
 //	//menu_page_pixel_display_camera(1);
 //	int16_t servo_Value = 0; //between -100 and 100
 //	int16_t Stearing_Value = 0;
@@ -571,7 +570,7 @@ void Real_Drive (uint8_t state)
 //
 //
 //
->>>>>>> c9f957702a398699ba7c6a3115d3d1a0b138a940
+
 }
 //
 
