@@ -62,8 +62,8 @@
 #define SOURCE_CLOCK CLOCK_GetFreq(kCLOCK_CoreSysClk) //Get Main-CLK Frequency
 
 /* Channel definitions */
-#define CTIMER3_PWM_LEFT_CHANNEL kCTIMER_Match_0 	//Definition of channel 0 ID
-#define CTIMER3_PWM_RIGHT_CHANNEL kCTIMER_Match_2	//Definition of channel 2 ID
+#define CTIMER3_PWM_LEFT_CHANNEL kCTIMER_Match_0 	//Define channel 0 as match register for the left BLDC
+#define CTIMER3_PWM_RIGHT_CHANNEL kCTIMER_Match_2	//Define channel 2 as match register for the right BLDC
 
 /* BLDC PWM initialization value definitions */
 #define BLDC_PWM_INIT_HIGH_VALUE 330000	//Init High value Sequence 1,5ms
@@ -71,8 +71,10 @@
 #define CTIMER3_PWM_0_DUTY 0            //Definition of initialization duty
 #define CTIMER3_PWM_PERIOD 4400000			//Definition of PWM period
 
-
-
+enum direction{
+	left_corner = -1,
+	right_corner = 1,
+};
 
 /*******************************************************************************
  * Control System
@@ -136,6 +138,7 @@ void BLDC_Init(void);
 void CTIMER3_Init(void);
 void delay_ms(uint32_t value);
 void ESC_Init_Task(void *pvParameters);
+void stear(float angle);
 void Camera_Test_Drive (uint8_t state);
 void Real_Drive (uint8_t state);
 void StateControl(uint8_t state);
