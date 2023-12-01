@@ -97,5 +97,9 @@ extern menu_rtos_handle_t menu_ppm_motor_right_handle;
  ***************************************************/
 extern menu_rtos_handle_t menu_ppm_restore_handle;
 
+/****************************************************
+ * handle for State Control
+ ***************************************************/
+extern menu_rtos_handle_t menu_drive_StateControl_handle;
 
 #endif /* HMI_MENU_DATA_H_ */

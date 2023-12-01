@@ -83,6 +83,7 @@ void menu_close();
 void screen_main();
 void screen_update_header();
 void screen_bg();
+void menu_open_drive_StateControl(uint8_t refresh);
 #endif /* HMI_SCREEN_H_ */
 
 

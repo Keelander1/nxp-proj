@@ -114,20 +114,20 @@
 #define c4 1.0
 
 	//Beobachter L
-#define l1 -2.3663
-#define l2 20.9939
-#define l3 50.9347
-#define l4 18.8420
+#define l1 -2.1993
+#define l2 48.6350
+#define l3 21.2867
+#define l4 12.6026
 
 //Regler K
-#define k1 0.0208
-#define k2 0.8729
-#define k3 -10.4644
-#define k4 -14.4163
-#define KYI -3.059988
-
-
-
+#define k1 1.6289
+#define k2 0.2159
+#define k3 -2.6515
+#define k4 -10.4811
+#define KYI -20.4
+#define Windup -0.2
+extern int k_1;
+extern int k_2;
 
 /*******************************************************************************
  * Prototypes

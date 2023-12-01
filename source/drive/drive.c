@@ -47,7 +47,7 @@
  * Parameters
 
  ******************************************************************************/
-int32_t BLDCTestValue=20;	//value for test purpose
+int32_t BLDCTestValue=30;	//value for test purpose
 int8_t Lenkfaktor = 5;
 
 int32_t* servoMiddle= &((all_param_t*)&const_all_param)->motors.servo.init; 	//servo init value
@@ -71,11 +71,11 @@ const uint16_t camera_distance = 380; //Distance between Camera View and Car Cen
 //Varaibeln für Regler
 //int16_t Y_ist = 0;					//Ausgang Regelschleife in mm
 //int16_t Y_soll = 0;					//Eingang Regelschleife in mm
-//int16_t Y_diff = 0;					//Differenz Soll-Ist Regler in mm
+int16_t Y_diff = 0;					//Differenz Soll-Ist Regler in mm
 //int16_t D = 180;					//Achsabstand des Autos --> muss noch nachgemessen werden
 //int16_t u = 0;						// Stellgröße in mm vor Umrechnung in °
 //int16_t P_Regler = 1;				//P-Regelverstärkung
-//int16_t X = 230;					//Sichtweite Kamera in mm
+double X = 230.0;					//Sichtweite Kamera in mm
 
 
 
@@ -95,7 +95,11 @@ double x3_hat_dot = 0;				// Ableitund der Schätzung der Zustandsgröße 3
 double x4_hat_dot = 0;				// Ableitund der Schätzung der Zustandsgröße 4
 double i = 0;
 double I = 0;
+double u_old = 0;
+double u_sat = 0;
 
+int k_1 = 16289;					// 10000
+int k_2 = 16289;					// 10000
 
 float gamma = 0;					//Lenkwinkel
 
@@ -104,18 +108,18 @@ float gamma = 0;					//Lenkwinkel
 //State Control_Old
 float Stellgroese_rad_u = 0;
 float Ausgangsrueckfuehrung_KYP = -6.8948;
-uint16_t Const_Test_Speed = 20;
+int16_t Const_Test_Speed = 20;
 uint16_t Speed_Left_normiert = 0;
 uint16_t Speed_Right_normiert = 0;
 uint16_t SpeedValueLeft = 0;
 uint16_t SpeedValueRight = 0;
 float Querabweichung_m_y = 0;
-float Spurweiter_m = 0.14;					//define
+double Spurweiter_m = 0.14;					//define
 float ReglerSollgroeße_m = 0;				//define
 float servo_Value = 0;
 //int16_t gamma = 0;
 float Stearing_Value = 0;
-
+extern volatile USS_Distance;
 
 
 const ctimer_config_t BLDC_config = {
@@ -504,6 +508,17 @@ void StateControl(uint8_t state)
 {
 	double sleeptime = t/1000.0;
 	//menu_page_pixel_display_camera(1);
+
+	//_________________________________
+	// stop if Uss detect an object
+	if (USS_Distance <= 40)
+		Const_Test_Speed = 0;
+	else
+		Const_Test_Speed = 30;
+
+	//__________________________________
+
+
 	//___________________________________________________________
 	// Input Data for funktion
 	Querabweichung_m_y = (float)edgeData[0].edge_center_mm / 1000.0;
@@ -513,13 +528,29 @@ void StateControl(uint8_t state)
 
 	//Reglergleichungen
 	// Gleichung I-Anteil
-	i = 0 - y;
+	i = 0 - y + (u_sat - u_old) * Windup;
 	I = I +  i * sleeptime;
 	// Gleichung 1
 	u = 0 + I*KYI*0 - (k1*x1_hat + k2*x2_hat + k3*x3_hat + k4*x4_hat);
 	//Begrenzung u
-	if (u <= -0.54) u = -0.54;
-	else if (u>=0.54) u = 0.54;
+	if (u <= -0.54)
+		{
+			u_old = u;
+			u = -0.54;
+			u_sat = u;
+
+		}
+	else if (u>=0.54)
+		{
+			u_old = u;
+			u = 0.54;
+			u_sat = u;
+		}
+	else
+	{
+		u_old = u;
+		u_sat = u;
+	}
 
 	//Gleichung2
 	g_hat = y - y_hat;
@@ -571,5 +602,23 @@ void StateControl(uint8_t state)
 
 	// Delay the Task --> for integration over time
 	vTaskDelay(t);
+
+	// Set the Speed -- here is not the Speed decision!!!
+			Speed_Left_normiert  = Const_Test_Speed * (1 + ((Spurweiter_m * y) / (X*X + y*y)));
+			Speed_Right_normiert = Const_Test_Speed * (1 - ((Spurweiter_m * y) / (X*X + y*y)));
+			//calculate test value for selected speed
+			SpeedValueLeft= *BLDCLeftMinValue + Speed_Left_normiert*(*BLDCLeftMaxValue-*BLDCLeftMinValue)/100;// Fester Wert definiert--> evtl. noch dynamisch machen!!!
+			SpeedValueRight= *BLDCRightMinValue + Speed_Right_normiert*(*BLDCRightMaxValue-*BLDCRightMinValue)/100;// Fester Wert definiert--> evtl. noch dynamisch machen!!!
+	//Berechnung und Setzen der Werte der Register für Rechten und Linken Motor
+			if (Const_Test_Speed == 0)
+			{
+			CTIMER3->MSR[0] = CTIMER3_PWM_PERIOD - (SpeedValueLeft-10) * CTIMER3_PWM_PERIOD / 20000;	// (Left)
+			CTIMER3->MSR[2] = CTIMER3_PWM_PERIOD - (SpeedValueRight-10) * CTIMER3_PWM_PERIOD / 20000; //(Right)
+			}
+			else
+			{
+				CTIMER3->MSR[0] = CTIMER3_PWM_PERIOD - SpeedValueLeft * CTIMER3_PWM_PERIOD / 20000;	// (Left)
+				CTIMER3->MSR[2] = CTIMER3_PWM_PERIOD - SpeedValueRight * CTIMER3_PWM_PERIOD / 20000; //(Right)
+			}
 
 	}

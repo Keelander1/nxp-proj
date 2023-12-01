@@ -147,11 +147,11 @@ const static menu_entry_t menu_main_drive_entries[] = {
 				.func = Real_Drive,
 				.en = true,
 		},
-		{		.str = "StateControl",							// new Simonis Leon 16.10.23
-						.type = MENU_PAGE,
-						.func = StateControl,
-						.en = true,
-				},
+		{		.str = "StateController",							// new Simonis Leon 16.10.23
+				.type = MENU_LINK,
+				.link = menu_open_drive_StateControl,
+				.en = true,
+		},
 
 		{
 				.str = "Back",
@@ -160,6 +160,32 @@ const static menu_entry_t menu_main_drive_entries[] = {
 				//.link = 0,
 				.en = true,
 		},
+};
+
+
+/****************************************************
+ * 	Entry for StateControl Menu
+ * 	Created @ 20.11.2023
+ * 	menu for drive in StateConrol
+ * 	Setup for the ControllerParams
+ * 	Activated the drive Function
+ ***************************************************/
+const static menu_entry_t menu_drive_StateControl_entries[] = {
+		{
+				.str = "k2",
+				.type = MENU_VALUE,
+				.val = &k_2,
+				//.act =0,
+				.en = true,
+		},
+		{
+				.str = "k1",
+				.type = MENU_VALUE,
+				.val = &k_1,
+				//.act =0,
+				.en = true,
+		},
+
 };
 /****************************************************
  * 	Entry for hardware menu
@@ -732,5 +758,14 @@ menu_rtos_handle_t menu_ppm_restore_handle = {
 		},
 };
 
-
+/****************************************************
+ * handle for motor restore menu
+ ***************************************************/
+menu_rtos_handle_t menu_drive_StateControl_handle = {
+		.drv_handle = {
+				.entry_cnt = 2,                                            	//3 entries
+				.entry_list = (menu_entry_t*)menu_drive_StateControl_entries,     	//list of all entries
+				.draw = menu_list_draw,                                    	//emtry draw function
+		},
+};
 

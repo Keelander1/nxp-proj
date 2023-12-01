@@ -493,7 +493,7 @@ void Camera_Exposure_time_task(void *pvParameters)
 			pixel_Values_sum = pixel_Values_sum + pixelValuesUC[x];						// Sum of all 128 ADC-Camera-Values
 			pixelValues[x]=pixelValuesUC[x]+calibrationCamera[x];						// Calibration Camera 1
 		}
-		exposure_time = exposure_time + ((16384-pixel_Values_sum))*6;					// Gain = 10 (can become unstable !!!)
+		exposure_time = exposure_time + ((16384-pixel_Values_sum))*5;					// Gain = 10 (can become unstable !!!)
 																						// 16384 = 128 * ADC-Medium-Value (0 ... 256)
 		CTIMER0->MSR[0] = exposure_time;												// Exposure Time in s = exposure_time/220 MHz
 
