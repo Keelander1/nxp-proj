@@ -77,7 +77,8 @@ struct EdgeDetectionData edgeData[2] = {
 			.edge_center = 0,
 			.edge_center_mm = 0,
 			.detection_mode = 0,
-			.track_state = 0
+			.track_state = 0,
+			.finish_detected = 0
 		},
 		{
 			.edges = {0},
@@ -89,7 +90,8 @@ struct EdgeDetectionData edgeData[2] = {
 			.edge_center = 0,
 			.edge_center_mm = 0,
 			.detection_mode = 0,
-			.track_state = 0
+			.track_state = 0,
+			.finish_detected = 0
 		}
     };
 
@@ -508,7 +510,9 @@ void Camera_Exposure_time_task(void *pvParameters)
 																						// 16384 = 128 * ADC-Medium-Value (0 ... 256)
 		CTIMER4->MSR[0] = exposure_time2;												// Exposure Time in s = exposure_time2/220 MHz
 
-
+//		IOCON->PIO[2][1] &= 0xFFFFFFFF0; 	//Clear FUNC bits of P2.2 Func 0 is GPIO-Pin
+//		GPIO->DIR[2]      |= (1 << 1);    //Set PIO2_1  to output
+//		GPIO->SET[2] |=(1<<1);
 		Edge_Detection(&edgeData[0], pixelValues);
 		Edge_Detection(&edgeData[1], pixelValues2);
 
@@ -664,19 +668,31 @@ void Edge_Detection(struct EdgeDetectionData *edgeData, volatile uint8_t *pixelV
 	//Convert Pixel to mm
 	edgeData->edge_center_mm = (int)(edgeData->edge_center - 63) * (500.0/edge_distance);
 
-	if((right_edge_count == 5) && (left_edge_count == 5)){
-		edgeData->track_state = four_stribes;
+	//finish linie detection
+	if((right_edge_count >=2 ) || (right_edge_count >= 2)){
+		edgeData->finish_detected = 1;
+//		GPIO->SET[2] |=(1<<1);
+	}
+	else{
+		edgeData->finish_detected = 0;
+//		GPIO->CLR[2] |=(1<<1);
 	}
 
-	else if((right_edge_count == 4) && (left_edge_count == 4)){
-		edgeData->track_state = tree_stribes;
-	}
 
-	else if((right_edge_count == 3) && (left_edge_count == 3)){
-		edgeData->track_state = finish;
-	}
-	else
-		edgeData->track_state = track;
+
+//	if((right_edge_count == 5) && (left_edge_count == 5)){
+//		edgeData->track_state = four_stribes;
+//	}
+//
+//	else if((right_edge_count == 4) && (left_edge_count == 4)){
+//		edgeData->track_state = tree_stribes;
+//	}
+//
+//	else if((right_edge_count == 3) && (left_edge_count == 3)){
+//		edgeData->track_state = finish;
+//	}
+//	else
+//		edgeData->track_state = track;
 }
 
 

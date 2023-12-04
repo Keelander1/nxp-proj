@@ -660,6 +660,8 @@ void StateControl_old(uint8_t state)
 
 void StateControl(uint8_t state)
 {
+	controlParam->testParam = 0;	//Testparameter für EEPROM
+
 	double sleeptime = t/1000.0;
 	//menu_page_pixel_display_camera(1);
 

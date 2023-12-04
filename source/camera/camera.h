@@ -94,6 +94,7 @@ struct EdgeDetectionData {
 	int16_t edge_center_mm;
 	uint8_t detection_mode;
 	uint8_t track_state;
+	uint8_t finish_detected;
 //	uint8_t camera_distance;	//TODO: implement
 };
 

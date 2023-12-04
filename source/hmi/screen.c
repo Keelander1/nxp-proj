@@ -253,6 +253,13 @@ void menu_page_pixel_display_camera(uint8_t refresh)    {								// new Martin F
 			ssd1309_write_str(&g_disp_0.disp_obj, time_string , ssd1309_font_6x8, false, ON);	//Print Exposure time
 		}
 
+//		Printing Finish detection
+
+		if(edgeData->finish_detected){
+			ssd1309_set_pos(&g_disp_0.disp_obj, 64, 50);
+			ssd1309_write_str(&g_disp_0.disp_obj, "Finish" , ssd1309_font_6x8, false, ON);
+		}
+
 		//Printing Track State
 //		ssd1309_set_pos(&g_disp_0.disp_obj, 64, 50);
 //		switch(track_state){

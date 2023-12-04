@@ -138,7 +138,7 @@ void BLDC_Init(void);
 void CTIMER3_Init(void);
 void delay_ms(uint32_t value);
 void ESC_Init_Task(void *pvParameters);
-void stear(float angle);
+void stear(float angle);		//angle in rad
 void Camera_Test_Drive (uint8_t state);
 void Real_Drive (uint8_t state);
 void StateControl(uint8_t state);
