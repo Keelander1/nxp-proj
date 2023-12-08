@@ -490,25 +490,46 @@ void Camera_Exposure_time_task(void *pvParameters)
 	while(1){
 		//Camera 1
 		int32_t pixel_Values_sum = 0;
+		int32_t exposureTimediff = 0;													// Value gets added to current exposure time at every call of task
 
 		for(uint8_t x=0;x<128;x++){
 			pixel_Values_sum = pixel_Values_sum + pixelValuesUC[x];						// Sum of all 128 ADC-Camera-Values
 			pixelValues[x]=pixelValuesUC[x]+calibrationCamera[x];						// Calibration Camera 1
 		}
-		exposure_time = exposure_time + ((16384-pixel_Values_sum))*5;					// Gain = 10 (can become unstable !!!)
+		exposureTimediff = (PVsumW-pixel_Values_sum)*ExposureGainCam;					// Value gets added to current exposure time at every call of task
+																						// Gain = 5
 																						// 16384 = 128 * ADC-Medium-Value (0 ... 256)
-		CTIMER0->MSR[0] = exposure_time;												// Exposure Time in s = exposure_time/220 MHz
+		if(exposureTimediff>=MaxDiffExpCams){											// max increment of exposure time every ms is 0,5ms
+			exposureTimediff=MaxDiffExpCams;
+		}
+		if(exposureTimediff<=-MaxDiffExpCams){													// max decrement of exposure time every ms is 0,5ms
+			exposureTimediff=-MaxDiffExpCams;
+		}
+		exposure_time = exposure_time + exposureTimediff;
+		CTIMER0->MSR[0] = exposure_time;												// Exposure Time in s = exposure_time/110 MHz
 
 		//Camera 2
 		int32_t pixel_Values_sum2 = 0;
+		int32_t exposureTimediff2 = 0;													// Value gets added to current exposure time at every call of task
 
 		for(uint8_t x=0;x<128;x++){
 		pixel_Values_sum2 = pixel_Values_sum2 + pixelValues2UC[x];						// Sum of all 128 ADC-Camera-Values
-		pixelValues2[x]=pixelValues2UC[x]+calibrationCamera2[x];							// Calibration Camera 2
+		pixelValues2[x]=pixelValues2UC[x]+calibrationCamera2[x];						// Calibration Camera 2
 		}
-		exposure_time2 = exposure_time2 + ((16384-pixel_Values_sum2))*5;					// Gain = 10 (can become unstable !!!)
-																						// 16384 = 128 * ADC-Medium-Value (0 ... 256)
-		CTIMER4->MSR[0] = exposure_time2;												// Exposure Time in s = exposure_time2/220 MHz
+		exposureTimediff2 = (PVsumW-pixel_Values_sum2)*ExposureGainCam2;					// Value gets added to current exposure time at every call of task
+																							// Gain = 5
+																							// 16384 = 128 * ADC-Medium-Value (0 ... 256)
+		if(exposureTimediff2>=MaxDiffExpCams){													// max increment of exposure time 2 every ms is 0,5ms
+			exposureTimediff2=MaxDiffExpCams;
+		}
+		if(exposureTimediff2<=-MaxDiffExpCams){													// max decrement of exposure time 2 every ms is 0,5ms
+			exposureTimediff2=-MaxDiffExpCams;
+		}
+
+
+		exposure_time2 = exposure_time2 + exposureTimediff2;
+
+		CTIMER4->MSR[0] = exposure_time2;												// Exposure Time in s = exposure_time2/110 MHz
 
 //		IOCON->PIO[2][1] &= 0xFFFFFFFF0; 	//Clear FUNC bits of P2.2 Func 0 is GPIO-Pin
 //		GPIO->DIR[2]      |= (1 << 1);    //Set PIO2_1  to output

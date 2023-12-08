@@ -78,7 +78,10 @@ enum track {
 	tree_stribes = 2,
 	four_stribes = 3
 };
-
+#define PVsumW 16384			//target value for PixelValue Sum in exposure Time calculation  16384 = 128 * ADC-Medium-Value (0 ... 256)
+#define ExposureGainCam	5		//Gain for exposure Time calculation of fist camera
+#define ExposureGainCam2 5		//Gain for exposure Time calculation of second camera
+#define MaxDiffExpCams 55000	//Maximum in- or decrease value for Exposure time in Timer register 55000 == 0,5 ms
 /*******************************************************************************
  * Structures
  ******************************************************************************/
