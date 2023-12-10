@@ -94,13 +94,52 @@ const static menu_entry_t menu_main_entries[] = {
 				/****************************************************
 				 * 	Entry for hide menu
 				 ***************************************************/
+				.str = "Music Mode",					//display "Music Mode"
+				.type = MENU_LINK,						//type is MENU_LINK
+				.link = menu_open_main_musicmode,		//link to music mode menu handler
+				.en = true,								//element is clickable
+		},
+		{
+				/****************************************************
+				 * 	Entry for hide menu
+				 ***************************************************/
 				.str = "Hide Menu",					//display "Hide Menu"
 				.type = MENU_LINK,					//type is MENU_LINK
 				.link = menu_close,					//link to main screen
 				.en = true,							//element is clickable
 		},
 };
+/****************************************************
+ * 	Entry for music mode menu
+ * 	menu for making music
+ ***************************************************/
+const static menu_entry_t menu_main_musicmode_entries[] = {	//new Martin Fürstberger 08.12.23
 
+		{
+				.str = "Start Music Mode",						//start Music mode
+				.type = MENU_PAGE,
+				.func = menu_page_musicmode_fcn,
+				.en = true,
+		},
+		{
+				.str = "Pirates",						//start Music mode
+				.type = MENU_PAGE,
+				.func = menu_page_Pirates,
+				.en = true,
+		},
+		{		.str = "Stop Buzzer",							//stop Buzzer
+				.type = MENU_PAGE,
+				.func = menu_page_Buzzer_stop,
+				.en = true,
+		},
+		{
+				.str = "Back",
+				.type = MENU_LINK,
+				.link = menu_open_main,
+				//.link = 0,
+				.en = true,
+		},
+};
 /****************************************************
  * 	Entry for drive menu
  * 	menu for drive purpose
@@ -649,7 +688,7 @@ const static menu_entry_t menu_ppm_restore_entries[] = {
  ***************************************************/
 menu_rtos_handle_t menu_main_handle = {
 		.drv_handle = {
-				.entry_cnt = 5,												//5 entries
+				.entry_cnt = 6,												//6 entries
 				.entry_list = (menu_entry_t*)menu_main_entries,				//list of all entries
 				.draw = menu_list_draw,										//emtry draw function
 		},
@@ -769,3 +808,13 @@ menu_rtos_handle_t menu_drive_StateControl_handle = {
 		},
 };
 
+/****************************************************
+ * handle for music mode
+ ***************************************************/
+menu_rtos_handle_t menu_main_musicmode_handle = {
+		.drv_handle = {
+				.entry_cnt = 4,                                            	//3 entries
+				.entry_list = (menu_entry_t*)menu_main_musicmode_entries,     	//list of all entries
+				.draw = menu_list_draw,                                    	//emtry draw function
+		},
+};

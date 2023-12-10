@@ -113,6 +113,11 @@ void menu_open_main_hardware() {
 	menu_rtos_switch_handle(&curr_menu_handle, &menu_main_hardware_handle);
 	menu_reset(&curr_menu_handle->drv_handle);
 }
+void menu_open_main_musicmode() {
+
+	menu_rtos_switch_handle(&curr_menu_handle, &menu_main_musicmode_handle);
+	menu_reset(&curr_menu_handle->drv_handle);
+}
 void menu_open_hardware_abaut() {
 
 	menu_rtos_switch_handle(&curr_menu_handle, &menu_hardware_ppm_handle);
@@ -301,6 +306,171 @@ void menu_page_calibration_camera(uint8_t refresh)    {
 	menu_rtos_switch_handle(&curr_menu_handle, &menu_main_hardware_handle);
 	menu_reset(&curr_menu_handle->drv_handle);
 }
+
+
+void menu_page_musicmode_fcn(uint8_t refresh){
+	uint8_t Note=0;
+	if(USS_Distance<98){
+		Note= USS_Distance/7;
+		MRT0->CHANNEL[1].CTRL=1;			//MRT0 Channel 1 Interrupt enabled and Repeat Interrupt Mode used
+		switch (Note){
+			case 0: MRT0->CHANNEL[1].INTVAL=(1<<31);				//MRT0 Channel Timer off
+			GPIO->CLR[2] |=(1<<1);				//Clear Buzzer
+			break;
+			case 1: MRT0->CHANNEL[1].INTVAL=(nC4);			//C4 == 264 Hz
+			break;
+			case 2: MRT0->CHANNEL[1].INTVAL=(nD4);			//D4 == 294 Hz
+			break;
+			case 3: MRT0->CHANNEL[1].INTVAL=(nE4);			//E4 == 329 Hz
+			break;
+			case 4: MRT0->CHANNEL[1].INTVAL=(nF4);			//F4 == 349 Hz
+			break;
+			case 5: MRT0->CHANNEL[1].INTVAL=(nG4);			//G4 == 392 Hz
+			break;
+			case 6: MRT0->CHANNEL[1].INTVAL=(nA4);			//A4 == 440 Hz
+			break;
+			case 7: MRT0->CHANNEL[1].INTVAL=(nB4);			//B4 == 494 Hz
+			break;
+			case 8: MRT0->CHANNEL[1].INTVAL=(nC5);			//C5 == 523 Hz
+			break;
+			case 9: MRT0->CHANNEL[1].INTVAL=(nD5);			//D5 == 587 Hz
+			break;
+			case 10: MRT0->CHANNEL[1].INTVAL=(nE5);			//E5 == 659 Hz
+			break;
+			case 11: MRT0->CHANNEL[1].INTVAL=(nF5);			//F5 == 698 Hz
+			break;
+			case 12: MRT0->CHANNEL[1].INTVAL=(nG5);		 	//G5 == 784 Hz
+			break;
+			case 13: MRT0->CHANNEL[1].INTVAL=(nA5);			//A5 == 880 Hz
+			break;
+			case 14: MRT0->CHANNEL[1].INTVAL=(nB5);			//B5 == 988 Hz
+			break;
+		}
+//		MRT0->CHANNEL[1].INTVAL= 2097152-(USS_Distance/3*(2097152/33));		//Timer Interrupt every ... = ... us (1 == 220'000'000 max Value 16'777'215 ==> 13,11Hz
+	}
+	else{
+		MRT0->CHANNEL[1].INTVAL=(1<<31);			//MRT0 Channel 1 Timer off
+		GPIO->CLR[2] |=(1<<1);				//Clear Buzzer
+	}
+	char distance_string[14]= "Distance USS: ";
+		sprintf(&distance_string[14], "%d",USS_Distance);	//Distance
+
+		ssd1309_rtos_lock(&g_disp_0);
+		//x1,y1, x2,  y2
+		ssd1309_draw_rect(&g_disp_0.disp_obj, 0, 13, 127, 63, true, OFF);
+		ssd1309_rtos_unlock(&g_disp_0);
+		ssd1309_set_pos(&g_disp_0.disp_obj, 0, 18);
+		ssd1309_write_str(&g_disp_0.disp_obj, distance_string , ssd1309_font_6x8, false, ON);
+}
+
+void menu_page_Pirates(uint8_t refresh){
+	uint16_t songspeed = 1.0;
+	uint32_t notes[] = {
+	nE4, nG4, nA4, nA4, (1<<31),
+	nA4, nB4, nC5, nC5, (1<<31),
+	nC5, nD5, nB4, nB4, (1<<31),
+	nA4, nG4, nA4, (1<<31),
+	nE4, nG4, nA4, nA4, (1<<31),
+	nA4, nB4, nC5, nC5, (1<<31),
+	nC5, nD5, nB4, nB4, (1<<31),
+	nA4, nG4, nA4, (1<<31),
+	nE4, nG4, nA4, nA4, (1<<31),
+	nA4, nC5, nD5, nD5, (1<<31),
+	nD5, nE5, nF5, nF5, (1<<31),
+	nE5, nD5, nE5, nA4, (1<<31),
+	nA4, nB4, nC5, nC5, (1<<31),
+	nD5, nE5, nA4, (1<<31),
+	nA4, nC5, nB4, nB4, (1<<31),
+	nC5, nA4, nB4, (1<<31),
+	nA4, nA4,
+	nA4, nB4, nC5, nC5, (1<<31),
+	nC5, nD5, nB4, nB4, (1<<31),
+	nA4, nG4, nA4, (1<<31),
+	nE4, nG4, nA4, nA4, (1<<31),
+	nA4, nB4, nC5, nC5, (1<<31),
+	nC5, nD5, nB4, nB4, (1<<31),
+	nA4, nG4, nA4, (1<<31),
+	nE4, nG4, nA4, nA4, (1<<31),
+	nA4, nC5, nD5, nD5, (1<<31),
+	nD5, nE5, nF5, nF5, (1<<31),
+	nE5, nD5, nE5, nA4, (1<<31),
+	nA4, nB4, nC5, nC5, (1<<31),
+	nD5, nE5, nA4, (1<<31),
+	nA4, nC5, nB4, nB4, (1<<31),
+	nC5, nA4, nB4, (1<<31),
+	nE5, (1<<31), (1<<31), nF5, (1<<31), (1<<31),
+	nE5, nE5, (1<<31), nG5, (1<<31), nE5, nD5, (1<<31), (1<<31),
+	nD5, (1<<31), (1<<31), nC5, (1<<31), (1<<31),
+	nB4, nC5, (1<<31), nB4, (1<<31), nA4,
+	nE5, (1<<31), (1<<31), nF5, (1<<31), (1<<31),
+	nE5, nE5, (1<<31), nG5, (1<<31), nE5, nD5, (1<<31), (1<<31),
+	nD5, (1<<31), (1<<31), nC5, (1<<31), (1<<31),
+	nB4, nC5, (1<<31), nB4, (1<<31), nA4
+	};
+	int duration[] = {
+	125, 125, 250, 125, 125,
+	125, 125, 250, 125, 125,
+	125, 125, 250, 125, 125,
+	125, 125, 375, 125,
+	125, 125, 250, 125, 125,
+	125, 125, 250, 125, 125,
+	125, 125, 250, 125, 125,
+	125, 125, 375, 125,
+	125, 125, 250, 125, 125,
+	125, 125, 250, 125, 125,
+	125, 125, 250, 125, 125,
+	125, 125, 125, 250, 125,
+	125, 125, 250, 125, 125,
+	250, 125, 250, 125,
+	125, 125, 250, 125, 125,
+	125, 125, 375, 375,
+	250, 125,
+	125, 125, 250, 125, 125,
+	125, 125, 250, 125, 125,
+	125, 125, 375, 125,
+	125, 125, 250, 125, 125,
+	125, 125, 250, 125, 125,
+	125, 125, 250, 125, 125,
+	125, 125, 375, 125,
+	125, 125, 250, 125, 125,
+	125, 125, 250, 125, 125,
+	125, 125, 250, 125, 125,
+	125, 125, 125, 250, 125,
+	125, 125, 250, 125, 125,
+	250, 125, 250, 125,
+	125, 125, 250, 125, 125,
+	125, 125, 375, 375,
+	250, 125, 375, 250, 125, 375,
+	125, 125, 125, 125, 125, 125, 125, 125, 375,
+	250, 125, 375, 250, 125, 375,
+	125, 125, 125, 125, 125, 500,
+	250, 125, 375, 250, 125, 375,
+	125, 125, 125, 125, 125, 125, 125, 125, 375,
+	250, 125, 375, 250, 125, 375,
+	125, 125, 125, 125, 125, 500
+	};
+	for (uint8_t i=0;i<203;i++){
+		uint16_t wait = duration[i] * songspeed;
+		MRT0->CHANNEL[1].INTVAL=(notes[i]);
+		if(notes[i]==(1<<31)){
+			GPIO->CLR[2] |=(1<<1);				//Clear Buzzer
+		}
+		vTaskDelay(wait);
+	}
+
+
+}
+
+void menu_page_Buzzer_stop(uint8_t refresh){
+	MRT0->CHANNEL[1].INTVAL=(1<<31);			//MRT0 Channel 1 Interrupt disabled
+	GPIO->CLR[2] |=(1<<1);				//Clear Buzzer
+}
+
+
+
+
+
+
 void menu_page_display_distance_USS(uint8_t refresh) {
 
 	char distance_string[14]= "Distance USS: ";
