@@ -1,8 +1,18 @@
+/Release/
 # Prerequisites
 *.d
 
 # Object files
 *.o
+*.su
+
+makefile
+*.d
+*.o
+*.su
+*.mk
+*.axf
+*.hex
 *.ko
 *.obj
 *.elf
@@ -10,6 +20,13 @@
 # Linker output
 *.ilk
 *.map
+*.ld
+Debug/makefile
+script.jlink
+.settings/language.settings.xml
+*.ld
+*.axf
+*.ld
 *.exp
 
 # Precompiled Headers
@@ -58,6 +75,18 @@ dkms.conf
 *.slo
 *.lo
 *.o
+*.su
+*.mk
+*.axf
+*.hex
+*.map
+*.ld
+Debug/makefile
+script.jlink
+.settings/language.settings.xml
+*.ld
+*.axf
+*.ld
 *.obj
 
 # Precompiled Headers

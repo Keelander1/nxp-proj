@@ -57,4 +57,9 @@ typedef struct _motor_param_t {
 	motor_chnl_param_t BLDCRight;
 } motor_param_t;
 
+typedef struct _state_control_t {
+	float testParam;
+	float testParam2;
+} state_control_t;
+
 #endif /* DRIVE_PARAM_H_ */

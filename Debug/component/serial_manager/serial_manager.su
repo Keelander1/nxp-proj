@@ -1,5 +1,5 @@
-C:\Users\keela\OneDrive\Desktop\Studium\Master ET\Semester2NXP\nxp-proj\drivers/fsl_common.h:552:28:DisableGlobalIRQ	16	static
-C:\Users\keela\OneDrive\Desktop\Studium\Master ET\Semester2NXP\nxp-proj\drivers/fsl_common.h:583:24:EnableGlobalIRQ	24	static
+D:\Studium\NXP-Cup\nxp-proj\nxp-proj\drivers/fsl_common.h:552:28:DisableGlobalIRQ	16	static
+D:\Studium\NXP-Cup\nxp-proj\nxp-proj\drivers/fsl_common.h:583:24:EnableGlobalIRQ	24	static
 ../component/serial_manager/serial_manager.c:267:32:SerialManager_StartWriting	32	static
 ../component/serial_manager/serial_manager.c:308:32:SerialManager_StartReading	32	static
 ../component/serial_manager/serial_manager.c:788:32:SerialManager_Write	32	static

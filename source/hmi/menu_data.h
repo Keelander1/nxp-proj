@@ -102,4 +102,9 @@ extern menu_rtos_handle_t menu_ppm_restore_handle;
  ***************************************************/
 extern menu_rtos_handle_t menu_drive_StateControl_handle;
 
+/****************************************************
+ * handle for Music Mode
+ ***************************************************/
+extern menu_rtos_handle_t menu_main_musicmode_handle;
+
 #endif /* HMI_MENU_DATA_H_ */

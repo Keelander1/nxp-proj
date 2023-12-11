@@ -220,7 +220,12 @@ void hmi_task(void *args)
 	menu_rtos_init(&menu_ppm_motor_left_handle);	//left BLDC menu handle
 	menu_rtos_init(&menu_ppm_motor_right_handle);	//right BLDC menu handle
 	menu_rtos_init(&menu_ppm_restore_handle);		//restore settings menu handle
+<<<<<<< HEAD
 	menu_rtos_init(&menu_drive_StateControl_handle);
+=======
+	menu_rtos_init(&menu_main_musicmode_handle);	//music mode handle
+
+>>>>>>> f2edbefff9e0c9b38b4959119c4c5bac45f9b1d9
 	//**********************************************************************
 	//display NXP logo
 	//**********************************************************************

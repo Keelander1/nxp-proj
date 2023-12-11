@@ -58,6 +58,23 @@ enum camSel {
 };
 extern int32_t camSelect;
 
+//Notes for Music Mode
+/********************************************************************************/
+#define nC4 220000000/264
+#define nD4 220000000/294
+#define nE4 220000000/329
+#define nF4 220000000/349
+#define nG4 220000000/392
+#define nA4 220000000/440
+#define nB4 220000000/494
+#define nC5 220000000/523
+#define nD5 220000000/587
+#define nE5 220000000/659
+#define nF5 220000000/698
+#define nG5 220000000/784
+#define nA5 220000000/880
+#define nB5 220000000/988
+/********************************************************************************/
 /*******************************************************************************
  * Prototypes
  ******************************************************************************/
@@ -65,6 +82,7 @@ extern int32_t camSelect;
 void menu_open_main();
 void menu_open_main_drive();
 void menu_open_main_hardware();
+void menu_open_main_musicmode();
 void menu_page_main_about(uint8_t refresh);
 void menu_open_hardware_ppm();
 void menu_open_ppm_servo_motor();
@@ -79,6 +97,9 @@ void menu_page_pixel_display_camera2(uint8_t refresh);
 void menu_page_calibration_camera2(uint8_t refresh);
 void menu_page_display_distance_USS(uint8_t refresh);
 void menu_page_camera_info(uint8_t refresh);
+void menu_page_musicmode_fcn(uint8_t refresh);
+void menu_page_Pirates(uint8_t refresh);
+void menu_page_Buzzer_stop(uint8_t refresh);
 void menu_close();
 void screen_main();
 void screen_update_header();

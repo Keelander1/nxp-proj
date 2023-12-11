@@ -59,6 +59,10 @@ void Board_Init(void)
 	//**********
 
 	CLKOUT_Init(); //Initialize Port 3 Pin 12 for CLKOUT Function (J12 Pin 9)
+
+	//Config Buzzer
+	IOCON->PIO[2][1] &= 0xFFFFFFFF0; 	//Clear FUNC bits of P2.1 Func 0 is GPIO-Pin
+	GPIO->DIR[2]      |= (1 << 1);    	//Set PIO2_1  to output
 }
 
 

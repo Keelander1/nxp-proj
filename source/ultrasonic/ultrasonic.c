@@ -59,10 +59,16 @@ void MRTIMER0_Init(void)
 
 void MRT0_IRQHandler(uint32_t flags)
 {
-	if(USS_Count==1){					//PIN is High
-	USS_Distance_Counter++;				//Timer counts up
+	if((MRT0->CHANNEL[0].STAT & 1) == 1){
+		if(USS_Count==1){					//PIN is High
+		USS_Distance_Counter++;				//Timer counts up
+		}
+		MRT0->CHANNEL[0].STAT|=1<<0;		//Clear Interrupt-Flag
 	}
-	MRT0->CHANNEL[0].STAT|=1<<0;		//Clear Interrupt-Flag
+	if((MRT0->CHANNEL[1].STAT & 1) == 1){
+		GPIO->NOT[2] |=(1<<1);				//Toggle Buzzer
+		MRT0->CHANNEL[1].STAT|=1<<0;		//Clear Interrupt-Flag
+	}
 }
 
 void PIN_INT_INIT(void)

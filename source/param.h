@@ -95,6 +95,8 @@ extern uint8_t const_all_param[FSL_FEATURE_EEPROM_PAGE_SIZE];	//array with all p
 extern all_param_t *all_param;									//pointer to all_param_t
 
 extern int8_t calibrationCamera_storage[2][128];
+
+extern state_control_t *controlParam;
 /*******************************************************************************
  * API
  ******************************************************************************/
