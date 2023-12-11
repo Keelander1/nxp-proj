@@ -171,10 +171,26 @@ const static menu_entry_t menu_main_drive_entries[] = {
  * 	Activated the drive Function
  ***************************************************/
 const static menu_entry_t menu_drive_StateControl_entries[] = {
+		{		.str = "Start_Drive_FKT",							// new Simonis Leon 16.06.23
+				.type = MENU_PAGE,
+				.func = StateControl,
+				.en = true,
+		},
 		{
-				.str = "k2",
+						.str = "Speed",
+						.type = MENU_VALUE,
+						.val = &Speed_Param,
+						.min_val = 0,													//min value
+						.max_val =  100,													//max value
+						//.act =0,
+						.en = true,
+				},
+		{
+				.str = "kyi",
 				.type = MENU_VALUE,
-				.val = &k_2,
+				.val = &k_yi,
+				.min_val = -100000,													//min value
+				.max_val =  100000,													//max value
 				//.act =0,
 				.en = true,
 		},
@@ -182,7 +198,79 @@ const static menu_entry_t menu_drive_StateControl_entries[] = {
 				.str = "k1",
 				.type = MENU_VALUE,
 				.val = &k_1,
+				.min_val = -100000,													//min value
+				.max_val =  100000,													//max value
 				//.act =0,
+				.en = true,
+		},
+		{
+				.str = "k2",
+				.type = MENU_VALUE,
+				.val = &k_2,
+				.min_val = -100000,													//min value
+				.max_val =  100000,													//max value
+				//.act =0,
+				.en = true,
+		},
+		{
+				.str = "k3",
+				.type = MENU_VALUE,
+				.val = &k_3,
+				.min_val = -100000,													//min value
+				.max_val =  100000,													//max value
+				//.act =0,
+				.en = true,
+		},
+		{
+				.str = "k4",
+				.type = MENU_VALUE,
+				.val = &k_4,
+				.min_val = -100000,													//min value
+				.max_val =  100000,													//max value
+				//.act =0,
+				.en = true,
+		},
+		{
+				.str = "l1",
+				.type = MENU_VALUE,
+				.val = &l_1,
+				.min_val = -100000,													//min value
+				.max_val =  100000,													//max value
+				//.act =0,
+				.en = true,
+		},
+		{
+				.str = "l2",
+				.type = MENU_VALUE,
+				.val = &l_2,
+				.min_val = -100000,													//min value
+				.max_val =  100000,													//max value
+				//.act =0,
+				.en = true,
+		},
+		{
+				.str = "l3",
+				.type = MENU_VALUE,
+				.val = &l_3,
+				.min_val = -100000,													//min value
+				.max_val =  100000,													//max value
+				//.act =0,
+				.en = true,
+		},
+		{
+				.str = "l4",
+				.type = MENU_VALUE,
+				.val = &l_4,
+				.min_val = -100000,													//min value
+				.max_val =  100000,													//max value
+				//.act =0,
+				.en = true,
+		},
+		{
+				.str = "Back",
+				.type = MENU_LINK,
+				.link = menu_open_main,
+				//.link = 0,
 				.en = true,
 		},
 
@@ -763,7 +851,7 @@ menu_rtos_handle_t menu_ppm_restore_handle = {
  ***************************************************/
 menu_rtos_handle_t menu_drive_StateControl_handle = {
 		.drv_handle = {
-				.entry_cnt = 2,                                            	//3 entries
+				.entry_cnt = 12,                                            	//3 entries
 				.entry_list = (menu_entry_t*)menu_drive_StateControl_entries,     	//list of all entries
 				.draw = menu_list_draw,                                    	//emtry draw function
 		},

@@ -81,14 +81,22 @@ enum direction{
  ******************************************************************************/
 #define t 20.0
 
+#define  Cv 25
+#define  Ch  40
+#define  m  2.5
+#define  V  1.5
+#define  Lh 0.175
+#define  Lv 0.175
+#define  J 0.087
+#define  D_ 0.45
 	//ReglermatrixA
-#define a11 -13.0
-#define  a12 -0.7375
+#define a11 ((-Cv-Ch) / (m*V))
+#define a12 ((-Cv*Lv+Ch*Lh)/(m*V*V)-1)
 #define a13 0.0
 #define a14 0.0
 
-#define a21 30.1724
-#define a22 -11.4404
+#define a21 (-Cv*Lv+Ch*Lh)/J
+#define a22 -(Lv*Lv*Cv+Lh*Lh*Ch)/(J*V)
 #define a23 0.0
 #define a24 0.0
 
@@ -97,15 +105,15 @@ enum direction{
 #define a33 0.0
 #define a34 0.0
 
-#define a41 -2.0
-#define a42 -0.45
-#define a43 2.0
+#define a41 -V
+#define a42 -D_
+#define a43 V
 #define a44 0.0
 
 
 	//Reglermatrix B
-#define B1 5
-#define B2 50.2874
+#define B1 Cv / (m*V)
+#define B2 (Cv*Lv) / J
 #define B3 0.0
 #define B4 0.0
 
@@ -116,6 +124,7 @@ enum direction{
 #define c4 1.0
 
 	//Beobachter L
+/*
 #define l1 -2.1993
 #define l2 48.6350
 #define l3 21.2867
@@ -127,9 +136,18 @@ enum direction{
 #define k3 -2.6515
 #define k4 -10.4811
 #define KYI -20.4
-#define Windup -0.2
+*/
+#define Windup -0.1;
 extern int k_1;
 extern int k_2;
+extern int k_3;
+extern int k_4;
+extern int k_yi;
+extern int l_1;
+extern int l_2;
+extern int l_3;
+extern int l_4;
+extern int Speed_Param;
 
 /*******************************************************************************
  * Prototypes

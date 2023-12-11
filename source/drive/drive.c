@@ -98,8 +98,18 @@ double I = 0;
 double u_old = 0;
 double u_sat = 0;
 
-int k_1 = 16289;					// 10000
-int k_2 = 16289;					// 10000
+int k_1 = 96;					// *100
+int k_2 = 16;					// *100
+int k_3 = -165;					// *100
+int k_4 = -269;					// *100
+int k_yi = 0;					// *100
+
+int l_1 = 0;					// *100
+int l_2 = 0;					// *100
+int l_3 = 1440;					// *100
+int l_4 = 1200;					// *100
+
+int Speed_Param = 20;
 
 float gamma = 0;					//Lenkwinkel
 
@@ -570,7 +580,6 @@ void Real_Drive (uint8_t state)
 //
 //
 //
-
 }
 //
 
@@ -660,6 +669,18 @@ void StateControl_old(uint8_t state)
 
 void StateControl(uint8_t state)
 {
+	double k1 = k_1/100.0;
+	double k2 = k_2/100.0;
+	double k3 = k_3/100.0;
+	double k4 = k_4/100.0;
+	double KYI = k_yi/100.0;
+
+	double l1 = l_1/100.0;
+	double l2 = l_2/100.0;
+	double l3 = l_3/100.0;
+	double l4 = l_4/100.0;
+
+
 	double sleeptime = t/1000.0;
 	//menu_page_pixel_display_camera(1);
 
@@ -668,7 +689,7 @@ void StateControl(uint8_t state)
 	if (USS_Distance <= 40)
 		Const_Test_Speed = 0;
 	else
-		Const_Test_Speed = 30;
+		Const_Test_Speed = Speed_Param;
 
 	//__________________________________
 
@@ -685,7 +706,8 @@ void StateControl(uint8_t state)
 	i = 0 - y + (u_sat - u_old) * Windup;
 	I = I +  i * sleeptime;
 	// Gleichung 1
-	u = 0 + I*KYI*0 - (k1*x1_hat + k2*x2_hat + k3*x3_hat + k4*x4_hat);
+	u = 0 + I*KYI - (k1*x1_hat + k2*x2_hat + k3*x3_hat + k4*x4_hat);
+	u = 0 - (k1*x1_hat + k2*x2_hat + k3*x3_hat + k4*x4_hat);			// ohne I anteil
 	//Begrenzung u
 	if (u <= -0.54)
 		{
@@ -724,7 +746,7 @@ void StateControl(uint8_t state)
 
 
 	stear(u);
-
+//
 //	gamma = (int16_t)(u*2*180/3.14);		// 30°Lenkwinkel Entsprechen 60° beim Servo
 //	//Faktor Lenkwinkel zu Servo-Winkel
 //	if (gamma <= -60)
@@ -752,15 +774,15 @@ void StateControl(uint8_t state)
 //	//calculate test value for right steering
 //	Stearing_Value= *servoMiddle + servo_Value*(*servoRight-*servoMiddle)/100;
 //	}
-//	//Schreiben des Umgerechneten PWM Werts ins Register für die Lenkwinkelsteuerung
-//	CTIMER1->MSR[2] = CTIMER1_PWM_PERIOD - Stearing_Value * CTIMER1_PWM_PERIOD / 20000;
+////	//Schreiben des Umgerechneten PWM Werts ins Register für die Lenkwinkelsteuerung
+	//CTIMER1->MSR[2] = CTIMER1_PWM_PERIOD - Stearing_Value * CTIMER1_PWM_PERIOD / 20000;
 
 	// Delay the Task --> for integration over time
 	vTaskDelay(t);
 
 	// Set the Speed -- here is not the Speed decision!!!
-			Speed_Left_normiert  = Const_Test_Speed * (1 + ((Spurweiter_m * y) / (X*X + y*y)));
-			Speed_Right_normiert = Const_Test_Speed * (1 - ((Spurweiter_m * y) / (X*X + y*y)));
+			Speed_Left_normiert  = Const_Test_Speed;// * (1 + ((Spurweiter_m * y) / (X*X + y*y)));
+			Speed_Right_normiert = Const_Test_Speed;// * (1 - ((Spurweiter_m * y) / (X*X + y*y)));
 			//calculate test value for selected speed
 			SpeedValueLeft= *BLDCLeftMinValue + Speed_Left_normiert*(*BLDCLeftMaxValue-*BLDCLeftMinValue)/100;// Fester Wert definiert--> evtl. noch dynamisch machen!!!
 			SpeedValueRight= *BLDCRightMinValue + Speed_Right_normiert*(*BLDCRightMaxValue-*BLDCRightMinValue)/100;// Fester Wert definiert--> evtl. noch dynamisch machen!!!

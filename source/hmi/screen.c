@@ -140,7 +140,7 @@ void menu_open_hardware_ppm() {
 	menu_reset(&curr_menu_handle->drv_handle);
 }
 
-void menu_open_drive_StateControl(uint8_t refresh) {
+void menu_open_drive_StateControl() {
 
 	menu_rtos_switch_handle(&curr_menu_handle, &menu_drive_StateControl_handle);
 	menu_reset(&curr_menu_handle->drv_handle);
