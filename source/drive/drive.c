@@ -669,7 +669,7 @@ void StateControl_old(uint8_t state)
 
 void StateControl(uint8_t state)
 {
-<<<<<<< HEAD
+
 	double k1 = k_1/100.0;
 	double k2 = k_2/100.0;
 	double k3 = k_3/100.0;
@@ -681,9 +681,9 @@ void StateControl(uint8_t state)
 	double l3 = l_3/100.0;
 	double l4 = l_4/100.0;
 
-=======
+
 	controlParam->testParam = 0;	//Testparameter für EEPROM
->>>>>>> f2edbefff9e0c9b38b4959119c4c5bac45f9b1d9
+
 
 	double sleeptime = t/1000.0;
 	//menu_page_pixel_display_camera(1);

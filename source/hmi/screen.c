@@ -350,6 +350,7 @@ void menu_page_musicmode_fcn(uint8_t refresh){
 	}
 	else{
 		MRT0->CHANNEL[1].INTVAL=(1<<31);			//MRT0 Channel 1 Timer off
+		vTaskDelay(1);
 		GPIO->CLR[2] |=(1<<1);				//Clear Buzzer
 	}
 	char distance_string[14]= "Distance USS: ";
@@ -364,7 +365,7 @@ void menu_page_musicmode_fcn(uint8_t refresh){
 }
 
 void menu_page_Pirates(uint8_t refresh){
-	uint16_t songspeed = 1.0;
+	float songspeed = 1.0;
 	uint32_t notes[] = {
 	nE4, nG4, nA4, nA4, (1<<31),
 	nA4, nB4, nC5, nC5, (1<<31),
@@ -405,9 +406,9 @@ void menu_page_Pirates(uint8_t refresh){
 	nE5, (1<<31), (1<<31), nF5, (1<<31), (1<<31),
 	nE5, nE5, (1<<31), nG5, (1<<31), nE5, nD5, (1<<31), (1<<31),
 	nD5, (1<<31), (1<<31), nC5, (1<<31), (1<<31),
-	nB4, nC5, (1<<31), nB4, (1<<31), nA4
+	nB4, nC5, (1<<31), nB4, (1<<31), nA4, (1<<31)
 	};
-	int duration[] = {
+	uint32_t duration[] = {
 	125, 125, 250, 125, 125,
 	125, 125, 250, 125, 125,
 	125, 125, 250, 125, 125,
@@ -447,18 +448,48 @@ void menu_page_Pirates(uint8_t refresh){
 	250, 125, 375, 250, 125, 375,
 	125, 125, 125, 125, 125, 125, 125, 125, 375,
 	250, 125, 375, 250, 125, 375,
-	125, 125, 125, 125, 125, 500
+	125, 125, 125, 125, 125, 500, 500
 	};
-	for (uint8_t i=0;i<203;i++){
-		uint16_t wait = duration[i] * songspeed;
+	for (uint8_t i=0;i<204;i++){
+		uint32_t wait = duration[i] * songspeed;
 		MRT0->CHANNEL[1].INTVAL=(notes[i]);
 		if(notes[i]==(1<<31)){
-			GPIO->CLR[2] |=(1<<1);				//Clear Buzzer
+//			for (uint8_t delay=0;delay<100;delay++){
+				vTaskDelay(1);
+				GPIO->CLR[2] |=(1<<1); //Clear Buzzer
+
 		}
 		vTaskDelay(wait);
 	}
+	menu_rtos_switch_handle(&curr_menu_handle, &menu_main_handle);
+	menu_reset(&curr_menu_handle->drv_handle);
 
+}
 
+void menu_page_Champions(uint8_t refresh){
+	float songspeed = 1.0;
+		uint32_t notes[] = {
+				nC4,(1<<31), nE4, (1<<31), nF4, (1<<31), nF4, (1<<31),	//8
+				nC4, (1<<31), nE4, (1<<31), nG4, nF4, (1<<31)			//7
+		};
+
+		uint32_t duration[] = {
+				125, 125, 125, 125, 125, 125, 375, 750,
+				125, 125, 125, 125, 125, 500, 750
+		};
+		for (uint8_t i=0;i<15;i++){
+			uint32_t wait = duration[i] * songspeed;
+			MRT0->CHANNEL[1].INTVAL=(notes[i]);
+			if(notes[i]==(1<<31)){
+				vTaskDelay(1);
+					GPIO->CLR[2] |=(1<<1); //Clear Buzzer
+
+			}
+			vTaskDelay(wait);
+		}
+
+		menu_rtos_switch_handle(&curr_menu_handle, &menu_main_handle);
+		menu_reset(&curr_menu_handle->drv_handle);
 }
 
 void menu_page_Buzzer_stop(uint8_t refresh){

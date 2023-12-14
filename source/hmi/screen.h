@@ -99,6 +99,7 @@ void menu_page_display_distance_USS(uint8_t refresh);
 void menu_page_camera_info(uint8_t refresh);
 void menu_page_musicmode_fcn(uint8_t refresh);
 void menu_page_Pirates(uint8_t refresh);
+void menu_page_Champions(uint8_t refresh);
 void menu_page_Buzzer_stop(uint8_t refresh);
 void menu_close();
 void screen_main();
