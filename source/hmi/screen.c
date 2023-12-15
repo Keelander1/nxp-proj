@@ -132,7 +132,7 @@ void menu_page_main_about(uint8_t refresh) {
 	ssd1309_set_pos(&g_disp_0.disp_obj, 8, 18);
 	ssd1309_write_str(&g_disp_0.disp_obj, "Made for NXP Cup", ssd1309_font_6x8, false, ON);
 	ssd1309_set_pos(&g_disp_0.disp_obj, 11, 34);
-	ssd1309_write_str(&g_disp_0.disp_obj, "By Students", ssd1309_font_6x8, false, ON);
+	ssd1309_write_str(&g_disp_0.disp_obj, "By Gesch.Rausch", ssd1309_font_6x8, false, ON);
 	ssd1309_set_pos(&g_disp_0.disp_obj, 29, 50);
 	ssd1309_write_str(&g_disp_0.disp_obj, "June 2023", ssd1309_font_6x8, false, ON);
 
@@ -408,7 +408,7 @@ void menu_page_Pirates(uint8_t refresh){
 	nD5, (1<<31), (1<<31), nC5, (1<<31), (1<<31),
 	nB4, nC5, (1<<31), nB4, (1<<31), nA4, (1<<31)
 	};
-	uint32_t duration[] = {
+	uint16_t duration[] = {
 	125, 125, 250, 125, 125,
 	125, 125, 250, 125, 125,
 	125, 125, 250, 125, 125,
@@ -466,31 +466,46 @@ void menu_page_Pirates(uint8_t refresh){
 
 }
 
-void menu_page_Champions(uint8_t refresh){
-	float songspeed = 1.0;
-		uint32_t notes[] = {
-				nC4,(1<<31), nE4, (1<<31), nF4, (1<<31), nF4, (1<<31),	//8
-				nC4, (1<<31), nE4, (1<<31), nG4, nF4, (1<<31)			//7
-		};
+/////////////////Not enough Memory for following function :(
 
-		uint32_t duration[] = {
-				125, 125, 125, 125, 125, 125, 375, 750,
-				125, 125, 125, 125, 125, 500, 750
-		};
-		for (uint8_t i=0;i<15;i++){
-			uint32_t wait = duration[i] * songspeed;
-			MRT0->CHANNEL[1].INTVAL=(notes[i]);
-			if(notes[i]==(1<<31)){
-				vTaskDelay(1);
-					GPIO->CLR[2] |=(1<<1); //Clear Buzzer
-
-			}
-			vTaskDelay(wait);
-		}
-
-		menu_rtos_switch_handle(&curr_menu_handle, &menu_main_handle);
-		menu_reset(&curr_menu_handle->drv_handle);
-}
+//void menu_page_Champions(uint8_t refresh){
+//	float songspeed = 1.0;
+//		uint32_t notes[] = {
+//				nC4,(1<<31), nE4, (1<<31), nF4, (1<<31), nF4, (1<<31),							//8
+//				nC4, (1<<31), nE4, (1<<31), nG4, nF4, (1<<31),									//7
+//				nC4, (1<<31), nE4, (1<<31), nF4, (1<<31), nF4, nC4, (1<<31),					//9
+//				nC4, (1<<31), nC4, (1<<31), nG4, (1<<31), nF4, (1<<31), nE4, nF4, (1<<31),		//11
+//				nE4, (1<<31), nG4, (1<<31), nA4, (1<<31), nA4, (1<<31), 						//8
+//				nE4, (1<<31), nG4, (1<<31), nA4, (1<<31), nA4, (1<<31),							//8
+//				nE4, (1<<31), nG4, (1<<31), nA4, (1<<31), nA4, (1<<31), nA4, (1<<31),			//10
+//				nB4, (1<<31), nB4, (1<<31), nB4, (1<<31), nC5, (1<<31), nC5, (1<<31) 			//10
+//		};
+////,
+//		uint32_t duration[] = {
+//				125, 125, 125, 125, 125, 125, 375, 750,
+//				125, 125, 125, 125, 125, 500, 750,
+//				125, 125, 125, 125, 375, 125, 125, 125, 625,
+//				100, 50, 100, 50, 100, 50, 100, 50, 100, 500, 750,
+//				125, 125, 125, 125, 125, 125, 375, 750,
+//				125, 125, 100, 50, 100, 50, 625, 750,
+//				125, 125, 125, 125, 125, 125, 125, 125, 100, 50,
+//				125, 125, 100, 50, 100, 50, 100, 50, 250, 50
+//		};
+//
+//		for (uint8_t i=0;i<52;i++){
+//			uint32_t wait = duration[i] * songspeed;
+//			MRT0->CHANNEL[1].INTVAL=(notes[i]);
+//			if(notes[i]==(1<<31)){
+//				vTaskDelay(1);
+//					GPIO->CLR[2] |=(1<<1); //Clear Buzzer
+//
+//			}
+//			vTaskDelay(wait);
+//		}
+//
+//		menu_rtos_switch_handle(&curr_menu_handle, &menu_main_handle);
+//		menu_reset(&curr_menu_handle->drv_handle);
+//}
 
 void menu_page_Buzzer_stop(uint8_t refresh){
 	MRT0->CHANNEL[1].INTVAL=(1<<31);			//MRT0 Channel 1 Interrupt disabled
