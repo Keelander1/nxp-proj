@@ -127,13 +127,12 @@ const static menu_entry_t menu_main_musicmode_entries[] = {	//new Martin Fürstb
 				.func = menu_page_Pirates,
 				.en = true,
 		},
-		//Not enough memory for the following function
-//		{
-//				.str = "Champions",						//start Music mode
-//				.type = MENU_PAGE,
-//				.func = menu_page_Champions,
-//				.en = true,
-//		},
+		{
+				.str = "Champions",						//start Music mode
+				.type = MENU_PAGE,
+				.func = menu_page_Champions,
+				.en = true,
+		},
 		{		.str = "Stop Buzzer",							//stop Buzzer
 				.type = MENU_PAGE,
 				.func = menu_page_Buzzer_stop,
@@ -908,7 +907,7 @@ menu_rtos_handle_t menu_drive_StateControl_handle = {
  ***************************************************/
 menu_rtos_handle_t menu_main_musicmode_handle = {
 		.drv_handle = {
-				.entry_cnt = 4,                                            	//3 entries
+				.entry_cnt = 5,                                            	//3 entries
 				.entry_list = (menu_entry_t*)menu_main_musicmode_entries,     	//list of all entries
 				.draw = menu_list_draw,                                    	//emtry draw function
 		},
