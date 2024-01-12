@@ -69,7 +69,7 @@
 #define BLDC_PWM_INIT_HIGH_VALUE 330000	//Init High value Sequence 1,5ms
 #define BLDC_PWM_INIT_LOW_VALUE 220000	//Init Low value Sequence 1,0ms
 #define CTIMER3_PWM_0_DUTY 0            //Definition of initialization duty
-#define CTIMER3_PWM_PERIOD 4400000			//Definition of PWM period
+#define CTIMER3_PWM_PERIOD 4400000			//Definition of PWM period (Taktanzahl)
 
 enum direction{
 	left_corner = -1,
@@ -150,6 +150,20 @@ extern int l_4;
 extern int Speed_Param;
 
 /*******************************************************************************
+ * Speed Control:
+ ******************************************************************************/
+#define SPEED_TO_PULSE 4.25 											//Umrechnungsfaktor zwischen Geschwindigkeit und Pulslänge
+#define TAKT_PER_MS 220000 												//Taktanzahl pro ms (Ins Timerregister wird Takt geschrieben)
+#define BRAKE_FAKTOR (-1.0*((SPEED_AFTER_FINISH*SPEED_AFTER_FINISH)/(2.0*0.25)))	//Bremsfaktor
+
+
+#define SPEED_MAX 0.68 //1.36		    //Maximale Geschwindigkeit (Initialisierungswert)
+#define SPEED_AFTER_FINISH 0.68		    //Geschwindigkeit nach Überschreitung der Zielline
+#define SPEED_CURVE 0.34 //0.85			//Geschwindigkeit in der Kurve
+
+#define RADIUS 0.72	   //Kurvenradius (Kreismittelpunkt bis Mitte der Fahrbahn)
+#define WHEELBASE 0.13 //Radabstand (Mitte des Reifens bis Mitte des Reifens)
+/*******************************************************************************
  * Prototypes
  ******************************************************************************/
 void BLDC_Init(void);
@@ -160,6 +174,8 @@ void stear(float angle);		//angle in rad
 void Camera_Test_Drive (uint8_t state);
 void Real_Drive (uint8_t state);
 void StateControl(uint8_t state);
+void SpeedControl1(void); //Funktion to set the Speed-Value according to the route section
+void SpeedControl2(void); //Funktion to set the Speed-Value according to the route section
 #endif /* DRIVE_DRIVE_H_ */
 
 
