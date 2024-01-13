@@ -54,7 +54,7 @@ void MRTIMER0_Init(void)
 	SYSCON->PRESETCTRL[1]&=~(1<<0);		//Clear MRT-Reset
 	EnableIRQ(MRT0_IRQn);				//Enable Interrupt
 	MRT0->CHANNEL[0].CTRL=1;			//MRT0 Interrupt enabled and Repeat Interrupt Mode used
-	MRT0->CHANNEL[0].INTVAL= 11000;	//Timer Interrupt every 11000/220000 = 50 us
+	MRT0->CHANNEL[0].INTVAL=(1<<31);	//Timer stops
 }
 
 void MRT0_IRQHandler(uint32_t flags)
