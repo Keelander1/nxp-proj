@@ -548,8 +548,6 @@ Discarded input sections
                 0x00000000       0x3f ./source/ultrasonic/ultrasonic.o
  .rodata.img_sign_blocking
                 0x00000000        0x8 ./source/ultrasonic/ultrasonic.o
- .bss.USS_Count
-                0x00000000        0x1 ./source/ultrasonic/ultrasonic.o
  .debug_macro   0x00000000      0xab4 ./source/ultrasonic/ultrasonic.o
  .debug_macro   0x00000000       0x10 ./source/ultrasonic/ultrasonic.o
  .debug_macro   0x00000000       0x1c ./source/ultrasonic/ultrasonic.o
@@ -9120,57 +9118,57 @@ SSD1309ImageBuffer
 OUTPUT(Gustl_SumEck.axf elf32-littlearm)
 LOAD linker stubs
 
-.debug_info     0x00000000    0x34f9a
+.debug_info     0x00000000    0x34f88
  .debug_info    0x00000000       0xb1 ./utilities/fsl_assert.o
  .debug_info    0x000000b1      0x6d2 ./startup/startup_lpc54628.o
- .debug_info    0x00000783     0x1bf7 ./source/ultrasonic/ultrasonic.o
- .debug_info    0x0000237a      0xa37 ./source/servo/servo.o
- .debug_info    0x00002db1      0xa0b ./source/rpmMeas/rpmMeas.o
- .debug_info    0x000037bc      0xec8 ./source/hmi/input_devices/input_devices.o
- .debug_info    0x00004684      0x1ad ./source/hmi/input_devices/rotary_encode.o
- .debug_info    0x00004831      0x1b6 ./source/hmi/input_devices/sw_debounce.o
- .debug_info    0x000049e7      0xfe5 ./source/hmi/hmi.o
- .debug_info    0x000059cc     0x10b2 ./source/hmi/menu_data.o
- .debug_info    0x00006a7e      0xf53 ./source/hmi/menu_main_screen.o
- .debug_info    0x000079d1     0x1b50 ./source/hmi/screen.o
- .debug_info    0x00009521     0x19a8 ./source/drive/drive.o
- .debug_info    0x0000aec9      0x307 ./source/display/menu/design/menu_list.o
- .debug_info    0x0000b1d0      0x42f ./source/display/menu/menu.o
- .debug_info    0x0000b5ff      0x2b3 ./source/display/menu/menu_rtos.o
- .debug_info    0x0000b8b2     0x1357 ./source/display/interface/i2c_rtos_interface.o
- .debug_info    0x0000cc09      0xc46 ./source/display/driver/ssd1309.o
- .debug_info    0x0000d84f      0x996 ./source/display/driver/ssd1309_rtos.o
- .debug_info    0x0000e1e5     0x12ee ./source/display/adapter/disp_adapter.o
- .debug_info    0x0000f4d3      0xf52 ./source/display/adapter/menu_adapter.o
- .debug_info    0x00010425     0x177f ./source/display/display.o
- .debug_info    0x00011ba4     0x2ccc ./source/camera/camera.o
- .debug_info    0x00014870      0xd1f ./source/board/board_func.o
- .debug_info    0x0001558f      0xfd0 ./source/main_gustl.o
- .debug_info    0x0001655f      0x81b ./source/param.o
- .debug_info    0x00016d7a       0x3c ./source/semihost_hardfault.o
- .debug_info    0x00016db6      0xf7f ./source/settings.o
- .debug_info    0x00017d35      0x4c1 ./freertos/freertos_kernel/portable/MemMang/heap_4.o
- .debug_info    0x000181f6      0x4d9 ./freertos/freertos_kernel/portable/GCC/ARM_CM4F/port.o
- .debug_info    0x000186cf      0x2be ./freertos/freertos_kernel/list.o
- .debug_info    0x0001898d     0x1697 ./freertos/freertos_kernel/queue.o
- .debug_info    0x0001a024     0x208c ./freertos/freertos_kernel/tasks.o
- .debug_info    0x0001c0b0      0xe72 ./freertos/freertos_kernel/timers.o
- .debug_info    0x0001cf22     0x30a3 ./drivers/fsl_clock.o
- .debug_info    0x0001ffc5     0x109d ./drivers/fsl_common.o
- .debug_info    0x00021062     0x20b8 ./drivers/fsl_ctimer.o
- .debug_info    0x0002311a     0x28ca ./drivers/fsl_dma.o
- .debug_info    0x000259e4     0x1882 ./drivers/fsl_eeprom.o
- .debug_info    0x00027266     0x19b2 ./drivers/fsl_flexcomm.o
- .debug_info    0x00028c18     0x15d4 ./drivers/fsl_gpio.o
- .debug_info    0x0002a1ec     0x2011 ./drivers/fsl_i2c.o
- .debug_info    0x0002c1fd     0x14ee ./drivers/fsl_i2c_dma.o
- .debug_info    0x0002d6eb      0xd83 ./drivers/fsl_reset.o
- .debug_info    0x0002e46e     0x1426 ./drivers/fsl_rit.o
- .debug_info    0x0002f894      0xece ./device/system_LPC54628.o
- .debug_info    0x00030762     0x12bb ./board/board.o
- .debug_info    0x00031a1d     0x10b8 ./board/clock_config.o
- .debug_info    0x00032ad5     0x1130 ./board/pin_mux.o
- .debug_info    0x00033c05     0x1395 D:\Studium\NXP-Cup\nxp-proj\nxp-proj\libs\libpower_hardabi.a(fsl_power_lib.o)
+ .debug_info    0x00000783     0x1be5 ./source/ultrasonic/ultrasonic.o
+ .debug_info    0x00002368      0xa37 ./source/servo/servo.o
+ .debug_info    0x00002d9f      0xa0b ./source/rpmMeas/rpmMeas.o
+ .debug_info    0x000037aa      0xec8 ./source/hmi/input_devices/input_devices.o
+ .debug_info    0x00004672      0x1ad ./source/hmi/input_devices/rotary_encode.o
+ .debug_info    0x0000481f      0x1b6 ./source/hmi/input_devices/sw_debounce.o
+ .debug_info    0x000049d5      0xfe5 ./source/hmi/hmi.o
+ .debug_info    0x000059ba     0x10b2 ./source/hmi/menu_data.o
+ .debug_info    0x00006a6c      0xf53 ./source/hmi/menu_main_screen.o
+ .debug_info    0x000079bf     0x1b50 ./source/hmi/screen.o
+ .debug_info    0x0000950f     0x19a8 ./source/drive/drive.o
+ .debug_info    0x0000aeb7      0x307 ./source/display/menu/design/menu_list.o
+ .debug_info    0x0000b1be      0x42f ./source/display/menu/menu.o
+ .debug_info    0x0000b5ed      0x2b3 ./source/display/menu/menu_rtos.o
+ .debug_info    0x0000b8a0     0x1357 ./source/display/interface/i2c_rtos_interface.o
+ .debug_info    0x0000cbf7      0xc46 ./source/display/driver/ssd1309.o
+ .debug_info    0x0000d83d      0x996 ./source/display/driver/ssd1309_rtos.o
+ .debug_info    0x0000e1d3     0x12ee ./source/display/adapter/disp_adapter.o
+ .debug_info    0x0000f4c1      0xf52 ./source/display/adapter/menu_adapter.o
+ .debug_info    0x00010413     0x177f ./source/display/display.o
+ .debug_info    0x00011b92     0x2ccc ./source/camera/camera.o
+ .debug_info    0x0001485e      0xd1f ./source/board/board_func.o
+ .debug_info    0x0001557d      0xfd0 ./source/main_gustl.o
+ .debug_info    0x0001654d      0x81b ./source/param.o
+ .debug_info    0x00016d68       0x3c ./source/semihost_hardfault.o
+ .debug_info    0x00016da4      0xf7f ./source/settings.o
+ .debug_info    0x00017d23      0x4c1 ./freertos/freertos_kernel/portable/MemMang/heap_4.o
+ .debug_info    0x000181e4      0x4d9 ./freertos/freertos_kernel/portable/GCC/ARM_CM4F/port.o
+ .debug_info    0x000186bd      0x2be ./freertos/freertos_kernel/list.o
+ .debug_info    0x0001897b     0x1697 ./freertos/freertos_kernel/queue.o
+ .debug_info    0x0001a012     0x208c ./freertos/freertos_kernel/tasks.o
+ .debug_info    0x0001c09e      0xe72 ./freertos/freertos_kernel/timers.o
+ .debug_info    0x0001cf10     0x30a3 ./drivers/fsl_clock.o
+ .debug_info    0x0001ffb3     0x109d ./drivers/fsl_common.o
+ .debug_info    0x00021050     0x20b8 ./drivers/fsl_ctimer.o
+ .debug_info    0x00023108     0x28ca ./drivers/fsl_dma.o
+ .debug_info    0x000259d2     0x1882 ./drivers/fsl_eeprom.o
+ .debug_info    0x00027254     0x19b2 ./drivers/fsl_flexcomm.o
+ .debug_info    0x00028c06     0x15d4 ./drivers/fsl_gpio.o
+ .debug_info    0x0002a1da     0x2011 ./drivers/fsl_i2c.o
+ .debug_info    0x0002c1eb     0x14ee ./drivers/fsl_i2c_dma.o
+ .debug_info    0x0002d6d9      0xd83 ./drivers/fsl_reset.o
+ .debug_info    0x0002e45c     0x1426 ./drivers/fsl_rit.o
+ .debug_info    0x0002f882      0xece ./device/system_LPC54628.o
+ .debug_info    0x00030750     0x12bb ./board/board.o
+ .debug_info    0x00031a0b     0x10b8 ./board/clock_config.o
+ .debug_info    0x00032ac3     0x1130 ./board/pin_mux.o
+ .debug_info    0x00033bf3     0x1395 D:\Studium\NXP-Cup\nxp-proj\nxp-proj\libs\libpower_hardabi.a(fsl_power_lib.o)
 
 .debug_abbrev   0x00000000     0x6bb7
  .debug_abbrev  0x00000000       0x66 ./utilities/fsl_assert.o
@@ -9556,106 +9554,106 @@ LOAD linker stubs
  .debug_line    0x00019694      0x469 ./board/pin_mux.o
  .debug_line    0x00019afd      0x41d D:\Studium\NXP-Cup\nxp-proj\nxp-proj\libs\libpower_hardabi.a(fsl_power_lib.o)
 
-.debug_str      0x00000000    0xa00f0
+.debug_str      0x00000000    0xa00e6
  .debug_str     0x00000000    0x8d094 ./utilities/fsl_assert.o
                               0x8d138 (size before relaxing)
  .debug_str     0x0008d094      0x6db ./startup/startup_lpc54628.o
                                0x3505 (size before relaxing)
- .debug_str     0x0008d76f     0x56b4 ./source/ultrasonic/ultrasonic.o
-                              0x9229e (size before relaxing)
- .debug_str     0x00092e23      0x29f ./source/servo/servo.o
+ .debug_str     0x0008d76f     0x56aa ./source/ultrasonic/ultrasonic.o
+                              0x92294 (size before relaxing)
+ .debug_str     0x00092e19      0x29f ./source/servo/servo.o
                               0x8face (size before relaxing)
- .debug_str     0x000930c2      0x25c ./source/rpmMeas/rpmMeas.o
+ .debug_str     0x000930b8      0x25c ./source/rpmMeas/rpmMeas.o
                               0x8f8dc (size before relaxing)
- .debug_str     0x0009331e      0xf74 ./source/hmi/input_devices/input_devices.o
+ .debug_str     0x00093314      0xf74 ./source/hmi/input_devices/input_devices.o
                               0x90342 (size before relaxing)
- .debug_str     0x00094292       0x50 ./source/hmi/input_devices/rotary_encode.o
+ .debug_str     0x00094288       0x50 ./source/hmi/input_devices/rotary_encode.o
                                0x453f (size before relaxing)
- .debug_str     0x000942e2       0x57 ./source/hmi/input_devices/sw_debounce.o
+ .debug_str     0x000942d8       0x57 ./source/hmi/input_devices/sw_debounce.o
                                0x453a (size before relaxing)
- .debug_str     0x00094339      0x407 ./source/hmi/hmi.o
+ .debug_str     0x0009432f      0x407 ./source/hmi/hmi.o
                               0x9279e (size before relaxing)
- .debug_str     0x00094740      0x1b7 ./source/hmi/menu_data.o
+ .debug_str     0x00094736      0x1b7 ./source/hmi/menu_data.o
                               0x91b43 (size before relaxing)
- .debug_str     0x000948f7       0xd1 ./source/hmi/menu_main_screen.o
+ .debug_str     0x000948ed       0xd1 ./source/hmi/menu_main_screen.o
                               0x91914 (size before relaxing)
- .debug_str     0x000949c8      0x405 ./source/hmi/screen.o
+ .debug_str     0x000949be      0x405 ./source/hmi/screen.o
                               0x9203b (size before relaxing)
- .debug_str     0x00094dcd      0x8c5 ./source/drive/drive.o
+ .debug_str     0x00094dc3      0x8c5 ./source/drive/drive.o
                               0x92397 (size before relaxing)
- .debug_str     0x00095692       0x61 ./source/display/menu/design/menu_list.o
+ .debug_str     0x00095688       0x61 ./source/display/menu/design/menu_list.o
                                0x9341 (size before relaxing)
- .debug_str     0x000956f3       0xc1 ./source/display/menu/menu.o
+ .debug_str     0x000956e9       0xc1 ./source/display/menu/menu.o
                                0x494a (size before relaxing)
- .debug_str     0x000957b4       0x32 ./source/display/menu/menu_rtos.o
+ .debug_str     0x000957aa       0x32 ./source/display/menu/menu_rtos.o
                                0x932d (size before relaxing)
- .debug_str     0x000957e6      0x458 ./source/display/interface/i2c_rtos_interface.o
+ .debug_str     0x000957dc      0x458 ./source/display/interface/i2c_rtos_interface.o
                               0x8fa7f (size before relaxing)
- .debug_str     0x00095c3e      0x12a ./source/display/driver/ssd1309.o
+ .debug_str     0x00095c34      0x12a ./source/display/driver/ssd1309.o
                                0x4b19 (size before relaxing)
- .debug_str     0x00095d68       0x56 ./source/display/driver/ssd1309_rtos.o
+ .debug_str     0x00095d5e       0x56 ./source/display/driver/ssd1309_rtos.o
                                0x956c (size before relaxing)
- .debug_str     0x00095dbe       0xee ./source/display/adapter/disp_adapter.o
+ .debug_str     0x00095db4       0xee ./source/display/adapter/disp_adapter.o
                               0x913ae (size before relaxing)
- .debug_str     0x00095eac       0x76 ./source/display/adapter/menu_adapter.o
+ .debug_str     0x00095ea2       0x76 ./source/display/adapter/menu_adapter.o
                               0x9109b (size before relaxing)
- .debug_str     0x00095f22       0x39 ./source/display/display.o
+ .debug_str     0x00095f18       0x39 ./source/display/display.o
                               0x91796 (size before relaxing)
- .debug_str     0x00095f5b      0x5b0 ./source/camera/camera.o
+ .debug_str     0x00095f51      0x5b0 ./source/camera/camera.o
                               0x92b82 (size before relaxing)
- .debug_str     0x0009650b       0x75 ./source/board/board_func.o
+ .debug_str     0x00096501       0x75 ./source/board/board_func.o
                               0x8eada (size before relaxing)
- .debug_str     0x00096580      0xa99 ./source/main_gustl.o
+ .debug_str     0x00096576      0xa99 ./source/main_gustl.o
                               0x933d6 (size before relaxing)
- .debug_str     0x00097019      0x188 ./source/param.o
+ .debug_str     0x0009700f      0x188 ./source/param.o
                               0x8a8a2 (size before relaxing)
- .debug_str     0x000971a1       0x1f ./source/semihost_hardfault.o
+ .debug_str     0x00097197       0x1f ./source/semihost_hardfault.o
                                0x2dd6 (size before relaxing)
- .debug_str     0x000971c0      0x188 ./source/settings.o
+ .debug_str     0x000971b6      0x188 ./source/settings.o
                               0x91a16 (size before relaxing)
- .debug_str     0x00097348      0x3a8 ./freertos/freertos_kernel/portable/MemMang/heap_4.o
+ .debug_str     0x0009733e      0x3a8 ./freertos/freertos_kernel/portable/MemMang/heap_4.o
                                0x84b6 (size before relaxing)
- .debug_str     0x000976f0      0x83b ./freertos/freertos_kernel/portable/GCC/ARM_CM4F/port.o
+ .debug_str     0x000976e6      0x83b ./freertos/freertos_kernel/portable/GCC/ARM_CM4F/port.o
                                0x8958 (size before relaxing)
- .debug_str     0x00097f2b      0x135 ./freertos/freertos_kernel/list.o
+ .debug_str     0x00097f21      0x135 ./freertos/freertos_kernel/list.o
                                0x7bc8 (size before relaxing)
- .debug_str     0x00098060      0x89c ./freertos/freertos_kernel/queue.o
+ .debug_str     0x00098056      0x89c ./freertos/freertos_kernel/queue.o
                                0x9276 (size before relaxing)
- .debug_str     0x000988fc     0x14e2 ./freertos/freertos_kernel/tasks.o
+ .debug_str     0x000988f2     0x14e2 ./freertos/freertos_kernel/tasks.o
                                0xa058 (size before relaxing)
- .debug_str     0x00099dde      0x608 ./freertos/freertos_kernel/timers.o
+ .debug_str     0x00099dd4      0x608 ./freertos/freertos_kernel/timers.o
                                0x979e (size before relaxing)
- .debug_str     0x0009a3e6     0x1f99 ./drivers/fsl_clock.o
+ .debug_str     0x0009a3dc     0x1f99 ./drivers/fsl_clock.o
                               0x8d50e (size before relaxing)
- .debug_str     0x0009c37f      0x15e ./drivers/fsl_common.o
+ .debug_str     0x0009c375      0x15e ./drivers/fsl_common.o
                               0x8a6d4 (size before relaxing)
- .debug_str     0x0009c4dd      0x8a9 ./drivers/fsl_ctimer.o
+ .debug_str     0x0009c4d3      0x8a9 ./drivers/fsl_ctimer.o
                               0x8c0a9 (size before relaxing)
- .debug_str     0x0009cd86      0x9a2 ./drivers/fsl_dma.o
+ .debug_str     0x0009cd7c      0x9a2 ./drivers/fsl_dma.o
                               0x8ccb7 (size before relaxing)
- .debug_str     0x0009d728      0x1c9 ./drivers/fsl_eeprom.o
+ .debug_str     0x0009d71e      0x1c9 ./drivers/fsl_eeprom.o
                               0x8b925 (size before relaxing)
- .debug_str     0x0009d8f1      0x360 ./drivers/fsl_flexcomm.o
+ .debug_str     0x0009d8e7      0x360 ./drivers/fsl_flexcomm.o
                               0x8bc2f (size before relaxing)
- .debug_str     0x0009dc51      0x107 ./drivers/fsl_gpio.o
+ .debug_str     0x0009dc47      0x107 ./drivers/fsl_gpio.o
                               0x8b5dd (size before relaxing)
- .debug_str     0x0009dd58      0xb7c ./drivers/fsl_i2c.o
+ .debug_str     0x0009dd4e      0xb7c ./drivers/fsl_i2c.o
                               0x8ba15 (size before relaxing)
- .debug_str     0x0009e8d4      0x240 ./drivers/fsl_i2c_dma.o
+ .debug_str     0x0009e8ca      0x240 ./drivers/fsl_i2c_dma.o
                               0x8bcab (size before relaxing)
- .debug_str     0x0009eb14       0xae ./drivers/fsl_reset.o
+ .debug_str     0x0009eb0a       0xae ./drivers/fsl_reset.o
                               0x8a640 (size before relaxing)
- .debug_str     0x0009ebc2      0x106 ./drivers/fsl_rit.o
+ .debug_str     0x0009ebb8      0x106 ./drivers/fsl_rit.o
                               0x8b18e (size before relaxing)
- .debug_str     0x0009ecc8       0xc3 ./device/system_LPC54628.o
+ .debug_str     0x0009ecbe       0xc3 ./device/system_LPC54628.o
                               0x88343 (size before relaxing)
- .debug_str     0x0009ed8b      0x7f9 ./board/board.o
+ .debug_str     0x0009ed81      0x7f9 ./board/board.o
                               0x8f66d (size before relaxing)
- .debug_str     0x0009f584       0xaa ./board/clock_config.o
+ .debug_str     0x0009f57a       0xaa ./board/clock_config.o
                               0x8b184 (size before relaxing)
- .debug_str     0x0009f62e      0x5a7 ./board/pin_mux.o
+ .debug_str     0x0009f624      0x5a7 ./board/pin_mux.o
                               0x8b1b6 (size before relaxing)
- .debug_str     0x0009fbd5      0x51b D:\Studium\NXP-Cup\nxp-proj\nxp-proj\libs\libpower_hardabi.a(fsl_power_lib.o)
+ .debug_str     0x0009fbcb      0x51b D:\Studium\NXP-Cup\nxp-proj\nxp-proj\libs\libpower_hardabi.a(fsl_power_lib.o)
                                 0xc4a (size before relaxing)
 
 .comment        0x00000000       0xc7
@@ -10556,7 +10554,6 @@ USB1_DriverIRQHandler                             ./startup/startup_lpc54628.o
 USB1_IRQHandler                                   ./startup/startup_lpc54628.o
 USB1_NEEDCLK_DriverIRQHandler                     ./startup/startup_lpc54628.o
 USB1_NEEDCLK_IRQHandler                           ./startup/startup_lpc54628.o
-USS_Count                                         ./source/ultrasonic/ultrasonic.o
 USS_Distance                                      ./source/ultrasonic/ultrasonic.o
                                                   ./source/drive/drive.o
                                                   ./source/hmi/screen.o
