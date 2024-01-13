@@ -1,11 +1,12 @@
 /*
  * GENERATED FILE - DO NOT EDIT
- * Copyright 2008-2013 Code Red Technologies Ltd,
- * Copyright 2013-2024 NXP
+ * Copyright (c) 2008-2013 Code Red Technologies Ltd,
+ * Copyright 2015, 2018-2019 NXP
+ * (c) NXP Semiconductors 2013-2024
  * Generated linker script file for LPC54628J512
  * Created from linkscript.ldt by FMCreateLinkLibraries
  * Using Freemarker v2.3.30
- * MCUXpresso IDE v11.8.0 [Build 1165] [2023-07-26] on 12.01.2024, 09:29:15
+ * MCUXpresso IDE v11.7.1 [Build 9221] [2023-03-28] on 13.01.2024, 15:56:40
  */
 
 INCLUDE "Gustl_SumEck_Debug_library.ld"
@@ -142,7 +143,7 @@ SECTIONS
     } > SRAM_UPPER AT>PROGRAM_FLASH
 
     /* BSS section for SRAMX */
-    .bss_RAM2 (NOLOAD) : ALIGN(4)
+    .bss_RAM2 : ALIGN(4)
     {
        PROVIDE(__start_bss_RAM2 = .) ;
        PROVIDE(__start_bss_SRAMX = .) ;
@@ -156,7 +157,7 @@ SECTIONS
     } > SRAMX AT> SRAMX
 
     /* BSS section for USB_RAM */
-    .bss_RAM3 (NOLOAD) : ALIGN(4)
+    .bss_RAM3 : ALIGN(4)
     {
        PROVIDE(__start_bss_RAM3 = .) ;
        PROVIDE(__start_bss_USB_RAM = .) ;
@@ -170,7 +171,7 @@ SECTIONS
     } > USB_RAM AT> USB_RAM
 
     /* MAIN BSS SECTION */
-    .bss (NOLOAD) : ALIGN(4)
+    .bss : ALIGN(4)
     {
         _bss = .;
         PROVIDE(__start_bss_RAM = .) ;

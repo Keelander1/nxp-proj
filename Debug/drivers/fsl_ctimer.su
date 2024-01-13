@@ -1,5 +1,5 @@
-C:\Users\Martina\Desktop\FHLandshut_ET_Ma\FH_Landshut_ET_1.Semester\ESE Projekt\Projekt\nxp-proj\CMSIS/core_cm4.h:1679:22:__NVIC_EnableIRQ	16	static
-C:\Users\Martina\Desktop\FHLandshut_ET_Ma\FH_Landshut_ET_1.Semester\ESE Projekt\Projekt\nxp-proj\CMSIS/core_cm4.h:1717:22:__NVIC_DisableIRQ	16	static
+D:\Studium\NXP-Cup\nxp-proj\nxp-proj\CMSIS/core_cm4.h:1679:22:__NVIC_EnableIRQ	16	static
+D:\Studium\NXP-Cup\nxp-proj\nxp-proj\CMSIS/core_cm4.h:1717:22:__NVIC_DisableIRQ	16	static
 ../drivers/fsl_clock.h:698:20:CLOCK_EnableClock	24	static
 ../drivers/fsl_clock.h:712:20:CLOCK_DisableClock	24	static
 ../drivers/fsl_common.h:484:28:EnableIRQ	16	static
