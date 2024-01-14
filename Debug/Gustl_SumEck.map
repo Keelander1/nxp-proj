@@ -9617,106 +9617,106 @@ LOAD linker stubs
  .debug_line    0x0001df43      0x511 ./board/pin_mux.o
  .debug_line    0x0001e454      0x41d C:\Users\Martina\Desktop\FHLandshut_ET_Ma\FH_Landshut_ET_1.Semester\ESE Projekt\Projekt\nxp-proj\libs\libpower_hardabi.a(fsl_power_lib.o)
 
-.debug_str      0x00000000    0xa029b
+.debug_str      0x00000000    0xa02a3
  .debug_str     0x00000000    0x8d1d7 ./utilities/fsl_assert.o
                               0x8d283 (size before relaxing)
  .debug_str     0x0008d1d7      0x713 ./startup/startup_lpc54628.o
                                0x3680 (size before relaxing)
- .debug_str     0x0008d8ea     0x56b4 ./source/ultrasonic/ultrasonic.o
-                              0x923e1 (size before relaxing)
- .debug_str     0x00092f9e      0x314 ./source/servo/servo.o
+ .debug_str     0x0008d8ea     0x56bc ./source/ultrasonic/ultrasonic.o
+                              0x923e9 (size before relaxing)
+ .debug_str     0x00092fa6      0x314 ./source/servo/servo.o
                               0x8fc8f (size before relaxing)
- .debug_str     0x000932b2      0x2b5 ./source/rpmMeas/rpmMeas.o
+ .debug_str     0x000932ba      0x2b5 ./source/rpmMeas/rpmMeas.o
                               0x8fa84 (size before relaxing)
- .debug_str     0x00093567      0xfc6 ./source/hmi/input_devices/input_devices.o
+ .debug_str     0x0009356f      0xfc6 ./source/hmi/input_devices/input_devices.o
                               0x904d7 (size before relaxing)
- .debug_str     0x0009452d       0x3c ./source/hmi/input_devices/rotary_encode.o
+ .debug_str     0x00094535       0x3c ./source/hmi/input_devices/rotary_encode.o
                                0x4690 (size before relaxing)
- .debug_str     0x00094569       0x3d ./source/hmi/input_devices/sw_debounce.o
+ .debug_str     0x00094571       0x3d ./source/hmi/input_devices/sw_debounce.o
                                0x468b (size before relaxing)
- .debug_str     0x000945a6      0x4ed ./source/hmi/hmi.o
-                              0x92a0e (size before relaxing)
- .debug_str     0x00094a93      0x4b8 ./source/hmi/menu_data.o
-                              0x91fae (size before relaxing)
- .debug_str     0x00094f4b       0xf5 ./source/hmi/menu_main_screen.o
-                              0x91ac2 (size before relaxing)
- .debug_str     0x00095040      0x21c ./source/hmi/screen.o
-                              0x9224a (size before relaxing)
- .debug_str     0x0009525c      0x8c4 ./source/drive/drive.o
-                              0x92562 (size before relaxing)
- .debug_str     0x00095b20       0xac ./source/display/menu/design/menu_list.o
+ .debug_str     0x000945ae      0x4ed ./source/hmi/hmi.o
+                              0x92a16 (size before relaxing)
+ .debug_str     0x00094a9b      0x4b8 ./source/hmi/menu_data.o
+                              0x91fb6 (size before relaxing)
+ .debug_str     0x00094f53       0xf5 ./source/hmi/menu_main_screen.o
+                              0x91aca (size before relaxing)
+ .debug_str     0x00095048      0x21c ./source/hmi/screen.o
+                              0x92252 (size before relaxing)
+ .debug_str     0x00095264      0x8c4 ./source/drive/drive.o
+                              0x9256a (size before relaxing)
+ .debug_str     0x00095b28       0xac ./source/display/menu/design/menu_list.o
                                0x94e4 (size before relaxing)
- .debug_str     0x00095bcc       0x82 ./source/display/menu/menu.o
+ .debug_str     0x00095bd4       0x82 ./source/display/menu/menu.o
                                0x4a8d (size before relaxing)
- .debug_str     0x00095c4e       0x35 ./source/display/menu/menu_rtos.o
+ .debug_str     0x00095c56       0x35 ./source/display/menu/menu_rtos.o
                                0x948c (size before relaxing)
- .debug_str     0x00095c83      0x4fa ./source/display/interface/i2c_rtos_interface.o
+ .debug_str     0x00095c8b      0x4fa ./source/display/interface/i2c_rtos_interface.o
                               0x8fcaf (size before relaxing)
- .debug_str     0x0009617d       0xdc ./source/display/driver/ssd1309.o
+ .debug_str     0x00096185       0xdc ./source/display/driver/ssd1309.o
                                0x4c81 (size before relaxing)
- .debug_str     0x00096259       0x71 ./source/display/driver/ssd1309_rtos.o
+ .debug_str     0x00096261       0x71 ./source/display/driver/ssd1309_rtos.o
                                0x976d (size before relaxing)
- .debug_str     0x000962ca       0xd2 ./source/display/adapter/disp_adapter.o
+ .debug_str     0x000962d2       0xd2 ./source/display/adapter/disp_adapter.o
                               0x914f1 (size before relaxing)
- .debug_str     0x0009639c       0x29 ./source/display/adapter/menu_adapter.o
+ .debug_str     0x000963a4       0x29 ./source/display/adapter/menu_adapter.o
                               0x9123a (size before relaxing)
- .debug_str     0x000963c5       0x2c ./source/display/display.o
+ .debug_str     0x000963cd       0x2c ./source/display/display.o
                               0x918fb (size before relaxing)
- .debug_str     0x000963f1      0x5a8 ./source/camera/camera.o
-                              0x92cfa (size before relaxing)
- .debug_str     0x00096999       0x75 ./source/board/board_func.o
+ .debug_str     0x000963f9      0x5a8 ./source/camera/camera.o
+                              0x92d02 (size before relaxing)
+ .debug_str     0x000969a1       0x75 ./source/board/board_func.o
                               0x8ec33 (size before relaxing)
- .debug_str     0x00096a0e      0xb2c ./source/main_gustl.o
-                              0x93686 (size before relaxing)
- .debug_str     0x0009753a      0x1d0 ./source/param.o
+ .debug_str     0x00096a16      0xb2c ./source/main_gustl.o
+                              0x9368e (size before relaxing)
+ .debug_str     0x00097542      0x1d0 ./source/param.o
                               0x8aa53 (size before relaxing)
- .debug_str     0x0009770a       0x1f ./source/semihost_hardfault.o
+ .debug_str     0x00097712       0x1f ./source/semihost_hardfault.o
                                0x2f19 (size before relaxing)
- .debug_str     0x00097729       0x9b ./source/settings.o
-                              0x91b78 (size before relaxing)
- .debug_str     0x000977c4      0x3ec ./freertos/freertos_kernel/portable/MemMang/heap_4.o
+ .debug_str     0x00097731       0x9b ./source/settings.o
+                              0x91b80 (size before relaxing)
+ .debug_str     0x000977cc      0x3ec ./freertos/freertos_kernel/portable/MemMang/heap_4.o
                                0x8648 (size before relaxing)
- .debug_str     0x00097bb0      0x82d ./freertos/freertos_kernel/portable/GCC/ARM_CM4F/port.o
+ .debug_str     0x00097bb8      0x82d ./freertos/freertos_kernel/portable/GCC/ARM_CM4F/port.o
                                0x8ac1 (size before relaxing)
- .debug_str     0x000983dd      0x135 ./freertos/freertos_kernel/list.o
+ .debug_str     0x000983e5      0x135 ./freertos/freertos_kernel/list.o
                                0x7d0b (size before relaxing)
- .debug_str     0x00098512      0x94f ./freertos/freertos_kernel/queue.o
+ .debug_str     0x0009851a      0x94f ./freertos/freertos_kernel/queue.o
                                0x957c (size before relaxing)
- .debug_str     0x00098e61     0x1327 ./freertos/freertos_kernel/tasks.o
+ .debug_str     0x00098e69     0x1327 ./freertos/freertos_kernel/tasks.o
                                0xa29b (size before relaxing)
- .debug_str     0x0009a188      0x5f2 ./freertos/freertos_kernel/timers.o
+ .debug_str     0x0009a190      0x5f2 ./freertos/freertos_kernel/timers.o
                                0x9a4d (size before relaxing)
- .debug_str     0x0009a77a     0x1f91 ./drivers/fsl_clock.o
+ .debug_str     0x0009a782     0x1f91 ./drivers/fsl_clock.o
                               0x8d6b1 (size before relaxing)
- .debug_str     0x0009c70b      0x152 ./drivers/fsl_common.o
+ .debug_str     0x0009c713      0x152 ./drivers/fsl_common.o
                               0x8a83b (size before relaxing)
- .debug_str     0x0009c85d      0x835 ./drivers/fsl_ctimer.o
+ .debug_str     0x0009c865      0x835 ./drivers/fsl_ctimer.o
                               0x8c228 (size before relaxing)
- .debug_str     0x0009d092      0x988 ./drivers/fsl_dma.o
+ .debug_str     0x0009d09a      0x988 ./drivers/fsl_dma.o
                               0x8ce36 (size before relaxing)
- .debug_str     0x0009da1a      0x194 ./drivers/fsl_eeprom.o
+ .debug_str     0x0009da22      0x194 ./drivers/fsl_eeprom.o
                               0x8bac2 (size before relaxing)
- .debug_str     0x0009dbae      0x360 ./drivers/fsl_flexcomm.o
+ .debug_str     0x0009dbb6      0x360 ./drivers/fsl_flexcomm.o
                               0x8bda0 (size before relaxing)
- .debug_str     0x0009df0e      0x107 ./drivers/fsl_gpio.o
+ .debug_str     0x0009df16      0x107 ./drivers/fsl_gpio.o
                               0x8b74e (size before relaxing)
- .debug_str     0x0009e015      0xb52 ./drivers/fsl_i2c.o
+ .debug_str     0x0009e01d      0xb52 ./drivers/fsl_i2c.o
                               0x8bbae (size before relaxing)
- .debug_str     0x0009eb67      0x208 ./drivers/fsl_i2c_dma.o
+ .debug_str     0x0009eb6f      0x208 ./drivers/fsl_i2c_dma.o
                               0x8bea3 (size before relaxing)
- .debug_str     0x0009ed6f       0x98 ./drivers/fsl_reset.o
+ .debug_str     0x0009ed77       0x98 ./drivers/fsl_reset.o
                               0x8a79b (size before relaxing)
- .debug_str     0x0009ee07       0xe9 ./drivers/fsl_rit.o
+ .debug_str     0x0009ee0f       0xe9 ./drivers/fsl_rit.o
                               0x8b2f7 (size before relaxing)
- .debug_str     0x0009eef0       0xb8 ./device/system_LPC54628.o
+ .debug_str     0x0009eef8       0xb8 ./device/system_LPC54628.o
                               0x88486 (size before relaxing)
- .debug_str     0x0009efa8      0x7fe ./board/board.o
+ .debug_str     0x0009efb0      0x7fe ./board/board.o
                               0x8f7fc (size before relaxing)
- .debug_str     0x0009f7a6       0x95 ./board/clock_config.o
+ .debug_str     0x0009f7ae       0x95 ./board/clock_config.o
                               0x8b455 (size before relaxing)
- .debug_str     0x0009f83b      0x581 ./board/pin_mux.o
+ .debug_str     0x0009f843      0x581 ./board/pin_mux.o
                               0x8b306 (size before relaxing)
- .debug_str     0x0009fdbc      0x4df C:\Users\Martina\Desktop\FHLandshut_ET_Ma\FH_Landshut_ET_1.Semester\ESE Projekt\Projekt\nxp-proj\libs\libpower_hardabi.a(fsl_power_lib.o)
+ .debug_str     0x0009fdc4      0x4df C:\Users\Martina\Desktop\FHLandshut_ET_Ma\FH_Landshut_ET_1.Semester\ESE Projekt\Projekt\nxp-proj\libs\libpower_hardabi.a(fsl_power_lib.o)
                                 0xc4a (size before relaxing)
 
 .comment        0x00000000       0xc3

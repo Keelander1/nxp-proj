@@ -885,7 +885,7 @@ void SpeedControl1(void) //Nur Kamera 1
 		delta_s=(40.0-distance)*0.01;
 		value=2.0*BRAKE_FAKTOR*delta_s+v;
 		 */
-		if(distance<=20)
+		if(distance<=15)
 		{
 			pulse_right=(*BLDCRightMinValue)*0.001-0.1;
 			pulse_left=(*BLDCLeftMinValue)*0.001-0.1;

@@ -161,8 +161,8 @@ extern int Speed_Param;
 #define SPEED_AFTER_FINISH 0.68		    //Geschwindigkeit nach Überschreitung der Zielline
 #define SPEED_CURVE 0.34 //0.85			//Geschwindigkeit in der Kurve
 
-#define RADIUS 0.72	   //Kurvenradius (Kreismittelpunkt bis Mitte der Fahrbahn)
-#define WHEELBASE 0.13 //Radabstand (Mitte des Reifens bis Mitte des Reifens)
+#define RADIUS (0.72-0.265)	    //Kurvenradius (Kreismittelpunkt bis Mitte der Fahrbahn)
+#define WHEELBASE 0.13  		//Radabstand (Mitte des Reifens bis Mitte des Reifens)
 /*******************************************************************************
  * Prototypes
  ******************************************************************************/
