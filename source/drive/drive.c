@@ -933,10 +933,10 @@ void SpeedControl1(void) //Nur Kamera 1
 	else if(left_curve) //Abbremsen bei Erkennung einer Links-Kurve [unterschiedliche Ansteuerung der Reifen]
 	{
 		r=RADIUS+edgeData[0].edge_center_mm*0.001;
-		winkel_v=SPEED_CURVE/r;
+		winkel_v=SPEED_CURVE*r;
 
-		speed_value_right=winkel_v*(r+0.5*WHEELBASE);
-		speed_value_left=winkel_v*(r-0.5*WHEELBASE);
+		speed_value_right=winkel_v/(r+0.5*WHEELBASE);
+		speed_value_left=winkel_v/(r-0.5*WHEELBASE);
 
 		pulse_right=(*BLDCRightMinValue)*0.001+(speed_value_right/SPEED_TO_PULSE);
 		pulse_left=(*BLDCLeftMinValue)*0.001+(speed_value_left/SPEED_TO_PULSE);
@@ -949,10 +949,10 @@ void SpeedControl1(void) //Nur Kamera 1
 	else if(right_curve) //Abbremsen bei Erkennung einer Rechts-Kurve [unterschiedliche Ansteuerung der Reifen]
 	{
 		r=RADIUS-edgeData[0].edge_center_mm*0.001;
-		winkel_v=SPEED_CURVE/r;
+		winkel_v=SPEED_CURVE*r;
 
-		speed_value_right=winkel_v*(r-0.5*WHEELBASE);
-		speed_value_left=winkel_v*(r+0.5*WHEELBASE);
+		speed_value_right=winkel_v/(r-0.5*WHEELBASE);
+		speed_value_left=winkel_v/(r+0.5*WHEELBASE);
 
 		pulse_right=(*BLDCRightMinValue)*0.001+(speed_value_right/SPEED_TO_PULSE);
 		pulse_left=(*BLDCLeftMinValue)*0.001+(speed_value_left/SPEED_TO_PULSE);
@@ -1051,10 +1051,10 @@ void SpeedControl2(void) //Beide Kameras
 	else if(left_curve) //Abbremsen bei Erkennung einer Links-Kurve [unterschiedliche Ansteuerung der Reifen]
 	{
 		r=RADIUS+edgeData[0].edge_center_mm;
-		winkel_v=SPEED_CURVE/r;
+		winkel_v=SPEED_CURVE*r;
 
-		speed_value_right=winkel_v*(r+0.5*WHEELBASE);
-		speed_value_left=winkel_v*(r-0.5*WHEELBASE);
+		speed_value_right=winkel_v/(r+0.5*WHEELBASE);
+		speed_value_left=winkel_v/(r-0.5*WHEELBASE);
 
 		pulse_right=(*BLDCRightMinValue)*0.001+(speed_value_right/SPEED_TO_PULSE);
 		pulse_left=(*BLDCLeftMinValue)*0.001+(speed_value_left/SPEED_TO_PULSE);
@@ -1067,10 +1067,10 @@ void SpeedControl2(void) //Beide Kameras
 	else if(right_curve) //Abbremsen bei Erkennung einer Rechts-Kurve [unterschiedliche Ansteuerung der Reifen]
 	{
 		r=RADIUS-edgeData[0].edge_center_mm;
-		winkel_v=SPEED_CURVE/r;
+		winkel_v=SPEED_CURVE*r;
 
-		speed_value_right=winkel_v*(r-0.5*WHEELBASE);
-		speed_value_left=winkel_v*(r+0.5*WHEELBASE);
+		speed_value_right=winkel_v/(r-0.5*WHEELBASE);
+		speed_value_left=winkel_v/(r+0.5*WHEELBASE);
 
 		pulse_right=(*BLDCRightMinValue)*0.001+(speed_value_right/SPEED_TO_PULSE);
 		pulse_left=(*BLDCLeftMinValue)*0.001+(speed_value_left/SPEED_TO_PULSE);

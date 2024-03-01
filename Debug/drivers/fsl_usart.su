@@ -1,4 +1,4 @@
-D:\Studium\NXP-Cup\nxp-proj\nxp-proj\CMSIS/core_cm4.h:1679:22:__NVIC_EnableIRQ	16	static
+C:\Users\Martina\Desktop\FHLandshut_ET_Ma\FH_Landshut_ET_1.Semester\ESE Projekt\Projekt\nxp-proj\CMSIS/core_cm4.h:1679:22:__NVIC_EnableIRQ	16	static
 ../drivers/fsl_common.h:484:28:EnableIRQ	16	static
 ../drivers/fsl_common.h:552:28:DisableGlobalIRQ	16	static
 ../drivers/fsl_common.h:583:24:EnableGlobalIRQ	24	static

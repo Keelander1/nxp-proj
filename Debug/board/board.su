@@ -1,3 +1,3 @@
-D:\Studium\NXP-Cup\nxp-proj\nxp-proj\drivers/fsl_clock.h:922:26:CLOCK_GetEmcClkFreq	16	static
+C:\Users\Martina\Desktop\FHLandshut_ET_Ma\FH_Landshut_ET_1.Semester\ESE Projekt\Projekt\nxp-proj\drivers/fsl_clock.h:922:26:CLOCK_GetEmcClkFreq	16	static
 ../board/board.c:51:10:BOARD_InitDebugConsole	4	static
 ../board/board.c:68:6:BOARD_InitSDRAM	80	static
