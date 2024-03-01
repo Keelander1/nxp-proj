@@ -35,9 +35,6 @@
  ******************************************************************************/
 volatile uint32_t USS_Distance=0;
 volatile uint32_t USS_Distance_Counter=0;
-volatile uint8_t USS_Count=0;
-
-
 /*******************************************************************************
  * Ultrasonic Main Initialization function
  ******************************************************************************/
@@ -54,15 +51,13 @@ void MRTIMER0_Init(void)
 	SYSCON->PRESETCTRL[1]&=~(1<<0);		//Clear MRT-Reset
 	EnableIRQ(MRT0_IRQn);				//Enable Interrupt
 	MRT0->CHANNEL[0].CTRL=1;			//MRT0 Interrupt enabled and Repeat Interrupt Mode used
-	MRT0->CHANNEL[0].INTVAL= 11000;	//Timer Interrupt every 11000/220000 = 50 us
+	MRT0->CHANNEL[0].INTVAL=(1<<31);	//Timer stops
 }
 
 void MRT0_IRQHandler(uint32_t flags)
 {
 	if((MRT0->CHANNEL[0].STAT & 1) == 1){
-		if(USS_Count==1){					//PIN is High
 		USS_Distance_Counter++;				//Timer counts up
-		}
 		MRT0->CHANNEL[0].STAT|=1<<0;		//Clear Interrupt-Flag
 	}
 	if((MRT0->CHANNEL[1].STAT & 1) == 1){
@@ -88,14 +83,13 @@ void PIN_INT_INIT(void)
 }
 void PIN_INT0_IRQHandler(uint32_t flags)
 {
-	if ((PINT->RISE & 1)==1){			//Rising Edge detected
+	if ((PINT->RISE & 1)==1){				//Rising Edge detected
 		USS_Distance=USS_Distance_Counter;	//Distance is stored in USS_Distance
-		USS_Count=0;					//Timer stops counting up
-		PINT->RISE|=(1<<0);				//Reset Rising edge Interrupt
+		MRT0->CHANNEL[0].INTVAL= (1<<31);	//Timer stops
+		PINT->RISE|=(1<<0);					//Reset Rising edge Interrupt
 	}
 	if ((PINT->FALL & 1)==1){				//Falling Edge detected
-		USS_Count=1;						//Timer starts counting up
-		MRT0->CHANNEL[0].INTVAL|= 1<<31;	//Timer resets to 0
+		MRT0->CHANNEL[0].INTVAL= 11000;		//Timer Interrupt every 11000/220000 = 50 us
 		USS_Distance_Counter=0;				//Reset Distance Counter
 		PINT->FALL|=(1<<0);					//Reset Falling edge Interrupt
 	}
