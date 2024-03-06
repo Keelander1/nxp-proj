@@ -97,7 +97,7 @@ struct EdgeDetectionData {
 	int16_t edge_center_mm;
 	uint8_t detection_mode;
 	uint8_t track_state;
-	uint8_t finish_detected;
+	uint8_t finish_detected; //1 if finish line detected
 //	uint8_t camera_distance;	//TODO: implement
 };
 
@@ -116,8 +116,12 @@ void CTIMER0_Init(void);
 void CTIMER4_Init(void);
 void Calculate_PixelValues_Task(void *pvParameters);
 void Camera_Exposure_time_task(void *pvParameters);
-void Edge_Detection(struct EdgeDetectionData *edgeData, volatile uint8_t *pixelVal);
+
+void Edge_Detection(struct EdgeDetectionData *edgeData, volatile uint8_t *pixelVal); //Ermittlung steigender Flanken (Übergang von schwarz auf weis) und fallender Flanken (Übergang von weiß auf schwarz) anhand der Kameradaten (Pixelwerte)
+void Finish_Line(struct EdgeDetectionData *edgeData); //Erkennung der Ziellinie
+
 void menu_func_edge_calibration(void);
+
 
 
 #endif /* CAMERA_CAMERA_H_ */

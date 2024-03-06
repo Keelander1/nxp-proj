@@ -158,7 +158,7 @@ extern int Speed_Param;
 
 
 #define SPEED_MAX 0.68 //1.36		    //Maximale Geschwindigkeit (Initialisierungswert)
-#define SPEED_AFTER_FINISH 0.68		    //Geschwindigkeit nach Überschreitung der Zielline
+#define SPEED_AFTER_FINISH 0.34		    //Geschwindigkeit nach Überschreitung der Zielline
 #define SPEED_CURVE 0.34 //0.85			//Geschwindigkeit in der Kurve
 
 #define RADIUS (0.72-0.265)	    //Kurvenradius (Kreismittelpunkt bis Mitte der Fahrbahn)
@@ -172,10 +172,9 @@ void delay_ms(uint32_t value);
 void ESC_Init_Task(void *pvParameters);
 void stear(float angle);		//angle in rad
 void Camera_Test_Drive (uint8_t state);
-void Real_Drive (uint8_t state);
+//void Real_Drive (uint8_t state);
 void StateControl(uint8_t state);
-void SpeedControl1(void); //Funktion to set the Speed-Value according to the route section
-void SpeedControl2(void); //Funktion to set the Speed-Value according to the route section
+void SpeedControl(void); //Funktion to set the Speed-Value according to the route section
 #endif /* DRIVE_DRIVE_H_ */
 
 

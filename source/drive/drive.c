@@ -50,6 +50,7 @@
 //Variablen für die Geschwindigkeitssteuerung:
 double speed_value_left=0; //Geschwindigkeit BLDC_Left
 double speed_value_right=0; //Geschwindigkeit BLDC_rigth
+int finished=0; //Ziellinie überschritten(==1)
 
 /******************************************************************************/
 int32_t BLDCTestValue=30;	//value for test purpose
@@ -344,7 +345,7 @@ void stear(float angle){
 }
 
 
-void Real_Drive (uint8_t state)
+/*void Real_Drive (uint8_t state)
 {
 
 	//menu_page_pixel_display_camera(1);
@@ -588,6 +589,8 @@ void Real_Drive (uint8_t state)
 }
 //
 
+*/
+
 
 /*********************************************************************
  Third Test Drive:
@@ -598,6 +601,7 @@ void Real_Drive (uint8_t state)
  ---Constant speed value
  ---Steering control with P-Control (Based on Matlab_Model
  *********************************************************************/
+/*
 void StateControl_old(uint8_t state)
 {
 
@@ -661,9 +665,7 @@ void StateControl_old(uint8_t state)
 //
 //
 	}
-
-
-
+*/
 /*******************************************************************************
  * Regleung mit Beobachter
  *
@@ -674,7 +676,7 @@ void StateControl_old(uint8_t state)
 
 void StateControl(uint8_t state)
 {
-	SpeedControl1();
+	SpeedControl();
 
 
 	double k1 = k_1/100.0;
@@ -820,14 +822,25 @@ void StateControl(uint8_t state)
  * FUNKTIONALITY: Set Speed-Value according to route section
  * DESCRIPTION:
  **********************************************************************************************/
-void SpeedControl1(void) //Nur Kamera 1
+
+void SpeedControl(void) //Beide Kameras
 {
 
 	//Identifikation des Streckenabschnittes(mit Kamera1 und Kamera2):
-	unsigned int straight_line=edgeData[0].edge_left_found&&edgeData[0].edge_right_found;  //Gerade Strecke
-	unsigned int crossover=!edgeData[0].edge_left_found&&!edgeData[0].edge_right_found;   //Kreuzung
-	unsigned int right_curve=edgeData[0].edge_left_found&&!edgeData[0].edge_right_found;   //Rechte Kurve
-	unsigned int left_curve=!edgeData[0].edge_left_found&&edgeData[0].edge_right_found;    //Linke Kurve
+	/*
+	unsigned int straight_line=edgeData[0].edge_left_found&&edgeData[0].edge_right_found&&edgeData[1].edge_left_found&&edgeData[1].edge_right_found; //Gerade Strecke
+	unsigned int crossover1=(edgeData[0].edge_left_found||edgeData[0].edge_right_found)&&edgeData[1].edge_left_found&&edgeData[1].edge_right_found;  //Kreuzung
+	unsigned int crossover2=!edgeData[0].edge_left_found&&!edgeData[0].edge_right_found&&edgeData[1].edge_left_found&&edgeData[1].edge_right_found;	 //Kreuzung
+	unsigned int right_curve=edgeData[0].edge_left_found&&edgeData[0].edge_right_found&&edgeData[1].edge_left_found&&!edgeData[1].edge_right_found;  //Rechte Kurve
+	unsigned int left_curve=edgeData[0].edge_left_found&&edgeData[0].edge_right_found&&!edgeData[1].edge_left_found&&edgeData[1].edge_right_found;	 //Linke Kurve
+	*/
+
+	//Identifikation des Streckenabschnittes (nur mit Kamera1):
+	unsigned int straight_line=edgeData[0].edge_left_found&&edgeData[0].edge_right_found; //Gerade Strecke
+	unsigned int crossover1=!edgeData[0].edge_left_found&&!edgeData[0].edge_right_found; //Kreuzung
+	unsigned int right_curve=edgeData[0].edge_left_found&&!edgeData[0].edge_right_found; //Rechtskurve
+	unsigned int left_curve=!edgeData[0].edge_left_found&&edgeData[0].edge_right_found; //Linkskurve
+
 
 	double r=0; //Radius
 	double winkel_v=0; //Winkelgeschwindigkeit
@@ -835,57 +848,13 @@ void SpeedControl1(void) //Nur Kamera 1
 	double pulse_right=0;
 	double pulse_left=0;
 
-	unsigned int distance=0;
-	/*
-	double v=0;
-	double delta_s=0;
-	double value=0;
-	*/
+	double distance=0; //Abstand Ultraschallsensor (cm)
 
-	//Reduzierung der Geschwindigkeit wenn Ziel erkannt:
-	/*
-	if(//Zielerkennung)
-	{
-		speed_value_rigth=SPEED_AFTER_FINISH;
-		speed_value_left=SPEED_AFTER_FINISH;
-
-		if (USS_Distance<40)
-		{
-			speed_value_right=sqrt(2*BRAKE_FAKTOR*(40-USS_Distance)*0.01+SPEED_AFTER_FINISH*SPEED_AFTER_FINISH);
-			speed_value_left=sqrt(2*BRAKE_FAKTOR*(40-USS_Distance)*0.01+SPEED_AFTER_FINISH*SPEED_AFTER_FINISH);
-		}
-
-		if((speed_value_right==0)||(speed_value_left==0))
-		{
-			pulse_right=(*BLDCRightMinValue)*0.001-0.1;
-			pulse_left=(*BLDCLeftMinValue)*0.001-0.1;
-
-			//Neuer Geschwindikeitswert ins Timer-Register schreiben:
-			CTIMER3->MSR[2]=CTIMER3_PWM_PERIOD-TAKT_PER_MS*pulse_right;
-			CTIMER3->MSR[0]=CTIMER3_PWM_PERIOD-TAKT_PER_MS*pulse_left;
-		}
-		else
-		{
-			pulse_right=(*BLDCRightMinValue)*0.001+(speed_value_right/SPEED_TO_PULSE);
-			pulse_left=(*BLDCLeftMinValue)*0.001+(speed_value_left/SPEED_TO_PULSE);
-
-			//Neuer Geschwindikeitswert ins Timer-Register schreiben:
-			CTIMER3->MSR[2]=CTIMER3_PWM_PERIOD-TAKT_PER_MS*pulse_right;
-			CTIMER3->MSR[0]=CTIMER3_PWM_PERIOD-TAKT_PER_MS*pulse_left;
-		}
-	}
-	*/
-
-
-	if(USS_Distance<40) //Reduzierung der Geschwindigkeit wenn Hinderniss erkannt
+	if(USS_Distance<=40) //Reduzierung der Geschwindigkeit wenn Hinderniss erkannt
 	{
 		distance=USS_Distance;
-		/*
-		v=SPEED_AFTER_FINISH*SPEED_AFTER_FINISH;
-		delta_s=(40.0-distance)*0.01;
-		value=2.0*BRAKE_FAKTOR*delta_s+v;
-		 */
-		if(distance<=15)
+
+		if(distance<=15) //Stillstand
 		{
 			pulse_right=(*BLDCRightMinValue)*0.001-0.1;
 			pulse_left=(*BLDCLeftMinValue)*0.001-0.1;
@@ -894,7 +863,7 @@ void SpeedControl1(void) //Nur Kamera 1
 			CTIMER3->MSR[2]=CTIMER3_PWM_PERIOD-TAKT_PER_MS*pulse_right;
 			CTIMER3->MSR[0]=CTIMER3_PWM_PERIOD-TAKT_PER_MS*pulse_left;
 		}
-		else
+		else //Reduzierung der Geschwindigkeit mit Bremsfaktor
 		{
 			speed_value_right=sqrt(2.0*BRAKE_FAKTOR*(40.0-distance)*0.01+SPEED_AFTER_FINISH*SPEED_AFTER_FINISH);
 			speed_value_left=sqrt(2.0*BRAKE_FAKTOR*(40.0-distance)*0.01+SPEED_AFTER_FINISH*SPEED_AFTER_FINISH);
@@ -906,114 +875,57 @@ void SpeedControl1(void) //Nur Kamera 1
 			CTIMER3->MSR[2]=CTIMER3_PWM_PERIOD-TAKT_PER_MS*pulse_right;
 			CTIMER3->MSR[0]=CTIMER3_PWM_PERIOD-TAKT_PER_MS*pulse_left;
 		}
-
-
+	}
+	else if(edgeData[0].finish_detected==1)	//Reduzierung der Geschwindigkeit wenn Ziel erkannt:
+	{
 		/*
+		//Test (Stillstand bei Erkennung der Ziellinie):
 		pulse_right=(*BLDCRightMinValue)*0.001-0.1;
 		pulse_left=(*BLDCLeftMinValue)*0.001-0.1;
 
 		//Neuer Geschwindikeitswert ins Timer-Register schreiben:
 		CTIMER3->MSR[2]=CTIMER3_PWM_PERIOD-TAKT_PER_MS*pulse_right;
-		CTIMER3->MSR[0]=CTIMER3_PWM_PERIOD-TAKT_PER_MS*pulse_left;*/
-
-	}
-	else if(straight_line||crossover) //Fahren mit maximaler Geschwindigkeit [Gerade,Kreuzung,unebener Fahrbahnrand]
-	{
-		speed_value_right=SPEED_MAX;
-		speed_value_left=SPEED_MAX;
-
-		pulse_right=(*BLDCRightMinValue)*0.001+(speed_value_right/SPEED_TO_PULSE);
-		pulse_left=(*BLDCLeftMinValue)*0.001+(speed_value_left/SPEED_TO_PULSE);
-
-		//Neuer Geschwindikeitswert ins Timer-Register schreiben:
-		CTIMER3->MSR[2]=CTIMER3_PWM_PERIOD-TAKT_PER_MS*pulse_right;
 		CTIMER3->MSR[0]=CTIMER3_PWM_PERIOD-TAKT_PER_MS*pulse_left;
+		*/
 
-	}
-	else if(left_curve) //Abbremsen bei Erkennung einer Links-Kurve [unterschiedliche Ansteuerung der Reifen]
-	{
-		r=RADIUS+edgeData[0].edge_center_mm*0.001;
-		winkel_v=SPEED_CURVE*r;
-
-		speed_value_right=winkel_v/(r+0.5*WHEELBASE);
-		speed_value_left=winkel_v/(r-0.5*WHEELBASE);
-
-		pulse_right=(*BLDCRightMinValue)*0.001+(speed_value_right/SPEED_TO_PULSE);
-		pulse_left=(*BLDCLeftMinValue)*0.001+(speed_value_left/SPEED_TO_PULSE);
-
-		//Neuer Geschwindikeitswert ins Timer-Register schreiben:
-		CTIMER3->MSR[2]=CTIMER3_PWM_PERIOD-TAKT_PER_MS*pulse_right;
-		CTIMER3->MSR[0]=CTIMER3_PWM_PERIOD-TAKT_PER_MS*pulse_left;
-
-	}
-	else if(right_curve) //Abbremsen bei Erkennung einer Rechts-Kurve [unterschiedliche Ansteuerung der Reifen]
-	{
-		r=RADIUS-edgeData[0].edge_center_mm*0.001;
-		winkel_v=SPEED_CURVE*r;
-
-		speed_value_right=winkel_v/(r-0.5*WHEELBASE);
-		speed_value_left=winkel_v/(r+0.5*WHEELBASE);
-
-		pulse_right=(*BLDCRightMinValue)*0.001+(speed_value_right/SPEED_TO_PULSE);
-		pulse_left=(*BLDCLeftMinValue)*0.001+(speed_value_left/SPEED_TO_PULSE);
-
-		//Neuer Geschwindikeitswert ins Timer-Register schreiben:
-		CTIMER3->MSR[2]=CTIMER3_PWM_PERIOD-TAKT_PER_MS*pulse_right;
-		CTIMER3->MSR[0]=CTIMER3_PWM_PERIOD-TAKT_PER_MS*pulse_left;
-
-	}
-	else
-	{
-			pulse_right=(*BLDCRightInitValue)*0.001;
-			pulse_left=(*BLDCLeftInitValue)*0.001;
-
-			//Neuer Geschwindikeitswert ins Timer-Register schreiben:
-			CTIMER3->MSR[2]=CTIMER3_PWM_PERIOD-TAKT_PER_MS*pulse_right;
-			CTIMER3->MSR[0]=CTIMER3_PWM_PERIOD-TAKT_PER_MS*pulse_left;
-	}
-
-}
-
-void SpeedControl2(void) //Beide Kameras
-{
-
-	//Identifikation des Streckenabschnittes(mit Kamera1 und Kamera2):
-	unsigned int straight_line=edgeData[0].edge_left_found&&edgeData[0].edge_right_found&&edgeData[1].edge_left_found&&edgeData[1].edge_right_found; //Gerade Strecke
-	unsigned int crossover1=(edgeData[0].edge_left_found||edgeData[0].edge_right_found)&&edgeData[1].edge_left_found&&edgeData[1].edge_right_found;  //Kreuzung
-	unsigned int crossover2=!edgeData[0].edge_left_found&&!edgeData[0].edge_right_found&&edgeData[1].edge_left_found&&edgeData[1].edge_right_found;	 //Kreuzung
-	unsigned int right_curve=edgeData[0].edge_left_found&&edgeData[0].edge_right_found&&edgeData[1].edge_left_found&&!edgeData[1].edge_right_found;  //Rechte Kurve
-	unsigned int left_curve=edgeData[0].edge_left_found&&edgeData[0].edge_right_found&&!edgeData[1].edge_left_found&&edgeData[1].edge_right_found;	 //Linke Kurve
-
-	double r=0; //Radius
-	double winkel_v=0; //Winkelgeschwindigkeit
-
-	double pulse_right=0;
-	double pulse_left=0;
-
-	//Reduzierung der Geschwindigkeit wenn Ziel erkannt:
-	/*
-	if(//Zielerkennung)
-	{
-		speed_value_rigth=SPEED_AFTER_FINISH;
+		speed_value_right=SPEED_AFTER_FINISH;
 		speed_value_left=SPEED_AFTER_FINISH;
 
-		if (USS_Distance<40)
-		{
-			speed_value_right=sqrt(2*BRAKE_FAKTOR*(40-USS_Distance)*0.01+SPEED_AFTER_FINISH*SPEED_AFTER_FINISH);
-			speed_value_left=sqrt(2*BRAKE_FAKTOR*(40-USS_Distance)*0.01+SPEED_AFTER_FINISH*SPEED_AFTER_FINISH);
-		}
 
-		if((speed_value_right==0)||(speed_value_left==0))
+		pulse_right=(*BLDCRightMinValue)*0.001+(speed_value_right/SPEED_TO_PULSE);
+		pulse_left=(*BLDCLeftMinValue)*0.001+(speed_value_left/SPEED_TO_PULSE);
+
+		//Neuer Geschwindikeitswert ins Timer-Register schreiben:
+		CTIMER3->MSR[2]=CTIMER3_PWM_PERIOD-TAKT_PER_MS*pulse_right;
+		CTIMER3->MSR[0]=CTIMER3_PWM_PERIOD-TAKT_PER_MS*pulse_left;
+
+
+		finished=1;
+
+	}
+	else if(finished==0) //Ziellinie noch nicht überschritten (Wenn Ziellinie überschritten keine Reduzierung der Geschwindigkeit in der Kurve, da gering genung)
+	{
+		if(straight_line||crossover1) //Fahren mit maximaler Geschwindigkeit [Gerade,Kreuzung,unebener Fahrbahnrand]
 		{
-			pulse_right=(*BLDCRightMinValue)*0.001-0.1;
-			pulse_left=(*BLDCLeftMinValue)*0.001-0.1;
+			speed_value_right=SPEED_MAX;
+			speed_value_left=SPEED_MAX;
+
+			pulse_right=(*BLDCRightMinValue)*0.001+(speed_value_right/SPEED_TO_PULSE);
+			pulse_left=(*BLDCLeftMinValue)*0.001+(speed_value_left/SPEED_TO_PULSE);
 
 			//Neuer Geschwindikeitswert ins Timer-Register schreiben:
 			CTIMER3->MSR[2]=CTIMER3_PWM_PERIOD-TAKT_PER_MS*pulse_right;
 			CTIMER3->MSR[0]=CTIMER3_PWM_PERIOD-TAKT_PER_MS*pulse_left;
+
 		}
-		else
+		else if(left_curve) //Abbremsen bei Erkennung einer Links-Kurve [unterschiedliche Ansteuerung der Reifen]
 		{
+			r=RADIUS+edgeData[0].edge_center_mm;
+			winkel_v=SPEED_CURVE*r;
+
+			speed_value_right=winkel_v/(r+0.5*WHEELBASE);
+			speed_value_left=winkel_v/(r-0.5*WHEELBASE);
+
 			pulse_right=(*BLDCRightMinValue)*0.001+(speed_value_right/SPEED_TO_PULSE);
 			pulse_left=(*BLDCLeftMinValue)*0.001+(speed_value_left/SPEED_TO_PULSE);
 
@@ -1021,72 +933,29 @@ void SpeedControl2(void) //Beide Kameras
 			CTIMER3->MSR[2]=CTIMER3_PWM_PERIOD-TAKT_PER_MS*pulse_right;
 			CTIMER3->MSR[0]=CTIMER3_PWM_PERIOD-TAKT_PER_MS*pulse_left;
 		}
-	}
-	*/
+		else if(right_curve) //Abbremsen bei Erkennung einer Rechts-Kurve [unterschiedliche Ansteuerung der Reifen]
+		{
+			r=RADIUS-edgeData[0].edge_center_mm;
+			winkel_v=SPEED_CURVE*r;
 
+			speed_value_right=winkel_v/(r-0.5*WHEELBASE);
+			speed_value_left=winkel_v/(r+0.5*WHEELBASE);
 
-	if(USS_Distance<=40) //Reduzierung der Geschwindigkeit wenn Hinderniss erkannt
-	{
-		pulse_right=(*BLDCRightMinValue)*0.001-0.1;
-		pulse_left=(*BLDCLeftMinValue)*0.001-0.1;
+			pulse_right=(*BLDCRightMinValue)*0.001+(speed_value_right/SPEED_TO_PULSE);
+			pulse_left=(*BLDCLeftMinValue)*0.001+(speed_value_left/SPEED_TO_PULSE);
 
-		//Neuer Geschwindikeitswert ins Timer-Register schreiben:
-		CTIMER3->MSR[2]=CTIMER3_PWM_PERIOD-TAKT_PER_MS*pulse_right;
-		CTIMER3->MSR[0]=CTIMER3_PWM_PERIOD-TAKT_PER_MS*pulse_left;
-
-	}
-	else if(straight_line||crossover1||crossover2) //Fahren mit maximaler Geschwindigkeit [Gerade,Kreuzung,unebener Fahrbahnrand]
-	{
-		speed_value_right=SPEED_MAX;
-		speed_value_left=SPEED_MAX;
-
-		pulse_right=(*BLDCRightMinValue)*0.001+(speed_value_right/SPEED_TO_PULSE);
-		pulse_left=(*BLDCLeftMinValue)*0.001+(speed_value_left/SPEED_TO_PULSE);
-
-		//Neuer Geschwindikeitswert ins Timer-Register schreiben:
-		CTIMER3->MSR[2]=CTIMER3_PWM_PERIOD-TAKT_PER_MS*pulse_right;
-		CTIMER3->MSR[0]=CTIMER3_PWM_PERIOD-TAKT_PER_MS*pulse_left;
-
-	}
-	else if(left_curve) //Abbremsen bei Erkennung einer Links-Kurve [unterschiedliche Ansteuerung der Reifen]
-	{
-		r=RADIUS+edgeData[0].edge_center_mm;
-		winkel_v=SPEED_CURVE*r;
-
-		speed_value_right=winkel_v/(r+0.5*WHEELBASE);
-		speed_value_left=winkel_v/(r-0.5*WHEELBASE);
-
-		pulse_right=(*BLDCRightMinValue)*0.001+(speed_value_right/SPEED_TO_PULSE);
-		pulse_left=(*BLDCLeftMinValue)*0.001+(speed_value_left/SPEED_TO_PULSE);
-
-		//Neuer Geschwindikeitswert ins Timer-Register schreiben:
-		CTIMER3->MSR[2]=CTIMER3_PWM_PERIOD-TAKT_PER_MS*pulse_right;
-		CTIMER3->MSR[0]=CTIMER3_PWM_PERIOD-TAKT_PER_MS*pulse_left;
-
-	}
-	else if(right_curve) //Abbremsen bei Erkennung einer Rechts-Kurve [unterschiedliche Ansteuerung der Reifen]
-	{
-		r=RADIUS-edgeData[0].edge_center_mm;
-		winkel_v=SPEED_CURVE*r;
-
-		speed_value_right=winkel_v/(r-0.5*WHEELBASE);
-		speed_value_left=winkel_v/(r+0.5*WHEELBASE);
-
-		pulse_right=(*BLDCRightMinValue)*0.001+(speed_value_right/SPEED_TO_PULSE);
-		pulse_left=(*BLDCLeftMinValue)*0.001+(speed_value_left/SPEED_TO_PULSE);
-
-		//Neuer Geschwindikeitswert ins Timer-Register schreiben:
-		CTIMER3->MSR[2]=CTIMER3_PWM_PERIOD-TAKT_PER_MS*pulse_right;
-		CTIMER3->MSR[0]=CTIMER3_PWM_PERIOD-TAKT_PER_MS*pulse_left;
-	}
-	else
-	{
+			//Neuer Geschwindikeitswert ins Timer-Register schreiben:
+			CTIMER3->MSR[2]=CTIMER3_PWM_PERIOD-TAKT_PER_MS*pulse_right;
+			CTIMER3->MSR[0]=CTIMER3_PWM_PERIOD-TAKT_PER_MS*pulse_left;
+		}
+		else
+		{
 			pulse_right=(*BLDCRightInitValue)*0.001;
 			pulse_left=(*BLDCLeftInitValue)*0.001;
 
 			//Neuer Geschwindikeitswert ins Timer-Register schreiben:
 			CTIMER3->MSR[2]=CTIMER3_PWM_PERIOD-TAKT_PER_MS*pulse_right;
 			CTIMER3->MSR[0]=CTIMER3_PWM_PERIOD-TAKT_PER_MS*pulse_left;
+		}
 	}
-
 }

@@ -534,7 +534,10 @@ void Camera_Exposure_time_task(void *pvParameters)
 //		IOCON->PIO[2][1] &= 0xFFFFFFFF0; 	//Clear FUNC bits of P2.2 Func 0 is GPIO-Pin
 //		GPIO->DIR[2]      |= (1 << 1);    //Set PIO2_1  to output
 //		GPIO->SET[2] |=(1<<1);
+
 		Edge_Detection(&edgeData[0], pixelValues);
+		Finish_Line(&edgeData[0]); //Erkennung der Ziellinie mittels Daten der Kamera1
+
 		Edge_Detection(&edgeData[1], pixelValues2);
 
 		vTaskDelay(1);
@@ -580,6 +583,7 @@ void Edge_Detection(struct EdgeDetectionData *edgeData, volatile uint8_t *pixelV
 
 	edgeData->edge_right_found = 0;
 	edgeData->edge_left_found = 0;
+	edgeData->finish_detected=0;
 
 //	detection_mode = init; //for debugging
 
@@ -631,7 +635,7 @@ void Edge_Detection(struct EdgeDetectionData *edgeData, volatile uint8_t *pixelV
 				edgeMiddle = edgeWidth/2 + right_edge_begin;
 				edgeData->edgesMiddle[edgeMiddle] = right;
 				right_edge_count++;
-				if(/*(edgeHight > right_edge_hight_max) && */ (edgeMiddle >= xmin) && (edgeMiddle <= xmax)){	//taking highest edge in area
+				if(/*(edgeHight > right_edge_hight_max) && */ (edgeMiddle >= xmin) && (edgeMiddle <= xmax)){	//taking highest edge in area (Flanke nehmen die am weitesten rechts liegt)
 					edgeData->edge_right = edgeMiddle;
 					right_edge_hight_max = edgeHight;
 					edgeData->edge_right_found = 1;
@@ -667,7 +671,7 @@ void Edge_Detection(struct EdgeDetectionData *edgeData, volatile uint8_t *pixelV
 				edgeMiddle = edgeWidth/2 + left_edge_begin;
 				edgeData->edgesMiddle[edgeMiddle] = left;
 				left_edge_count++;
-				if((edgeHight > left_edge_hight_max) && (edgeMiddle >= xmin) && (edgeMiddle <= xmax) && (left_edge_hight_max == 0)){	//taking highest edge in area
+				if((edgeHight > left_edge_hight_max) && (edgeMiddle >= xmin) && (edgeMiddle <= xmax) && (left_edge_hight_max == 0)){	//taking highest edge in area (Flanke nehmen die am weitesten links liegt)
 					edgeData->edge_left = edgeMiddle;
 					left_edge_hight_max = edgeHight;
 					edgeData->edge_left_found = 1;
@@ -689,8 +693,10 @@ void Edge_Detection(struct EdgeDetectionData *edgeData, volatile uint8_t *pixelV
 	//Convert Pixel to mm
 	edgeData->edge_center_mm = (int)(edgeData->edge_center - 63) * (500.0/edge_distance);
 
-	//finish linie detection
-	if((right_edge_count >=2 ) || (right_edge_count >= 2)){
+
+
+/*
+	if((right_edge_count >=2 ) || (left_edge_count >= 2)){
 		edgeData->finish_detected = 1;
 //		GPIO->SET[2] |=(1<<1);
 	}
@@ -699,7 +705,7 @@ void Edge_Detection(struct EdgeDetectionData *edgeData, volatile uint8_t *pixelV
 //		GPIO->CLR[2] |=(1<<1);
 	}
 
-
+*/
 
 //	if((right_edge_count == 5) && (left_edge_count == 5)){
 //		edgeData->track_state = four_stribes;
@@ -714,6 +720,28 @@ void Edge_Detection(struct EdgeDetectionData *edgeData, volatile uint8_t *pixelV
 //	}
 //	else
 //		edgeData->track_state = track;
+}
+
+/*******************************************************************************
+ * Finish_Line
+ ******************************************************************************/
+void Finish_Line(struct EdgeDetectionData *edgeData)
+{
+	uint8_t number_of_edges=0;
+
+	for (uint8_t x=1;x<=126;x++)
+	{
+		if (((edgeData->edgesMiddle[x]==right)||(edgeData->edgesMiddle[x]==left))&&(x>edgeData->edge_left)&&(x<edgeData->edge_right))
+		{
+			number_of_edges++;
+
+			if(number_of_edges>=3)
+			{
+				edgeData->finish_detected=1;
+				break;
+			}
+		}
+	}
 }
 
 

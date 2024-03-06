@@ -187,11 +187,6 @@ const static menu_entry_t menu_main_drive_entries[] = {
 				.max_val = 2,
 				.en = true,
 		},
-		{		.str = "Real_Drive",							// new Simonis Leon 16.06.23
-				.type = MENU_PAGE,
-				.func = Real_Drive,
-				.en = true,
-		},
 		{		.str = "StateController",							// new Simonis Leon 16.10.23
 				.type = MENU_LINK,
 				.link = menu_open_drive_StateControl,

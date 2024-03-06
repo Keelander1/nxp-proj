@@ -211,7 +211,7 @@ void menu_page_pixel_display_camera(uint8_t refresh)    {								// new Martin F
 		//x1,y1, x2,  y2
 		ssd1309_draw_rect(&g_disp_0.disp_obj, 0, 13, 127, 63, true, OFF);
 
-		//Print Left & Right Edge
+	//Print Left & Right Edge
 
 		for(x=0;x<128;x++){
 			y = 64-(pixelVal[x]/5);						//Scale Pixel Values to Display Size
@@ -259,12 +259,12 @@ void menu_page_pixel_display_camera(uint8_t refresh)    {								// new Martin F
 		}
 
 //		Printing Finish detection
-
+/*
 		if(edgeData->finish_detected){
 			ssd1309_set_pos(&g_disp_0.disp_obj, 64, 50);
 			ssd1309_write_str(&g_disp_0.disp_obj, "Finish" , ssd1309_font_6x8, false, ON);
 		}
-
+*/
 		//Printing Track State
 //		ssd1309_set_pos(&g_disp_0.disp_obj, 64, 50);
 //		switch(track_state){
