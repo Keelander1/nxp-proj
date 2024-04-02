@@ -157,12 +157,27 @@ extern int Speed_Param;
 #define BRAKE_FAKTOR (-1.0*((SPEED_AFTER_FINISH*SPEED_AFTER_FINISH)/(2.0*0.25)))	//Bremsfaktor
 
 
-#define SPEED_MAX 0.68 //1.36		    //Maximale Geschwindigkeit (Initialisierungswert)
+#define SPEED_MAX 0.80 //1.36		    //Maximale Geschwindigkeit (Initialisierungswert)
 #define SPEED_AFTER_FINISH 0.34		    //Geschwindigkeit nach Überschreitung der Zielline
-#define SPEED_CURVE 0.34 //0.85			//Geschwindigkeit in der Kurve
+#define SPEED_CURVE 0.38 //0.85			//Geschwindigkeit in der Kurve
 
 #define RADIUS (0.72-0.265)	    //Kurvenradius (Kreismittelpunkt bis Mitte der Fahrbahn)
 #define WHEELBASE 0.13  		//Radabstand (Mitte des Reifens bis Mitte des Reifens)
+
+/*******************************************************************************
+ * Speed Control2:
+ ******************************************************************************/
+#define BRAKE_FAKTOR2 (-1.0*((SPEED_AFTER_FINISH2*SPEED_AFTER_FINISH2)/(2.0*0.25)))	//Bremsfaktor
+
+
+#define SPEED_MAX2 1.02 //1.36		    //Maximale Geschwindigkeit (Initialisierungswert)
+#define SPEED_AFTER_FINISH2 0.34		    //Geschwindigkeit nach Überschreitung der Zielline
+#define SPEED_CURVE2 0.44 //0.85			//Geschwindigkeit in der Kurve
+
+#define RADIUS (0.72-0.265)	    //Kurvenradius (Kreismittelpunkt bis Mitte der Fahrbahn)
+#define WHEELBASE 0.13  		//Radabstand (Mitte des Reifens bis Mitte des Reifens)
+
+
 /*******************************************************************************
  * Prototypes
  ******************************************************************************/
@@ -173,8 +188,14 @@ void ESC_Init_Task(void *pvParameters);
 void stear(float angle);		//angle in rad
 void Camera_Test_Drive (uint8_t state);
 //void Real_Drive (uint8_t state);
+
 void StateControl(uint8_t state);
 void SpeedControl(void); //Funktion to set the Speed-Value according to the route section
+
+//Funktionen für das schnellere Umrunden der Strecke:
+void StateControl2(uint8_t state);
+void SpeedControl2(void); //Funktion to set the Speed-Value according to the route section
+
 #endif /* DRIVE_DRIVE_H_ */
 
 

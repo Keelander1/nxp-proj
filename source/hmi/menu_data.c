@@ -211,9 +211,14 @@ const static menu_entry_t menu_main_drive_entries[] = {
  * 	Activated the drive Function
  ***************************************************/
 const static menu_entry_t menu_drive_StateControl_entries[] = {
-		{		.str = "Start_Drive_FKT",							// new Simonis Leon 16.06.23
+		{		.str = "Drive_FKT_Slow",							// new Simonis Leon 16.06.23
 				.type = MENU_PAGE,
 				.func = StateControl,
+				.en = true,
+		},
+		{		.str = "Drive_FKT_Fast",							// new Simonis Leon 16.06.23
+				.type = MENU_PAGE,
+				.func = StateControl2,
 				.en = true,
 		},
 		{
@@ -224,7 +229,7 @@ const static menu_entry_t menu_drive_StateControl_entries[] = {
 						.max_val =  100,													//max value
 						//.act =0,
 						.en = true,
-				},
+		},
 		{
 				.str = "kyi",
 				.type = MENU_VALUE,

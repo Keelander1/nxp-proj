@@ -182,7 +182,7 @@ void extern_drive_start() {
 void hmi_task(void *args)
 {
 	//**********************************************************************
-	//tick calculation for 20ms refresh time
+	//tick calculation for 10ms refresh time
 	//**********************************************************************
 	const TickType_t ticks_to_next_wakeup = pdMS_TO_TICKS(HMI_FG_REFR_RATE);	//calculate ticks until next wakeup
 	TickType_t ticks_since_last_wakeup;

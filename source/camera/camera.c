@@ -45,7 +45,8 @@
 
 #include "camera.h"
 #include "screen.h"
-
+#include <stdlib.h> //für abs() Funktion
+#include <math.h>
 
 /*******************************************************************************
  * Parameters
@@ -691,7 +692,7 @@ void Edge_Detection(struct EdgeDetectionData *edgeData, volatile uint8_t *pixelV
 		edgeData->edge_center = (edgeData->edge_right + edgeData->edge_left)/2;
 	}
 	//Convert Pixel to mm
-	edgeData->edge_center_mm = (int)(edgeData->edge_center - 63) * (500.0/edge_distance);
+	edgeData->edge_center_mm = (int)(edgeData->edge_center - 62) * (RoadWith/edge_distance);
 
 
 
@@ -727,21 +728,42 @@ void Edge_Detection(struct EdgeDetectionData *edgeData, volatile uint8_t *pixelV
  ******************************************************************************/
 void Finish_Line(struct EdgeDetectionData *edgeData)
 {
-	uint8_t number_of_edges=0;
+	//Notwendige Variablen:
+	//Abstand zwischen linken und rechten Fahrbahnrand in mm:
+	uint8_t edge_distance = ((all_param_t*)&const_all_param)->camera.edge_distance[camSelect-1];
+	//Hypothenuse (entspricht Abstand rechter - linker Fahrbahnrand in mm):
+	int h=(int)(edgeData->edge_right-edgeData->edge_left)*(RoadWith/edge_distance);
+	//Winkel in dem das Fahrzeug zum Fahrbahnmittelpunkt steht:
+	double alpha_rad=acos(RoadWith/h); //Winkel im Bogenmaß
 
+	int H=0;
+	int diff=0; //Abstand der Flanke zum Mittelpunkt in mm (Horizontaler Abstand)
+
+	//Berechnung des tatsächlichen Abstandes der detektierten Flanken vom Fahrbahnmittelpunkt: (aus dem Winkel)
 	for (uint8_t x=1;x<=126;x++)
 	{
-		if (((edgeData->edgesMiddle[x]==right)||(edgeData->edgesMiddle[x]==left))&&(x>edgeData->edge_left)&&(x<edgeData->edge_right))
+		if (((edgeData->edgesMiddle[x]==right)||(edgeData->edgesMiddle[x]==left))&&(x>edgeData->edge_left)&&(x<edgeData->edge_right)) //Ermittlung aller Edges zwischen dem rechten und linken Fahrbahnrand
 		{
-			number_of_edges++;
+			if(x<edgeData->edge_center) //Flanke befindet sich LINKS vom Mittelpunkt
+			{
+				H=(int)(edgeData->edge_center-x)*(RoadWith/edge_distance);
+				diff=(int)(cos(alpha_rad)*H);
+			}
+			else if(x>edgeData->edge_center) //Flanke befindet sich RECHTS vom Mittelpunkt
+			{
+				H=(int)(x-edgeData->edge_center)*(RoadWith/edge_distance);
+				diff=(int)(cos(alpha_rad)*H);
+			}
 
-			if(number_of_edges>=3)
+			//Sobald eine Flanke innerhalb des Bereichs des Zielstreifens detektiert wurde, ist die Ziellinie überschritten:
+			if((30<=diff)&&(diff<=140))
 			{
 				edgeData->finish_detected=1;
 				break;
 			}
 		}
 	}
+
 }
 
 

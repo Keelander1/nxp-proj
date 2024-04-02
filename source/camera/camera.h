@@ -82,6 +82,8 @@ enum track {
 #define ExposureGainCam	5		//Gain for exposure Time calculation of fist camera
 #define ExposureGainCam2 5		//Gain for exposure Time calculation of second camera
 #define MaxDiffExpCams 55000	//Maximum in- or decrease value for Exposure time in Timer register 55000 == 0,5 ms
+
+#define RoadWith 510.0			//Breite der Fahrbahn in mm
 /*******************************************************************************
  * Structures
  ******************************************************************************/
