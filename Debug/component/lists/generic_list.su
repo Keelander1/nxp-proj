@@ -1,5 +1,5 @@
-C:\Users\Martina\Desktop\FHLandshut_ET_Ma\FH_Landshut_ET_1.Semester\ESE Projekt\Projekt\nxp-proj\drivers/fsl_common.h:552:28:DisableGlobalIRQ	16	static
-C:\Users\Martina\Desktop\FHLandshut_ET_Ma\FH_Landshut_ET_1.Semester\ESE Projekt\Projekt\nxp-proj\drivers/fsl_common.h:583:24:EnableGlobalIRQ	24	static
+C:\Users\keela\OneDrive\Desktop\Studium\NXP_Cup\2024_04_02\nxp-proj\drivers/fsl_common.h:552:28:DisableGlobalIRQ	16	static
+C:\Users\keela\OneDrive\Desktop\Studium\NXP_Cup\2024_04_02\nxp-proj\drivers/fsl_common.h:583:24:EnableGlobalIRQ	24	static
 ../component/lists/generic_list.c:16:22:LIST_Error_Check	24	static
 ../component/lists/generic_list.c:62:6:LIST_Init	16	static
 ../component/lists/generic_list.c:85:15:LIST_GetList	16	static

@@ -561,7 +561,7 @@ void menu_func_edge_calibration() {
 
 void Edge_Detection(struct EdgeDetectionData *edgeData, volatile uint8_t *pixelVal){
 	//Parameter
-	uint8_t threshold = 30;					//threshold for edge detection
+	uint8_t threshold = 20;					//threshold for edge detection //Schwellwert 30 -> 20 bei Wettbewerb
 	uint8_t edge_min_width = 1;
 	uint8_t edge_min_hight = 30;
 	uint8_t trace_offset = 7;
@@ -738,6 +738,7 @@ void Finish_Line(struct EdgeDetectionData *edgeData)
 
 	int H=0;
 	int diff=0; //Abstand der Flanke zum Mittelpunkt in mm (Horizontaler Abstand)
+	int cnt=0;
 
 	//Berechnung des tatsächlichen Abstandes der detektierten Flanken vom Fahrbahnmittelpunkt: (aus dem Winkel)
 	for (uint8_t x=1;x<=126;x++)
@@ -758,8 +759,13 @@ void Finish_Line(struct EdgeDetectionData *edgeData)
 			//Sobald eine Flanke innerhalb des Bereichs des Zielstreifens detektiert wurde, ist die Ziellinie überschritten:
 			if((30<=diff)&&(diff<=140))
 			{
-				edgeData->finish_detected=1;
-				break;
+				cnt=cnt+1;
+				if (cnt>=2)
+				{
+					edgeData->finish_detected=1;
+					break;
+				}
+
 			}
 		}
 	}

@@ -108,7 +108,7 @@ int k_1 = 96;					// *100
 int k_2 = 16;					// *100
 int k_3 = -165;					// *100
 int k_4 = -269;					// *100
-int k_yi = -216;					// *100
+int k_yi = -150;					// *100
 
 int l_1 = 0;					// *100
 int l_2 = 0;					// *100
@@ -678,7 +678,7 @@ void StateControl(uint8_t state)
 {
 	SpeedControl();
 
-
+	double lenkeinschlag = 0;
 	double k1 = k_1/100.0;
 	double k2 = k_2/100.0;
 	double k3 = k_3/100.0;
@@ -708,22 +708,51 @@ void StateControl(uint8_t state)
 
 	//__________________________________
 
+	int cam = 1;
+		switch(edgeData[cam].edge_left_found + (edgeData[cam].edge_right_found << 1))
+		{
+			case 0:	//no Edge found
+				lenkeinschlag = 0;
 
+				break;
+
+			case 1:	//left Edge found
+				lenkeinschlag = KYI;
+				// Input Data for funktion
+				Querabweichung_m_y = (float)edgeData[cam].edge_center_mm / 1000.0;
+				y = Querabweichung_m_y;
+				break;
+
+			case 2:	//right Edge found
+				lenkeinschlag = KYI;
+				// Input Data for funktion
+				Querabweichung_m_y = (float)edgeData[cam].edge_center_mm / 1000.0;
+				y = Querabweichung_m_y;
+				break;
+
+			case 3:	//left & right Edge found
+				lenkeinschlag = KYI;
+				Querabweichung_m_y = (float)edgeData[cam].edge_center_mm / 1000.0;
+				y = Querabweichung_m_y;
+
+				break;
+		}
+		//______________________
 	//___________________________________________________________
 	// Input Data for funktion
-	Querabweichung_m_y = (float)edgeData[0].edge_center_mm / 1000.0;
-	y = Querabweichung_m_y;
+	//Querabweichung_m_y = (float)edgeData[0].edge_center_mm / 1000.0;
+	//y = Querabweichung_m_y;
 
 	//_____________________________________________________________
 
 	//Reglergleichungen
 	// Gleichung I-Anteil
-	i = 0 - y + (u_sat - u_old) * Windup;
-	I = I +  i * sleeptime;
+	//i = 0 - y + (u_sat - u_old) * Windup;
+	//I = I +  i * sleeptime;
 	// Gleichung 1
-	u = 0 + I*KYI - (k1*x1_hat + k2*x2_hat + k3*x3_hat + k4*x4_hat);
-	u = 0 - (k1*x1_hat + k2*x2_hat + k3*x3_hat + k4*x4_hat);			// ohne I anteil
-	u = 0 - KYI*y;
+	//u = 0 + I*KYI - (k1*x1_hat + k2*x2_hat + k3*x3_hat + k4*x4_hat);
+	//u = 0 - (k1*x1_hat + k2*x2_hat + k3*x3_hat + k4*x4_hat);			// ohne I anteil
+	u = 0 - lenkeinschlag*y;
 	//Begrenzung u
 	if (u <= -0.54)
 		{
@@ -850,7 +879,7 @@ void SpeedControl(void) //Beide Kameras
 
 	double distance=0; //Abstand Ultraschallsensor (cm)
 
-	if((USS_Distance<=30)&&(finished==0)) //Falls die Ziellinie nicht erkannt wurde (und Geschwindigkeit nicht reduziert wurde) soll 30 cm vor dem Hinderniss bereits auf Null abgebremst werden
+	if((USS_Distance<=40)&&(finished==0)) //Falls die Ziellinie nicht erkannt wurde (und Geschwindigkeit nicht reduziert wurde) soll 30 cm vor dem Hinderniss bereits auf Null abgebremst werden
 	{
 		//Stillstand:
 		pulse_right=(*BLDCRightMinValue)*0.001-0.1;
@@ -978,7 +1007,7 @@ void StateControl2(uint8_t state)
 {
 	SpeedControl2();
 
-
+	double lenkeinschlag;
 	double k1 = k_1/100.0;
 	double k2 = k_2/100.0;
 	double k3 = k_3/100.0;
@@ -1007,23 +1036,50 @@ void StateControl2(uint8_t state)
 	*/
 
 	//__________________________________
+	int cam = 1;
+	switch(edgeData[cam].edge_left_found + (edgeData[cam].edge_right_found << 1))
+	{
+		case 0:	//no Edge found
+			lenkeinschlag = 0;
 
+			break;
 
+		case 1:	//left Edge found
+			lenkeinschlag = KYI;
+			// Input Data for funktion
+			Querabweichung_m_y = (float)edgeData[cam].edge_center_mm / 1000.0;
+			y = Querabweichung_m_y;
+			break;
+
+		case 2:	//right Edge found
+			lenkeinschlag = KYI;
+			// Input Data for funktion
+			Querabweichung_m_y = (float)edgeData[cam].edge_center_mm / 1000.0;
+			y = Querabweichung_m_y;
+			break;
+
+		case 3:	//left & right Edge found
+			lenkeinschlag = KYI;
+			Querabweichung_m_y = (float)edgeData[cam].edge_center_mm / 1000.0;
+			y = Querabweichung_m_y;
+
+			break;
+	}
 	//___________________________________________________________
 	// Input Data for funktion
-	Querabweichung_m_y = (float)edgeData[0].edge_center_mm / 1000.0;
-	y = Querabweichung_m_y;
+	//Querabweichung_m_y = (float)edgeData[0].edge_center_mm / 1000.0;
+	//y = Querabweichung_m_y;
 
 	//_____________________________________________________________
 
 	//Reglergleichungen
 	// Gleichung I-Anteil
-	i = 0 - y + (u_sat - u_old) * Windup;
-	I = I +  i * sleeptime;
+	//i = 0 - y + (u_sat - u_old) * Windup;
+	//I = I +  i * sleeptime;
 	// Gleichung 1
-	u = 0 + I*KYI - (k1*x1_hat + k2*x2_hat + k3*x3_hat + k4*x4_hat);
-	u = 0 - (k1*x1_hat + k2*x2_hat + k3*x3_hat + k4*x4_hat);			// ohne I anteil
-	u = 0 - KYI*y;
+	//u = 0 + I*KYI - (k1*x1_hat + k2*x2_hat + k3*x3_hat + k4*x4_hat);
+	//u = 0 - (k1*x1_hat + k2*x2_hat + k3*x3_hat + k4*x4_hat);			// ohne I anteil
+	u = 0 - lenkeinschlag*y;
 	//Begrenzung u
 	if (u <= -0.54)
 		{
@@ -1150,7 +1206,7 @@ void SpeedControl2(void) //Beide Kameras
 
 	double distance=0; //Abstand Ultraschallsensor (cm)
 
-	if((USS_Distance<=30)&&(finished==0)) //Falls die Ziellinie nicht erkannt wurde (und Geschwindigkeit nicht reduziert wurde) soll 30 cm vor dem Hinderniss bereits auf Null abgebremst werden
+	if((USS_Distance<=50)&&(finished==0)) //Falls die Ziellinie nicht erkannt wurde (und Geschwindigkeit nicht reduziert wurde) soll 30 cm vor dem Hinderniss bereits auf Null abgebremst werden
 	{
 		//Stillstand:
 		pulse_right=(*BLDCRightMinValue)*0.001-0.1;

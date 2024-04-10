@@ -35,7 +35,6 @@ int main(void)
 {
 	//*******************************************
 	//Initialize board hardware.
-
 	CLOCK_AttachClk(BOARD_DEBUG_UART_CLK_ATTACH); //attach 12 MHz clock to FLEXCOMM0 (debug console)
     BOARD_InitBootPins();
     BOARD_InitBootClocks();
