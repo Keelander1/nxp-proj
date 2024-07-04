@@ -108,7 +108,7 @@ int k_1 = 96;					// *100
 int k_2 = 16;					// *100
 int k_3 = -165;					// *100
 int k_4 = -269;					// *100
-int k_yi = -150;					// *100
+int k_yi = -170;					// *100
 
 int l_1 = 0;					// *100
 int l_2 = 0;					// *100
@@ -1266,7 +1266,6 @@ void SpeedControl2(void) //Beide Kameras
 		CTIMER3->MSR[2]=CTIMER3_PWM_PERIOD-TAKT_PER_MS*pulse_right;
 		CTIMER3->MSR[0]=CTIMER3_PWM_PERIOD-TAKT_PER_MS*pulse_left;
 
-
 		finished=1;
 
 	}
@@ -1299,6 +1298,7 @@ void SpeedControl2(void) //Beide Kameras
 			//Neuer Geschwindikeitswert ins Timer-Register schreiben:
 			CTIMER3->MSR[2]=CTIMER3_PWM_PERIOD-TAKT_PER_MS*pulse_right;
 			CTIMER3->MSR[0]=CTIMER3_PWM_PERIOD-TAKT_PER_MS*pulse_left;
+			//activate_control_90(1); 	//Steuerung 90 grad ausführen, 1 = links, 0 = rechts
 		}
 		else if(right_curve) //Abbremsen bei Erkennung einer Rechts-Kurve [unterschiedliche Ansteuerung der Reifen]
 		{
@@ -1314,6 +1314,7 @@ void SpeedControl2(void) //Beide Kameras
 			//Neuer Geschwindikeitswert ins Timer-Register schreiben:
 			CTIMER3->MSR[2]=CTIMER3_PWM_PERIOD-TAKT_PER_MS*pulse_right;
 			CTIMER3->MSR[0]=CTIMER3_PWM_PERIOD-TAKT_PER_MS*pulse_left;
+			//activate_control_90(0); 	//Steuerung 90 grad ausführen, 1 = links, 0 = rechts
 		}
 		else //Falls gar nichts erkannt wird soll stehen geblieben werden
 		{
@@ -1327,3 +1328,24 @@ void SpeedControl2(void) //Beide Kameras
 
 	}
 }
+
+/*activate_control_90(int x){ //Steuerung 90 grad ausführen, 1 = links, 0 = rechts
+	//Gerade weiterfahren
+	double delta_y = 0.1;	//Stück der Weiterfahrt nach vorne bis Abbiegevorgang in m
+	double time_t_straight = (speed_value_left + speed_value_right)/(2*delta_y);	// Zeit der geraden Weiterfahrt (Durchschnittsgeschwindigkeit/ Weg weiter nach vorne)
+	vTaskDelay(time_t_straight);	//Verzögerung um gerade Weiterzufahren um delta_y
+	//Lenkwinkel bestimmen und Abbiegezeit bestimmen
+	double angle_rad = 0.2897517; //durchschnittswinkel = arcsin(Radabstand/Kurvenradius) = arcsin ( 13cm/45.5cm ) = 0.2897517 rad
+	double delta_y_curve = 0.7069;	//	Strecke der Kurve 90° = 0.5 radius * pi = 0.5 * 0.45*3.1415
+	double time_t_stear = (speed_value_left + speed_value_right)/(2*delta_y_curve);	// Zeit der Kurvenfahrt (Durchschnittsgeschwindigkeit/ Strecke Kurve)
+		if(x == 0){	//0 = rechts
+			stear(angle_rad);	//Räder rechts einschlagen
+			vTaskDelay(time_t_stear);
+		}
+		else if(x == 1){	//1 =links
+			stear(-angle_rad);	//Räder links einschlagen
+			vTaskDelay(time_t_stear);
+		}
+		stear(0);
+}
+*/

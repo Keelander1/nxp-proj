@@ -111,11 +111,11 @@ void SERVO_Demo(void *pvParameters)
 		CTIMER1->MSR[2] = CTIMER1_PWM_PERIOD - (*servoLeftValue)*CTIMER1_PWM_PERIOD/20000;		//Steer left
 		vTaskDelay(500);
 		CTIMER1->MSR[2] = CTIMER1_PWM_PERIOD - (*servoRightValue)*CTIMER1_PWM_PERIOD/20000;		//Steer right
-		vTaskDelay(800);
-		CTIMER1->MSR[2] = CTIMER1_PWM_PERIOD - (*servoMiddleValue)*CTIMER1_PWM_PERIOD/20000;	//Steering angle zero degree
+		vTaskDelay(500);
+		//CTIMER1->MSR[2] = CTIMER1_PWM_PERIOD - (*servoMiddleValue)*CTIMER1_PWM_PERIOD/20000;	//Steering angle zero degree
 		//***************************************************************
 
-		vTaskSuspend(NULL);	//suspend Task
+		//vTaskSuspend(NULL);	//suspend Task
 	}
 
 }

@@ -78,12 +78,13 @@ enum track {
 	tree_stribes = 2,
 	four_stribes = 3
 };
-#define PVsumW 16384			//target value for PixelValue Sum in exposure Time calculation  16384 = 128 * ADC-Medium-Value (0 ... 256)
-#define ExposureGainCam	5		//Gain for exposure Time calculation of fist camera
-#define ExposureGainCam2 5		//Gain for exposure Time calculation of second camera
-#define MaxDiffExpCams 55000	//Maximum in- or decrease value for Exposure time in Timer register 55000 == 0,5 ms
+#define PVsumW 16384				//target value for PixelValue Sum in exposure Time calculation  16384 = 128 * ADC-Medium-Value (0 ... 256)
+#define ExposureGainCam	5			//Gain for exposure Time calculation of fist camera
+#define ExposureGainCam2 5			//Gain for exposure Time calculation of second camera
+#define MaxDiffExpCams 55000		//Maximum in- or decrease value for Exposure time in Timer register 55000 == 0,5 ms
+#define MaxExposureTime 22000000 	//Maximum exposure time for cameras is 100 ms
 
-#define RoadWith 510.0			//Breite der Fahrbahn in mm
+#define RoadWidth 510.0				//Breite der Fahrbahn in mm
 /*******************************************************************************
  * Structures
  ******************************************************************************/
@@ -123,7 +124,7 @@ void Edge_Detection(struct EdgeDetectionData *edgeData, volatile uint8_t *pixelV
 void Finish_Line(struct EdgeDetectionData *edgeData); //Erkennung der Ziellinie
 
 void menu_func_edge_calibration(void);
-
+void Edge_Detection_Prewitt(struct EdgeDetectionData *edgeData, volatile uint8_t *pixelVal);
 
 
 #endif /* CAMERA_CAMERA_H_ */

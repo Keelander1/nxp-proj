@@ -107,11 +107,15 @@ volatile int16_t edge_center_mm =0;
 volatile uint8_t detection_mode = 0;
 volatile uint8_t track_state = 0;
 
+//Array zum Speichern der Pixelwerte nach der 1. Ableitung (nur Werte von 0-255):
+volatile float edge_gradient1[128];
+volatile float edge_gefiltert[128];
+
 //volatile uint8_t camera_distance = 0;	//TODO: implement
 
 
-volatile uint32_t exposure_time=10000000;
-volatile uint32_t exposure_time2=10000000;
+volatile uint32_t exposure_time=5000000;
+volatile uint32_t exposure_time2=5000000;
 
 
 const int16_t VREFn = 0; 				//mV
@@ -148,7 +152,7 @@ void CTIMER0_Init(void)
 	CTIMER0-> MCR  = 0;						//Delete current Configuration
 	CTIMER0-> MCR |= (1<<0)|(1<<1)|(1<<24);	//Interrupt when MR0 = value in TC, Timer Counter reset and reload MR with MSR at Match0
 
-	CTIMER0->MSR[0] = exposure_time;				//Initialize MSR0 with  220000 --> Timer overflow every 1ms  ((1/220MHZ)*220000)
+	CTIMER0->MSR[0] = exposure_time;				//Initialize MSR0 with  5000000 --> Timer overflow every 22.73ms  ((1/220MHZ)*5000000)
 	CTIMER0->PR=1;									//Prescaler (/2)
 	//***********************************
 	//ADC Interrupt configuration
@@ -172,7 +176,7 @@ void CTIMER4_Init(void)
 	CTIMER4-> MCR  = 0;						//Delete current Configuration
 	CTIMER4-> MCR |= (1<<0)|(1<<1)|(1<<24);	//Interrupt when MR0 = value in TC, Timer Counter reset and reload MR with MSR at Match0
 
-	CTIMER4->MSR[0] = exposure_time2;		//Initialize MSR0 with  220000 --> Timer overflow every 1ms  ((1/220MHZ)*220000)
+	CTIMER4->MSR[0] = exposure_time2;		//Initialize MSR0 with  5000000 --> Timer overflow every 22.73ms  ((1/220MHZ)*5000000)
 	CTIMER4->PR=1;							//Prescaler (/2)
 	//***********************************
 	//ADC Interrupt configuration
@@ -507,6 +511,9 @@ void Camera_Exposure_time_task(void *pvParameters)
 			exposureTimediff=-MaxDiffExpCams;
 		}
 		exposure_time = exposure_time + exposureTimediff;
+		if(exposure_time>=MaxExposureTime){													// max exposure time for camera is 100 ms
+			exposure_time=MaxExposureTime;
+		}
 		CTIMER0->MSR[0] = exposure_time;												// Exposure Time in s = exposure_time/110 MHz
 
 		//Camera 2
@@ -529,17 +536,26 @@ void Camera_Exposure_time_task(void *pvParameters)
 
 
 		exposure_time2 = exposure_time2 + exposureTimediff2;
-
+		if(exposure_time2>=MaxExposureTime){													// max exposure time for camera is 100 ms
+			exposure_time2=MaxExposureTime;
+		}
 		CTIMER4->MSR[0] = exposure_time2;												// Exposure Time in s = exposure_time2/110 MHz
 
 //		IOCON->PIO[2][1] &= 0xFFFFFFFF0; 	//Clear FUNC bits of P2.2 Func 0 is GPIO-Pin
 //		GPIO->DIR[2]      |= (1 << 1);    //Set PIO2_1  to output
 //		GPIO->SET[2] |=(1<<1);
 
-		Edge_Detection(&edgeData[0], pixelValues);
-		Finish_Line(&edgeData[0]); //Erkennung der Ziellinie mittels Daten der Kamera1
 
-		Edge_Detection(&edgeData[1], pixelValues2);
+		//Kantenerkennung in dem Kamerabild von Kamera1:
+		//Edge_Detection(&edgeData[0], pixelValues);
+		Edge_Detection_Prewitt(&edgeData[0], pixelValues);
+
+		//Kantenerkennung in dem Kamerabild von Kamera2:
+		//Edge_Detection(&edgeData[1], pixelValues2);
+		Edge_Detection_Prewitt(&edgeData[1], pixelValues2);
+
+		//Erkennung der Ziellinie mittels Daten der Kamera1:
+		Finish_Line(&edgeData[0]);
 
 		vTaskDelay(1);
 	}
@@ -692,7 +708,7 @@ void Edge_Detection(struct EdgeDetectionData *edgeData, volatile uint8_t *pixelV
 		edgeData->edge_center = (edgeData->edge_right + edgeData->edge_left)/2;
 	}
 	//Convert Pixel to mm
-	edgeData->edge_center_mm = (int)(edgeData->edge_center - 62) * (RoadWith/edge_distance);
+	edgeData->edge_center_mm = (int)(edgeData->edge_center - 62) * (RoadWidth/edge_distance);
 
 
 
@@ -732,9 +748,9 @@ void Finish_Line(struct EdgeDetectionData *edgeData)
 	//Abstand zwischen linken und rechten Fahrbahnrand in mm:
 	uint8_t edge_distance = ((all_param_t*)&const_all_param)->camera.edge_distance[camSelect-1];
 	//Hypothenuse (entspricht Abstand rechter - linker Fahrbahnrand in mm):
-	int h=(int)(edgeData->edge_right-edgeData->edge_left)*(RoadWith/edge_distance);
+	int h=(int)(edgeData->edge_right-edgeData->edge_left)*(RoadWidth/edge_distance);
 	//Winkel in dem das Fahrzeug zum Fahrbahnmittelpunkt steht:
-	double alpha_rad=acos(RoadWith/h); //Winkel im Bogenmaß
+	double alpha_rad=acos(RoadWidth/h); //Winkel im Bogenmaß
 
 	int H=0;
 	int diff=0; //Abstand der Flanke zum Mittelpunkt in mm (Horizontaler Abstand)
@@ -747,12 +763,12 @@ void Finish_Line(struct EdgeDetectionData *edgeData)
 		{
 			if(x<edgeData->edge_center) //Flanke befindet sich LINKS vom Mittelpunkt
 			{
-				H=(int)(edgeData->edge_center-x)*(RoadWith/edge_distance);
+				H=(int)(edgeData->edge_center-x)*(RoadWidth/edge_distance);
 				diff=(int)(cos(alpha_rad)*H);
 			}
 			else if(x>edgeData->edge_center) //Flanke befindet sich RECHTS vom Mittelpunkt
 			{
-				H=(int)(x-edgeData->edge_center)*(RoadWith/edge_distance);
+				H=(int)(x-edgeData->edge_center)*(RoadWidth/edge_distance);
 				diff=(int)(cos(alpha_rad)*H);
 			}
 
@@ -762,7 +778,7 @@ void Finish_Line(struct EdgeDetectionData *edgeData)
 				cnt=cnt+1;
 				if (cnt>=2)
 				{
-					edgeData->finish_detected=1;
+					edgeData->finish_detected=1; //Änderung: muss eigentlich 1 sein, damit Zielerkennung funktioniert!!!
 					break;
 				}
 
@@ -772,6 +788,134 @@ void Finish_Line(struct EdgeDetectionData *edgeData)
 
 }
 
+/*******************************************************************************
+ * EdgeDetection_Prewitt (Überarbeitung der EdgeDetection: Anwendung des Prewitt-Filters)
+ ******************************************************************************/
+void Edge_Detection_Prewitt(struct EdgeDetectionData *edgeData, volatile uint8_t *pixelVal)
+{
+
+	//Notwendige Variablen:
+	float threshold=15.0;
+	int Hx[3]={-1,0,1};
+	uint8_t edge_distance = ((all_param_t*)&const_all_param)->camera.edge_distance[camSelect-1];
+
+	//Array zum Speichern der Pixelwerte nach der 1. Ableitung (nur Werte von 0-255):
+	//float edge_gradient1[128];
+
+	edge_gradient1[0] = (float)(pixelVal[0] * Hx[0] + pixelVal[1] * Hx[2]);
+	edge_gradient1[127] = (float)pixelVal[126] * Hx[0] + pixelVal[127] * Hx[2];
+	float sum = 0.0; // Summe der Multiplikation des linke und rechten Pixels vom aktuellen Pixel
+
+	//Array zum Speichern der Werte nach dem Noise-Filtern:
+	//float edge_gefiltert[128];
+
+
+	//Array zum Speichern der gefundenen Maxima(left) und Minima(right): edgeData->edgesMiddle[i]
+	for (int i = 0; i < 128; i++)
+	{
+		edgeData->edgesMiddle[i]= 0;
+	}
+
+	//Inititalisierung:
+	edgeData->edge_right_found = 0;
+	edgeData->edge_left_found = 0;
+	edgeData->finish_detected=0;
+
+
+	//Kantenverstärkung (1.Ableitung durch Anwendung des Prewitt-Operators):
+	for (int i = 1; i <= 126; i++) //Rechtes und linkes Pixel nicht berücksichtigen
+	{
+		sum = (float)(pixelVal[i - 1] * Hx[0] + pixelVal[i + 1] * Hx[2]);
+
+		//Ergebnis Abspeichern:
+		edge_gradient1[i] = sum;
+
+	}
+
+	//Noise-Filter (Eliminierung des Rauschen durch Schwellenwert:
+	for (int i = 0; i <= 127; i++)
+	{
+		if ((edge_gradient1[i] > 0) && (edge_gradient1[i] <= threshold))
+		{
+			edge_gefiltert[i] = 0;
+		}
+		else if ((edge_gradient1[i] < 0) && (edge_gradient1[i] >= -threshold))
+		{
+			edge_gefiltert[i] = 0;
+		}
+		else
+			edge_gefiltert[i] = edge_gradient1[i];
+	}
+
+	//Find Maxima(Left-Edge) and Minima(Right-Edge):
+	int cnt = 0;
+	while (cnt < 128)
+	{
+		if (edge_gefiltert[cnt] == 0)
+		{
+			cnt++;
+		}
+		else if (edge_gefiltert[cnt] > 0) //Linke Kante
+		{
+			while (edge_gefiltert[cnt] < edge_gefiltert[cnt+1])
+			{
+				cnt++;
+			}
+			edgeData->edgesMiddle[cnt] = left;
+			while (edge_gefiltert[cnt] != 0)
+			{
+				cnt++;
+			}
+		}
+		else if (edge_gefiltert[cnt] < 0) //Rechte Kante
+		{
+			while (edge_gefiltert[cnt] > edge_gefiltert[cnt+1])
+			{
+				cnt++;
+			}
+			edgeData->edgesMiddle[cnt] = right;
+
+			while (edge_gefiltert[cnt] != 0)
+			{
+				cnt++;
+			}
+		}
+	}
+
+	//Rechten Fahrbahnrand festlegen (=Flanke die am weitesten Rechts liegt):
+	//Rechten Fahrbahnrand finden:
+	for (int i = 127; i >= 0; i--)
+	{
+		if (edgeData->edgesMiddle[i] == right)
+		{
+			edgeData->edge_right_found = 1;
+			edgeData->edge_right=i;
+			break;
+		}
+	}
+
+	//Linken Fahrbahnrand festlegen(=Flanke, die am weitesten Links liegt):
+	for (int i = 0; i <= 127; i++)
+	{
+		if (edgeData->edgesMiddle[i] == left)
+		{
+			edgeData->edge_left_found = 1;
+			edgeData->edge_left=i;
+			break;
+		}
+	}
+
+	//Ermittlung des Fahrbahnmittelpunktes:
+	if((edgeData->edge_left_found == 0) && (edgeData->edge_right_found == 1)) //Nur rechter Fahrbahnrand gefunden
+		edgeData->edge_center = edgeData->edge_right - edge_distance/2;
+	else if((edgeData->edge_left_found == 1) && (edgeData->edge_right_found == 0)) //Nur linker Fahrbahnrand gefunden
+		edgeData->edge_center = edgeData->edge_left + edge_distance/2;
+	else if((edgeData->edge_left_found == 1) && (edgeData->edge_right_found == 1)) //Linker und rechter Fahrbahnrand gefunden
+		edgeData->edge_center = (edgeData->edge_right + edgeData->edge_left)/2;
+
+	//Berechnung des aktuellen Abstandes des Fahrzeugs zum Fahrbahnmittelpunkt:
+	edgeData->edge_center_mm = (int)(edgeData->edge_center - 62) * (RoadWith/edge_distance);
+}
 
 /*Transfer ADC result values to voltages and logical values
 uint8_t transferCounter;											//Start with result 0
